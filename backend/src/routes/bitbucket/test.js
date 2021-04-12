@@ -1,45 +1,29 @@
+/**
+ * This is a class for testing
+ */
+
 const router = require("express").Router();
 const {Bitbucket} = require("bitbucket");
 
 const clientOptions = {
     baseUrl: "https://api.bitbucket.org/2.0",
-    request: {
-        timeout: 10,
-    },
-    auth: {
-        token: process.env.BIBUCKET_TOKEN,
-    }
 };
 
 const bitbucket = new Bitbucket(clientOptions);
 
-router.get("/", async (req, res) => {
-    try {
-        const {data, headers, status, url} = await bitbucket.repositories.get({
-            workspace: "atlassian",
-            repo_slug: "atlassian-event"
-        });
-        console.log(data.values);
-    } catch (err) {
-        const {message, error, headers, request, status} = err;
-    }
 
-    /*
-        bitbucket.repositories.get({ workspace: "atlassian", repo_slug: "atlassian-event"})
-            .then(({data, headers}) => {
-                console.log(data);
-            })
-            .catch((err) => console.error(err));
-     */
-    /*
+//Test to get information about a specific repository
+router.get("repository/:workspace/:repo_slug", async (req, res) => {
     try {
-        const {data, headers, status, url} = await bitbucket.repositories.list({workspace: "dashboardtest"});
-        res.send(data.values)
+        const {data} = await bitbucket
+            .repositories
+            .get({workspace: req.params.workspace, repo_slug: req.params.repo_slug});
+        res.send(data);
     } catch (err) {
-        const {message, error, headers, request, status} = err;
-        res.status(400)
+        const {error} = err;
+        console.log(error);
+        res.sendStatus(404);
     }
-     */
 });
 
 module.exports = router;
