@@ -2,7 +2,7 @@
  * This is a class for testing
  */
 const router = require("express").Router();
-const bitbucket  = require("./bitbucket");  //local bitbucket client
+const bitbucket = require("./bitbucket");  //local bitbucket client
 
 
 //Test to get information about a specific repository
