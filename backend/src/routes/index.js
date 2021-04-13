@@ -1,6 +1,6 @@
 const router = require("express").Router();
 
-const bitbucket = require("./bibucket");
+const bitbucket = require("./bitbucket");
 const server = require("./server");
 
 router.use("/bitbucket", bitbucket);
