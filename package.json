@@ -11,5 +11,14 @@
     "url": "dashboard_schertech"
   },
   "author": "Beniamin Terza, Sparber Fabian, Julian Lamprecht, Simon Penn, Daniel Nagler",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@tailwindcss/postcss7-compat": "^2.1.0",
+    "autoprefixer": "^9.8.6",
+    "postcss": "^7.0.35",
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.1.0"
+  },
+  "dependencies": {
+    "@craco/craco": "^6.1.1"
+  }
 }
