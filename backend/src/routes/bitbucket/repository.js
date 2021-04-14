@@ -26,28 +26,9 @@ router.get("/", async (req, res) => {
 
 //Returns information about a specific repository
 router.get("/:workspace/:repo_slug", async (req, res) => {
-    let workspace = req.params.workspace;
-    let repo_slug = req.params.repo_slug;
-    let sql = `
-        SELECT *
-        FROM repositories
-        WHERE workspace = ?
-          AND repo_slug = ?`;
-
-    db.get(sql, [workspace, repo_slug], (err, row) => {
-        if (err) {
-            console.log(err);
-            return res.sendStatus(400);
-        }
-
-        if (!row) {
-            console.log("Result is empty");
-            return res.sendStatus(204);
-        }
-
-        console.log("after");
-
-        res.send(row);
+    res.send({
+        workspace: req.params.workspace,
+        repo_slug: req.params.repo_slug
     });
 });
 
