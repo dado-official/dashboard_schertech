@@ -19,6 +19,7 @@
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.1.0"
   },
   "dependencies": {
-    "@craco/craco": "^6.1.1"
+    "@craco/craco": "^6.1.1",
+    "npm-install-all": "^1.1.21"
   }
 }
