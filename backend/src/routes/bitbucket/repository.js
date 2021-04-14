@@ -91,5 +91,38 @@ router.delete("/:workspace/:repo_slug", async (req, res) => {
     });
 });
 
+//Returns information about the commits
+router.get("/:workspace/:repo_slug/commits", async (req, res) => {
+    try {
+        const {data} = await bitbucket
+            .repositories
+            .listCommits({workspace: req.params.workspace, repo_slug: req.params.repo_slug, revision: ""});
+
+        let commits = [];
+
+        data.values.forEach((commit) => {
+            let reducedCommit = {
+                id: commit.hash.substring(0, 7),
+                hash: commit.hash,
+                message: commit.message,
+                author_name: commit.author?.user?.display_name || "",
+                author_raw: commit.author.raw,
+                date: commit.date
+            };
+
+            commits.push(reducedCommit);
+        });
+
+        res.send({
+            commit_number: commits.length,
+            commits: commits,
+        });
+
+    } catch (err) {
+        const {error, status, message} = err;
+        console.log("ERROR:", error, status, message);
+        res.sendStatus(status);
+    }
+});
 
 module.exports = router;
