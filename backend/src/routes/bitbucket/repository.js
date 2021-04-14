@@ -26,10 +26,16 @@ router.get("/", async (req, res) => {
 
 //Returns information about a specific repository
 router.get("/:workspace/:repo_slug", async (req, res) => {
-    res.send({
-        workspace: req.params.workspace,
-        repo_slug: req.params.repo_slug
-    });
+    try {
+        const {data} = await bitbucket
+            .repositories
+            .get({workspace: req.params.workspace, repo_slug: req.params.repo_slug});
+        res.send(data);
+    } catch (err) {
+        const {error, status, message} = err;
+        console.log("ERROR:", error, status, message);
+        res.sendStatus(status);
+    }
 });
 
 //Adds a new repository
