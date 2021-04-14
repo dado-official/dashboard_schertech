@@ -7,7 +7,7 @@ import {BiCalendarEvent} from 'react-icons/bi'
 
 const Sidebar = () => {
     return (
-        <div id="sidebarMainContainer" className="bg-primary rounded-0.938 h-full w-14.625 pr-1.188 pl-1.188 pt-1.688 ">
+        <div id="sidebarMainContainer" className="bg-primary fixed rounded-0.938 h-maxHeight w-14.625 pr-1.188 pl-1.188 pt-1.688 ">
             <SidebarElement 
                 icon = {<FiServer color="white" ></FiServer>}
                 title="Server"/>
