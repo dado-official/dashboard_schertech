@@ -1,5 +1,6 @@
 import React from "react";
 import ServerContainer from "../AllServers/ServerContainer";
+import AddButton from "../Shared/AddButton";
 
 export default function AllServers() {
     return (
@@ -37,6 +38,7 @@ export default function AllServers() {
                     name="Server1"
                     description="Server1 description..."
                 />
+                <AddButton />
             </div>
         </div>
     );

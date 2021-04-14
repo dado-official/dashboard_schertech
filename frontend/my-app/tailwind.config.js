@@ -30,20 +30,8 @@ module.exports = {
             },
         },
     },
-<<<<<<< HEAD
-    
-   },
-   variants: {
-     extend: {
-      backgroundColor: ['group-focus']
-     },
-   },
-   plugins: [],
- }
-=======
     variants: {
         extend: {},
     },
     plugins: [],
 };
->>>>>>> main
