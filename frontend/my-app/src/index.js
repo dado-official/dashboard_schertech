@@ -5,7 +5,9 @@ import App from "./App";
 
 ReactDOM.render(
     <React.StrictMode>
-        <App />
+        <div className="App h-full w-full p-8 bg-background">
+            <App />
+        </div>
     </React.StrictMode>,
     document.getElementById("root")
 );
