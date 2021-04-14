@@ -1,5 +1,8 @@
 const router = require("express").Router();
 const db = require("@database/db");
+const mysql=require("mysql");
+
+
 
 //Returns a list of all the servers
 router.get("/", async (req, res) => {
@@ -24,9 +27,36 @@ router.get("/", async (req, res) => {
 
 //Returns information about a specific server
 router.get("/:hostname", async (req, res) => {
-    res.send({
-        hostname: req.params.hostname
+     /* connection.connect((err) => {
+        if (err) throw err;
+        console.log('Connected!');
+        res.send("Connected");
+      }); */
+    const connection = await mysql.createConnection({
+        host: 'localhost',
+        user: 'test',
+        password: 'test123',
+        database: 'csgo'
     });
+
+    connection.connect(function(err) {
+        if (err) {
+            console.error('error connecting: ' + err.stack);
+            res.send("Error connecting");
+        }
+        console.log('connection authenticated: ' + (connection.state == "authenticated"));
+        console.log('connected as id ' + connection.threadId);
+        console.log("connection: " + connection.state);
+        res.send(connection.state == "authenticated");
+    });    
+    
+
+    /* connection.query('SELECT * FROM map', (err,rows) => {
+        if(err) throw err;
+      
+        console.log('Data received from Db:');
+        console.log(rows);
+      }); */
 });
 
 //Adds a new server
