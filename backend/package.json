@@ -10,7 +10,15 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "bitbucket": "^2.5.1",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "nodemon": "^2.0.7"
+    "module-alias": "^2.2.2",
+    "nodemon": "^2.0.7",
+    "sqlite3": "^5.0.2"
+  },
+  "_moduleAliases": {
+    "@root": ".",
+    "@database": "src/database"
   }
 }
