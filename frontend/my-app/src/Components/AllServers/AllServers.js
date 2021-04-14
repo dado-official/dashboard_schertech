@@ -41,7 +41,9 @@ export default function AllServers({ setUrl }) {
                     name="Server1"
                     description="Server1 description..."
                 />
-                <AddButton />
+                <AddButton 
+                    title="server"
+                />
             </div>
         </div>
     );
