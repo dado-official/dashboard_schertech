@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import ServerContainer from "../AllServers/ServerContainer";
 import AddButton from "../Shared/AddButton";
 
-export default function AllServers() {
+export default function AllServers({ setUrl }) {
+    useEffect(() => {
+        setUrl("Server");
+    }, []);
     return (
         <div className="ml-16.625">
             <h2 className={`text-white text-2xl font-medium`}>Servers</h2>

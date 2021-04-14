@@ -6,8 +6,7 @@ export default function Sidebarelement(props) {
     const Icon = props.icon;
     return (
         <Link
-            to={props.title.toLowerCase()}
-            onClick={() => props.setUrl(props.title)}
+            to={`/${props.title.toLowerCase()}`}
             onMouseEnter={() => setcolor("white")}
             onMouseLeave={() => setcolor("#94A3BC")}
             className={` 

@@ -11,6 +11,8 @@ module.exports = {
                 hover: "#343434",
                 onlineGreen: "#2DFD99",
                 offlineRed: "#FF4B77",
+                commitBlue: "#3963CD",
+                commitBlueHover: "#4c7aed",
             },
             spacing: {
                 1.875: "1.875rem",
@@ -24,9 +26,12 @@ module.exports = {
                 14.625: "14.625rem",
                 16.625: "16.625rem",
                 maxHeight: "calc(100% - 4rem)",
+                minContent: "min-content",
+                0.875: "0.875rem",
             },
             borderRadius: {
                 0.938: "0.938rem",
+                "3px": "3px",
             },
         },
     },
