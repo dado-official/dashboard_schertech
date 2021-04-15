@@ -3,7 +3,6 @@ const db = require("@database/db");
 const mysql=require("mysql");
 
 
-
 //Returns a list of all the servers
 router.get("/", async (req, res) => {
     let sql = `
@@ -25,38 +24,30 @@ router.get("/", async (req, res) => {
     });
 });
 
-//Returns information about a specific server
-router.get("/:hostname", async (req, res) => {
-     /* connection.connect((err) => {
-        if (err) throw err;
-        console.log('Connected!');
-        res.send("Connected");
-      }); */
+//Checks if database of server is reachable
+router.get("/:hostname/:username/:password", async (req, res) => {
     const connection = await mysql.createConnection({
-        host: 'localhost',
-        user: 'test',
-        password: 'test123',
-        database: 'csgo'
+        host: req.params.hostname,
+        user: req.params.username,
+        password: req.params.password   
     });
-
-    connection.connect(function(err) {
-        if (err) {
-            console.error('error connecting: ' + err.stack);
-            res.send("Error connecting");
+    connection.ping(err => {
+        try{
+            if(err){
+                console.log("Error connecting");
+                throw new Error("Database not reachable");
+            }else{
+                console.log("Pingable!");
+                res.send("true");
+            }
+        }catch(e){
+            console.log(e.message);
+            res.send("false");
+        }finally{
+            connection.end();
         }
-        console.log('connection authenticated: ' + (connection.state == "authenticated"));
-        console.log('connected as id ' + connection.threadId);
-        console.log("connection: " + connection.state);
-        res.send(connection.state == "authenticated");
-    });    
-    
-
-    /* connection.query('SELECT * FROM map', (err,rows) => {
-        if(err) throw err;
-      
-        console.log('Data received from Db:');
-        console.log(rows);
-      }); */
+        
+    })
 });
 
 //Adds a new server
