@@ -106,6 +106,7 @@ router.get("/:workspace/:repo_slug/commits", async (req, res) => {
         res.send({
             commit_number: commits.length,
             commits: commits,
+            link: `https://bitbucket.org/${req.params.workspace}/${req.params.repo_slug}/commits/`
         });
 
     } catch (err) {
