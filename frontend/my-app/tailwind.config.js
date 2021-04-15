@@ -9,6 +9,7 @@ module.exports = {
                 background: "#161616",
                 backgroundHover: "#212121",
                 hover: "#343434",
+                hoverLight: "#3d3d3d",
                 onlineGreen: "#2DFD99",
                 offlineRed: "#FF4B77",
                 commitBlue: "#3963CD",

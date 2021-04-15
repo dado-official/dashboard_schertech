@@ -1,12 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BiLockAlt } from "react-icons/bi";
 import { BiLockOpenAlt } from "react-icons/bi";
 import LatestCommits from "./LatestCommits";
+import MostCommitsChart from "./MostCommitsChart";
 
-export default function Repository() {
+export default function Repository({ setUrl }) {
     const [name, setName] = useState("Repositoryname");
     const [owner, setOwner] = useState("Repo Owner");
     const [isPrivate, setIsPrivate] = useState(false);
+
+    useEffect(() => {
+        setUrl("Repository");
+    }, []);
 
     return (
         <div className="ml-16.625">
@@ -37,8 +42,9 @@ export default function Repository() {
                     Go to Repository
                 </button>
             </div>
-            <div className="grid grid-flow-rows grid-cols-3 gap-8 mt-8">
+            <div className="grid grid-flow-rows grid-cols-4 gap-8 mt-8">
                 <LatestCommits />
+                <MostCommitsChart />
             </div>
         </div>
     );

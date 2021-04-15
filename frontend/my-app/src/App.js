@@ -19,7 +19,7 @@ function App() {
                     <AllRepositories setUrl={setUrl} />
                 </Route>
                 <Route path="/repository/:id">
-                    <Repository />
+                    <Repository setUrl={setUrl} />
                 </Route>
                 <Route path="/scrum" exact>
                     <p>g</p>
