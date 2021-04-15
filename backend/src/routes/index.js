@@ -6,6 +6,6 @@ const custom = require("./custom");
 
 router.use("/bitbucket", bitbucket);
 router.use("/server", server);
-router.use("/custom", server);
+router.use("/custom", custom);
 
 module.exports = router;
