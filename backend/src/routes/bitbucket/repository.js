@@ -46,7 +46,8 @@ router.get("/:workspace/:repo_slug", async (req, res) => {
 router.post("/", async (req, res) => {
     const {workspace, repo_slug} = req.body;
     let sql = `
-        INSERT OR IGNORE 
+        INSERT
+        OR IGNORE 
         INTO repositories(workspace, repo_slug)
         VALUES(?, ?)`;
 

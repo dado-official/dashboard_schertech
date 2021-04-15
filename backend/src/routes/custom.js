@@ -26,9 +26,10 @@ router.get("/", (req, res) => {
 router.post("/", (req, res) => {
     const {title, description, frequency, target_value} = req.body;
     let sql = `
-    INSERT OR IGNORE 
-    INTO customs(title, description, frequency, target_value)
-    VALUES(?, ?, ?, ?)`;
+        INSERT
+        OR IGNORE 
+        INTO customs(title, description, frequency, target_value)
+        VALUES(?, ?, ?, ?)`;
     console.log(title);
     db.run(sql, [title, description, frequency, target_value], (err) => {
         if (err) {
@@ -44,7 +45,8 @@ router.post("/", (req, res) => {
 router.delete("/:id", (req, res) => {
     const {id} = req.params;
     let sql = `
-        DELETE FROM customs
+        DELETE
+        FROM customs
         WHERE id = ? `;
 
     db.run(sql, [id], (err) => {
@@ -66,9 +68,10 @@ router.post("/:id", (req, res) => {
     const {id} = req.params;
     const {value} = req.body;
     let sql = `
-    INSERT OR IGNORE
-    INTO custom_values(id, date, value)
-    VALUES(?, ?, ?)`;
+        INSERT
+        OR IGNORE
+        INTO custom_values(id, date, value)
+        VALUES(?, ?, ?)`;
 
     db.run(sql, [id, getUnixTimestamp(), value], (err) => {
         if (err) {
