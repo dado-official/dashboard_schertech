@@ -30,6 +30,9 @@ router.get("/:workspace/:repo_slug", async (req, res) => {
         const {data} = await bitbucket
             .repositories
             .get({workspace: req.params.workspace, repo_slug: req.params.repo_slug});
+        //data.links.avatar.href Repository Avatar
+
+
         res.send(data);
     } catch (err) {
         const {error, status, message} = err;
