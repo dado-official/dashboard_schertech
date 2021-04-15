@@ -59,15 +59,33 @@ router.delete("/:id", (req, res) => {
 
 //Returns all values from a specific entry
 router.get("/:id", (req, res) => {
-
+    console.log(getUnixTimestamp());
 });
 
 router.post("/:id", (req, res) => {
+    const {id} = req.params;
+    const {value} = req.body;
+    let sql = `
+    INSERT OR IGNORE
+    INTO custom_values(id, date, value)
+    VALUES(?, ?, ?)`;
 
+    db.run(sql, [id, getUnixTimestamp(), value], (err) => {
+        if (err) {
+            console.log(err);
+            return res.sendStatus(400);
+        }
+
+        res.sendStatus(200);
+    });
 });
 
 router.delete("/:id/:date", (req, res) => {
 
 });
+
+function getUnixTimestamp() {
+    return Math.floor(new Date() / 1000);
+}
 
 module.exports = router;
