@@ -86,6 +86,10 @@ router.post("/", async (req, res) => {
     });
 });
 
+//TODO
+//Update a specific sever
+
+
 //Deletes a specific server
 router.delete("/:hostname", async (req, res) => {
     let hostname = req.params.hostname;
