@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const bitbucket = require("./bitbucket");
+const moment = require("moment")
 const db = require("@database/db");
 
 
@@ -12,6 +13,7 @@ router.get("/", async (req, res) => {
     db.all(sql, (err, rows) => {
         if (err) {
             console.log(err);
+
             return res.sendStatus(400);
         }
 
@@ -88,32 +90,39 @@ router.get("/:workspace/:repo_slug/commits", async (req, res) => {
             .repositories
             .listCommits({workspace: req.params.workspace, repo_slug: req.params.repo_slug, revision: ""});
 
-        let commits = [];
+        let commitData = reduceCommitData(data);
+        //Add link to the Bitbucket repository
+        commitData["link"] = `https://bitbucket.org/${req.params.workspace}/${req.params.repo_slug}/commits/`;
 
-        data.values.forEach((commit) => {
-            let reducedCommit = {
-                id: commit.hash.substring(0, 7),
-                hash: commit.hash,
-                message: commit.message,
-                author_name: commit.author?.user?.display_name || "",
-                author_raw: commit.author.raw,
-                date: commit.date
-            };
-
-            commits.push(reducedCommit);
-        });
-
-        res.send({
-            commit_number: commits.length,
-            commits: commits,
-            link: `https://bitbucket.org/${req.params.workspace}/${req.params.repo_slug}/commits/`
-        });
-
+        res.send(commitData);
     } catch (err) {
         const {error, status, message} = err;
         console.log("ERROR:", error, status, message);
         res.sendStatus(status);
     }
 });
+
+//Reduces the commit data you get from the Bitbucket api
+function reduceCommitData(data) {
+    let commits = [];
+
+    data.values.forEach((commit) => {
+        let reducedCommit = {
+            id: commit.hash.substring(0, 7),
+            hash: commit.hash,
+            message: commit.message,
+            author_name: commit.author?.user?.display_name || "",
+            author_raw: commit.author.raw,
+            date: commit.date
+        };
+
+        commits.push(reducedCommit);
+    });
+
+    return {
+        commit_number: commits.length,
+        commits: commits,
+    };
+}
 
 module.exports = router;
