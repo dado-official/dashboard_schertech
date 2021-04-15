@@ -1,6 +1,5 @@
 const router = require("express").Router();
 const bitbucket = require("./bitbucket");
-const moment = require("moment")
 const db = require("@database/db");
 
 
@@ -13,7 +12,6 @@ router.get("/", async (req, res) => {
     db.all(sql, (err, rows) => {
         if (err) {
             console.log(err);
-
             return res.sendStatus(400);
         }
 
@@ -28,10 +26,11 @@ router.get("/", async (req, res) => {
 
 //Returns information about a specific repository
 router.get("/:workspace/:repo_slug", async (req, res) => {
+    const {workspace, repo_slug} = req.params;
     try {
         const {data} = await bitbucket
             .repositories
-            .get({workspace: req.params.workspace, repo_slug: req.params.repo_slug});
+            .get({workspace: workspace, repo_slug: repo_slug});
         //data.links.avatar.href Repository Avatar
 
 
@@ -45,11 +44,9 @@ router.get("/:workspace/:repo_slug", async (req, res) => {
 
 //Adds a new repository
 router.post("/", async (req, res) => {
-    let workspace = req.body.workspace;
-    let repo_slug = req.body.repo_slug;
+    const {workspace, repo_slug} = req.body;
     let sql = `
-        INSERT
-        OR IGNORE 
+        INSERT OR IGNORE 
         INTO repositories(workspace, repo_slug)
         VALUES(?, ?)`;
 
@@ -65,8 +62,7 @@ router.post("/", async (req, res) => {
 
 //Deletes a specific repository
 router.delete("/:workspace/:repo_slug", async (req, res) => {
-    let workspace = req.params.workspace;
-    let repo_slug = req.params.repo_slug;
+    const {workspace, repo_slug} = req.params;
     let sql = `
         DELETE
         FROM repositories
@@ -83,16 +79,18 @@ router.delete("/:workspace/:repo_slug", async (req, res) => {
     });
 });
 
+
 //Returns information about the commits
 router.get("/:workspace/:repo_slug/commits", async (req, res) => {
+    const {workspace, repo_slug} = req.params;
     try {
         const {data} = await bitbucket
             .repositories
-            .listCommits({workspace: req.params.workspace, repo_slug: req.params.repo_slug, revision: ""});
+            .listCommits({workspace: workspace, repo_slug: repo_slug, revision: ""});
 
         let commitData = reduceCommitData(data);
         //Add link to the Bitbucket repository
-        commitData["link"] = `https://bitbucket.org/${req.params.workspace}/${req.params.repo_slug}/commits/`;
+        commitData["link"] = `https://bitbucket.org/${workspace}/${repo_slug}/commits/`;
 
         res.send(commitData);
     } catch (err) {
