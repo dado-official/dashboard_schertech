@@ -4,7 +4,8 @@ import "./App.css";
 import AllServers from "./Components/AllServers/AllServers";
 import AllRepositories from "./Components/AllRepositories/AllRepositories.";
 import Repository from "./Components/Repository/Repository";
-import AddServer from "./Components/AllServers/AddServer"
+import AddServer from "./Components/AllServers/AddServer";
+import AddRepository from "./Components/AllRepositories/AddRepository";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 function App() {
@@ -20,15 +21,19 @@ function App() {
                 <Route path="/repository" exact>
                     <AllRepositories setUrl={setUrl} />
                 </Route>
+                <Route path={"/repository/add"}>
+                  <AddRepository/>
+                </Route>
                 <Route path="/repository/:id">
                     <Repository />
                 </Route>
-                <Route path="/scrum" exact>
+                <Route path="/cusom" exact>
                     <p>g</p>
                 </Route>
                 <Route path={"/server/add"}>
                   <AddServer/>
                 </Route>
+                
             </Switch>
         </Router>
     );
