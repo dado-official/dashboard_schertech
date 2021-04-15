@@ -6,7 +6,7 @@ import ServerContainer from "../AllServers/ServerContainer";
 
 import { HiServer } from "react-icons/hi";
 import { IoLogoBitbucket } from "react-icons/all";
-import { BiCalendarEvent } from "react-icons/bi";
+import { BiCustomize } from "react-icons/bi";
 
 const Sidebar = ({ url }) => {
     return (
@@ -20,7 +20,7 @@ const Sidebar = ({ url }) => {
                 title="Repository"
                 url={url}
             />
-            <SidebarElement icon={BiCalendarEvent} title="Scrum" url={url} />
+            <SidebarElement icon={BiCustomize} title="Custom" url={url} />
         </header>
     );
 };

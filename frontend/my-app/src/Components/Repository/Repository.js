@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { BiLockAlt } from "react-icons/bi";
 import { BiLockOpenAlt } from "react-icons/bi";
+import Insights from "./Insights";
 import LatestCommits from "./LatestCommits";
 
 export default function Repository() {
@@ -37,8 +38,24 @@ export default function Repository() {
                     Go to Repository
                 </button>
             </div>
-            <div className="grid grid-flow-rows grid-cols-3 gap-8 mt-8">
-                <LatestCommits />
+            <div className="flex">
+                <div className="grid grid-flow-rows grid-cols-3 gap-8 mt-8">
+                    <LatestCommits />
+                </div>
+                <div>
+                    <Insights
+                        members="42"
+                        contributors="21"
+                        admins="2"
+                        owner="seppele"
+                        linesofcode="22.6K"
+                        files="73"
+                        commits="93"
+                        additions="70.3K"
+                        deletions="7.7K"
+                        branches="2"
+                    />
+                </div>                        
             </div>
         </div>
     );
