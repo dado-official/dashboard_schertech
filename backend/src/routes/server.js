@@ -25,28 +25,45 @@ router.get("/", async (req, res) => {
 });
 
 //Checks if database of server is reachable
-router.get("/:hostname/:username/:password", async (req, res) => {
-    const connection = await mysql.createConnection({
-        host: req.params.hostname,
-        user: req.params.username,
-        password: req.params.password   
-    });
-    connection.ping(err => {
-        try{
-            if(err){
-                console.log("Error connecting");
-                throw new Error("Database not reachable");
-            }else{
-                console.log("Pingable!");
-                res.send("true");
-            }
-        }catch(e){
-            console.log(e.message);
-            res.send("false");
-        }finally{
-            connection.end();
+router.get("/:hostname", async (req, res) => {
+    var username;
+    var password;
+    let sql= "SELECT * FROM servers WHERE hostname=?"
+    db.get(sql, [req.params.hostname], async (err, row) => {   //gets username and password from local database
+        if (err) {
+            console.log(err);
+            return res.sendStatus(400);
         }
-        
+
+        username=row.db_username.toString();
+        password=row.db_password.toString();
+
+        console.log("Username: " + username + " Password: " + password);
+
+
+        const connection = await mysql.createConnection({
+            host: req.params.hostname,
+            user: username,
+            password: password  
+        });
+
+        connection.ping(err => {
+            try{
+                if(err){
+                    console.log("Error connecting");
+                    throw new Error("Database not reachable");
+                }else{
+                    console.log("Pingable!");
+                    res.send("true");
+                }
+            }catch(e){
+                console.log(e.message);
+                res.send("false");
+            }finally{
+                connection.end();
+            }
+            
+        })
     })
 });
 
