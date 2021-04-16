@@ -23,6 +23,7 @@ module.exports = {
                 0.875: "0.875rem",
                 1.131: "1.131rem",
                 1.188: "1.188rem",
+                1.25: "1.25rem",
                 1.688: "1.688rem",
                 2.563: "2.563rem",
                 2.75: "2.75rem",
@@ -44,7 +45,8 @@ module.exports = {
             },
             borderRadius: {
                 0.938: "0.938rem",
-                0.625: "0.625rem"
+                0.625: "0.625rem",
+                0.313: "0.313rem"
             },
             boxShadow: {
                 focusAdd: "0px 0px 4px 3px #3963CD"

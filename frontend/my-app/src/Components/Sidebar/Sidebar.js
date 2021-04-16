@@ -14,13 +14,9 @@ const Sidebar = ({ url }) => {
             id="sidebarMainContainer"
             className="bg-primary fixed rounded-0.938 h-maxHeight w-14.625 pr-1.188 pl-1.188 pt-1.688 "
         >
-            <SidebarElement icon={HiServer} title="Server" url={url} />
-            <SidebarElement
-                icon={IoLogoBitbucket}
-                title="Repository"
-                url={url}
-            />
-            <SidebarElement icon={BiCustomize} title="Custom" url={url} />
+            <SidebarElement icon={HiServer} title="Server" url={url} alert={0}/>
+            <SidebarElement icon={IoLogoBitbucket} title="Repository" url={url} alert={1}/>
+            <SidebarElement icon={BiCustomize} title="Custom" url={url} alert={0}/>
         </header>
     );
 };
