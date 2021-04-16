@@ -1,6 +1,6 @@
+# [Home](../README.md)
 # Bitbucket API documentation
 
-# Repositories
 This API doesn't affect the real repository. I only affects the list on the local database, 
 which is used to know what repositories to monitor.
 
@@ -9,8 +9,15 @@ which is used to know what repositories to monitor.
 
 
 
+# Repositories
+
 ## Get a list of all repositories stored on the database
 `GET /`
+
+#### Response
+````
+TODO: not finished
+````
 
 
 
@@ -35,7 +42,8 @@ repo_slug | The name of the repository slug (name)
 #### Body parameters
 Parameter | Description
 --- | ---
-TODO | 
+new_workspace | The new name of the workspace
+new_repo_slug | The new name of the repository slug (name)
 
 
 
@@ -59,6 +67,8 @@ repo_slug | The name of the repository slug (name)
 
 
 
+# Commits
+
 ## Get a list with the last 30 commits from the repository
 `GET /:workspace/:repo_slug/commits`  
 #### Path parameters
@@ -66,3 +76,5 @@ Parameter | Description
 --- | ---
 workspace | The name of the workspace
 repo_slug | The name of the repository slug (name)
+
+## TODO not finished

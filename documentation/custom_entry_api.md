@@ -1,3 +1,4 @@
+# [Home](../README.md)
 # Custom entries API documentation
 
 # Base URL
@@ -9,6 +10,18 @@
 
 ## Get a list of all the entries that are stored on the database
 `GET /`
+#### Response
+````
+[
+    {
+        id
+        title
+        description
+        frequency
+        target_value
+    }
+]
+````
 
 
 
@@ -19,7 +32,7 @@ Parameter | Description
 --- | ---
 title | The title of the entry.
 description | The description of the entry.
-frequency | How often you enter new values (d=daily, w=weekly, m=monthly, y=yearly). 
+frequency | How often you enter new values (in days). 
 target_value | The value you want to reach.
 
 
@@ -34,10 +47,10 @@ id | The id of the entry
 #### Body parameters (Use at least one of them)
 Parameter | Description
 --- | ---
-title | The title of the entry.
-description | The description of the entry.
-frequency | How often you enter new values (d=daily, w=weekly, m=monthly, y=yearly).
-target_value | The value you want to reach.
+title | The new title of the entry.
+description | The new description of the entry.
+frequency | How often you enter new values (in days).
+target_value | The new value you want to reach.
 
 
 
@@ -59,6 +72,18 @@ Parameter | Description
 --- | ---
 entry_id | The id of the entry
 
+#### Response
+````
+[
+    {
+        value_id
+        entry_id
+        value
+        date
+    }
+]
+````
+
 
 
 ## Get a specific value from an entry
@@ -68,6 +93,16 @@ Parameter | Description
 --- | ---
 entry_id | The id of the entry
 value_id | The id of the value
+
+#### Response
+````
+{
+    value_id
+    entry_id
+    value
+    date
+}
+````
 
 
 
@@ -96,7 +131,7 @@ value_id | The id of the value
 #### Body parameters
 Parameter | Description
 --- | ---
-value | The value you want to store
+value | The new value you want to store
 
 
 

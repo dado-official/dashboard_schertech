@@ -1,3 +1,4 @@
+# [Home](../README.md)
 # Server API documentation
 
 # Base URL
@@ -6,7 +7,19 @@
 
 
 ## Get a list of all servers that are stored on the database
-`GET /`
+`GET /`  
+#### Response
+````
+[
+    {
+        hostname
+        db_port
+        db_username
+        db_password
+        description
+    }
+]
+````
 
 
 
@@ -16,7 +29,10 @@
 Parameter | Description
 --- | --- 
 hostname | The hostname or IP of the server
-
+db_port | The port of the database
+db_username | The DB username
+db_password | The password of the DB user
+description | The description of the Serve
 
 
 ## Get information about a specific server
@@ -26,6 +42,12 @@ Parameter | Description
 --- | ---
 hostname | The hostname or IP of the server
 
+#### Response (Not finished)
+````
+{
+    reachable: boolean
+}
+````
 
 
 ## Update information about the server
@@ -38,7 +60,11 @@ hostname | The hostname of IP of the server
 #### Body parameters
 Parameter | Description
 --- | ---
-TODO | 
+new_hostname | The new hostname of IP of the server
+db_port | The new port of the database
+db_username | The new DB username
+db_password | The new password of the DB user
+description | The new description of the Server
 
 
 
