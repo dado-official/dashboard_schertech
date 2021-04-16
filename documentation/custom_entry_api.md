@@ -10,6 +10,18 @@
 
 ## Get a list of all the entries that are stored on the database
 `GET /`
+#### Response
+````
+[
+    {
+        id
+        title
+        description
+        frequency
+        target_value
+    }
+]
+````
 
 
 
@@ -60,6 +72,18 @@ Parameter | Description
 --- | ---
 entry_id | The id of the entry
 
+#### Response
+````
+[
+    {
+        value_id
+        entry_id
+        value
+        date
+    }
+]
+````
+
 
 
 ## Get a specific value from an entry
@@ -69,6 +93,16 @@ Parameter | Description
 --- | ---
 entry_id | The id of the entry
 value_id | The id of the value
+
+#### Response
+````
+{
+    value_id
+    entry_id
+    value
+    date
+}
+````
 
 
 

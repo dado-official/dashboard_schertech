@@ -43,8 +43,8 @@ router.get("/:hostname", async (req, res) => {
             return res.sendStatus(400);
         }
 
-        const {db_username, db_password, db_port} = row
-        console.log(`Username: ${db_username} Password: ${db_password} Port: ${db_port}`)
+        const {db_username, db_password, db_port} = row;
+        console.log(`Username: ${db_username} Password: ${db_password} Port: ${db_port}`);
 
         const connection = await mysql.createConnection({  //create connection to db
             host: hostname,
@@ -58,11 +58,11 @@ router.get("/:hostname", async (req, res) => {
                     throw new Error("Database not reachable");
                 } else {
                     console.log("Pingable!");
-                    res.send(true);
+                    res.send({reachable: true});
                 }
             } catch (e) {
                 console.log(e.message);
-                res.send(false);
+                res.send({reachable: false});
             } finally {
                 connection.end();
             }

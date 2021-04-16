@@ -7,7 +7,19 @@
 
 
 ## Get a list of all servers that are stored on the database
-`GET /`
+`GET /`  
+#### Response
+````
+[
+    {
+        hostname
+        db_port
+        db_username
+        db_password
+        description
+    }
+]
+````
 
 
 
@@ -30,6 +42,12 @@ Parameter | Description
 --- | ---
 hostname | The hostname or IP of the server
 
+#### Response (Not finished)
+````
+{
+    reachable: boolean
+}
+````
 
 
 ## Update information about the server

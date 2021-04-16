@@ -90,7 +90,7 @@ router.put("/:workspace/:repo_slug", (req, res) => {
     sql += "WHERE workspace = ? AND repo_slug = ?;";
     values.push(workspace);
     values.push(repo_slug);
-    console.log(sql)
+
     //Regex to remove the last comma in this string:
     //https://stackoverflow.com/questions/5497318/replace-last-occurrence-of-character-in-string/
     sql = sql.replace(/,([^,]*)$/, "$1");
@@ -177,10 +177,10 @@ router.get("/:workspace/:repo_slug/weeklycommits", async (req, res) => {
             .listCommits({workspace: req.params.workspace, repo_slug: req.params.repo_slug, revision: ""});
 
         let commits = [];
-        
+
         var date = new Date();                      //get date from a week ago to check if commit was within last week
-        date.setDate(date.getDate() - 7);   
-        
+        date.setDate(date.getDate() - 7);
+
         let commitMap = new Map();
 
         data.values.forEach((commit) => {
@@ -192,18 +192,18 @@ router.get("/:workspace/:repo_slug/weeklycommits", async (req, res) => {
             let dateCheck = Date.parse(date);                   //Date from a week ago and commitDate need to be parsed to the same format to be compared
             let commitDate = Date.parse(commit.date);
 
-            if(dateCheck < commitDate){                                                     //check if commit was within last week and adding it to map 
-                if(commitMap.get(commit.author?.user?.display_name) !== undefined){         //change value of commits issued or add user to the commitmap
-                    let counter = commitMap.get(commit.author?.user?.display_name)
+            if (dateCheck < commitDate) {                                                     //check if commit was within last week and adding it to map
+                if (commitMap.get(commit.author?.user?.display_name) !== undefined) {         //change value of commits issued or add user to the commitmap
+                    let counter = commitMap.get(commit.author?.user?.display_name);
                     ++counter;
-                    commitMap.set(commit.author?.user?.display_name, counter)
+                    commitMap.set(commit.author?.user?.display_name, counter);
                 } else {
-                    commitMap.set(commit.author?.user?.display_name, 1)
+                    commitMap.set(commit.author?.user?.display_name, 1);
                 }
             }
             commits.push(reducedCommit);
         });
-       
+
         res.send({
             commit_number: commits.length,
             commits: commits,
