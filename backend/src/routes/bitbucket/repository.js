@@ -169,4 +169,52 @@ function reduceCommitData(data) {
     };
 }
 
+//Retruns who and how often a commit was made in a repository
+router.get("/:workspace/:repo_slug/weeklycommits", async (req, res) => {
+    try {
+        const {data} = await bitbucket
+            .repositories
+            .listCommits({workspace: req.params.workspace, repo_slug: req.params.repo_slug, revision: ""});
+
+        let commits = [];
+        
+        var date = new Date();                      //get date from a week ago to check if commit was within last week
+        date.setDate(date.getDate() - 7);   
+        
+        let commitMap = new Map();
+
+        data.values.forEach((commit) => {
+            let reducedCommit = {
+                author_name: commit.author?.user?.display_name || "",
+                date: commit.date
+            };
+
+            let dateCheck = Date.parse(date);                   //Date from a week ago and commitDate need to be parsed to the same format to be compared
+            let commitDate = Date.parse(commit.date);
+
+            if(dateCheck < commitDate){                                                     //check if commit was within last week and adding it to map 
+                if(commitMap.get(commit.author?.user?.display_name) !== undefined){         //change value of commits issued or add user to the commitmap
+                    let counter = commitMap.get(commit.author?.user?.display_name)
+                    ++counter;
+                    commitMap.set(commit.author?.user?.display_name, counter)
+                } else {
+                    commitMap.set(commit.author?.user?.display_name, 1)
+                }
+            }
+            commits.push(reducedCommit);
+        });
+       
+        res.send({
+            commit_number: commits.length,
+            commits: commits,
+            commitMap: JSON.stringify([...commitMap])
+        });
+
+    } catch (err) {
+        const {error, status, message} = err;
+        console.log("ERROR:", error, status, message);
+        res.sendStatus(status);
+    }
+});
+
 module.exports = router;
