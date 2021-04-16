@@ -71,13 +71,13 @@ router.post("/", async (req, res) => {
 });
 
 //Update a specific repository
-router.put("/:hostname", (req, res) => {
+router.put("/:workspace/:repo_slug", (req, res) => {
     const {workspace, repo_slug} = req.params;
     const {new_workspace, new_repo_slug} = req.body;
     //TODO make this better, if possible
     //Create update statement, only update if a value is given
     let values = [];
-    let sql = "UPDATE servers SET ";
+    let sql = "UPDATE repositories SET ";
     if (new_workspace) {
         sql += "workspace = ?, ";
         values.push(new_workspace);
@@ -90,7 +90,7 @@ router.put("/:hostname", (req, res) => {
     sql += "WHERE workspace = ? AND repo_slug = ?;";
     values.push(workspace);
     values.push(repo_slug);
-
+    console.log(sql)
     //Regex to remove the last comma in this string:
     //https://stackoverflow.com/questions/5497318/replace-last-occurrence-of-character-in-string/
     sql = sql.replace(/,([^,]*)$/, "$1");
