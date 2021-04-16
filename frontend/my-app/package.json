@@ -4,10 +4,13 @@
     "private": true,
     "dependencies": {
         "@craco/craco": "^6.1.1",
+        "@nivo/bar": "^0.67.0",
+        "@nivo/core": "^0.67.0",
         "@testing-library/jest-dom": "^5.11.10",
         "@testing-library/react": "^11.2.6",
         "@testing-library/user-event": "^12.8.3",
         "chart.js": "^2.9.4",
+        "nivo": "^0.31.0",
         "npm-install-all": "^1.1.21",
         "react": "^17.0.2",
         "react-chartjs-2": "^2.11.1",
@@ -15,6 +18,7 @@
         "react-icons": "^4.2.0",
         "react-router-dom": "^5.2.0",
         "react-scripts": "4.0.3",
+        "recharts": "^2.0.9",
         "web-vitals": "^1.1.1"
     },
     "scripts": {

@@ -3,6 +3,7 @@ import { BiLockAlt } from "react-icons/bi";
 import { BiLockOpenAlt } from "react-icons/bi";
 import LatestCommits from "./LatestCommits";
 import MostCommitsChart from "./MostCommitsChart";
+import CommitsPerWeekChart from "./CommitsPerWeekChart";
 
 export default function Repository({ setUrl }) {
     const [name, setName] = useState("Repositoryname");
@@ -44,7 +45,10 @@ export default function Repository({ setUrl }) {
             </div>
             <div className="grid grid-flow-rows grid-cols-4 gap-8 mt-8">
                 <LatestCommits />
-                <MostCommitsChart />
+                <div className="flex flex-col gap-8 col-span-2 h-full">
+                    <MostCommitsChart />
+                    <CommitsPerWeekChart />
+                </div>
             </div>
         </div>
     );
