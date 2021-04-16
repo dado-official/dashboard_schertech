@@ -7,9 +7,8 @@
     font-family: "Montserrat", sans-serif;
 }
 
-.App {
-    height: 100%;
-    width: 100%;
+body {
+    background-color: #161616;
 }
 
 .buttonBackground {

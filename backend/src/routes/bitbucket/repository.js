@@ -26,10 +26,11 @@ router.get("/", async (req, res) => {
 
 //Returns information about a specific repository
 router.get("/:workspace/:repo_slug", async (req, res) => {
+    const {workspace, repo_slug} = req.params;
     try {
         const {data} = await bitbucket
             .repositories
-            .get({workspace: req.params.workspace, repo_slug: req.params.repo_slug});
+            .get({workspace: workspace, repo_slug: repo_slug});
         //data.links.avatar.href Repository Avatar
         //branch anzahl mit link ganz am Ende size
         //Zeit moment.js Library
@@ -52,8 +53,7 @@ router.get("/:workspace/:repo_slug", async (req, res) => {
 
 //Adds a new repository
 router.post("/", async (req, res) => {
-    let workspace = req.body.workspace;
-    let repo_slug = req.body.repo_slug;
+    const {workspace, repo_slug} = req.body;
     let sql = `
         INSERT
         OR IGNORE 
@@ -70,10 +70,13 @@ router.post("/", async (req, res) => {
     });
 });
 
+//TODO
+//Update a specific repository
+
+
 //Deletes a specific repository
 router.delete("/:workspace/:repo_slug", async (req, res) => {
-    let workspace = req.params.workspace;
-    let repo_slug = req.params.repo_slug;
+    const {workspace, repo_slug} = req.params;
     let sql = `
         DELETE
         FROM repositories
@@ -90,39 +93,48 @@ router.delete("/:workspace/:repo_slug", async (req, res) => {
     });
 });
 
+
 //Returns information about the commits
 router.get("/:workspace/:repo_slug/commits", async (req, res) => {
+    const {workspace, repo_slug} = req.params;
     try {
         const {data} = await bitbucket
             .repositories
-            .listCommits({workspace: req.params.workspace, repo_slug: req.params.repo_slug, revision: ""});
+            .listCommits({workspace: workspace, repo_slug: repo_slug, revision: ""});
 
-        let commits = [];
+        let commitData = reduceCommitData(data);
+        //Add link to the Bitbucket repository
+        commitData["link"] = `https://bitbucket.org/${workspace}/${repo_slug}/commits/`;
 
-        data.values.forEach((commit) => {
-            let reducedCommit = {
-                id: commit.hash.substring(0, 7),
-                hash: commit.hash,
-                message: commit.message,
-                author_name: commit.author?.user?.display_name || "",
-                author_raw: commit.author.raw,
-                date: commit.date
-            };
-
-            commits.push(reducedCommit);
-        });
-
-        res.send({
-            commit_number: commits.length,
-            commits: commits,
-            link: `https://bitbucket.org/${req.params.workspace}/${req.params.repo_slug}/commits/`
-        });
-
+        res.send(commitData);
     } catch (err) {
         const {error, status, message} = err;
         console.log("ERROR:", error, status, message);
         res.sendStatus(status);
     }
 });
+
+//Reduces the commit data you get from the Bitbucket api
+function reduceCommitData(data) {
+    let commits = [];
+
+    data.values.forEach((commit) => {
+        let reducedCommit = {
+            id: commit.hash.substring(0, 7),
+            hash: commit.hash,
+            message: commit.message,
+            author_name: commit.author?.user?.display_name || "",
+            author_raw: commit.author.raw,
+            date: commit.date
+        };
+
+        commits.push(reducedCommit);
+    });
+
+    return {
+        commit_number: commits.length,
+        commits: commits,
+    };
+}
 
 module.exports = router;
