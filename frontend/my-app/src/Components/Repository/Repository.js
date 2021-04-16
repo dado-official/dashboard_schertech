@@ -16,7 +16,7 @@ export default function Repository({ setUrl }) {
     }, []);
 
     return (
-        <div className="ml-16.625">
+        <div className="ml-16.625 pb-8">
             <div className="flex justify-between">
                 <div className="flex gap-4">
                     <img
@@ -45,10 +45,12 @@ export default function Repository({ setUrl }) {
                 </button>
             </div>
             <div className="flex">
-                <div className="grid grid-flow-rows grid-cols-3 gap-8 mt-8">
+                <div className="grid grid-flow-rows grid-cols-4 gap-8 mt-8">
                     <LatestCommits />
-                </div>
-                <div>
+                    <div className="flex flex-col gap-8 col-span-2">
+                        <MostCommitsChart />
+                        <CommitsPerWeekChart />
+                    </div>
                     <Insights
                         members="42"
                         contributors="21"
@@ -61,7 +63,7 @@ export default function Repository({ setUrl }) {
                         deletions="7.7K"
                         branches="2"
                     />
-                </div>                        
+                </div>
             </div>
         </div>
     );

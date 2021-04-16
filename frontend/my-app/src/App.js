@@ -8,6 +8,7 @@ import AddServer from "./Components/AllServers/AddServer";
 import AddRepository from "./Components/AllRepositories/AddRepository";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import AllCustom from "./Components/Custom/AllCustom";
+import Custom from "./Components/Custom/Custom";
 
 function App() {
     const [url, setUrl] = useState();
@@ -32,6 +33,9 @@ function App() {
                 </Route>
                 <Route path="/custom" exact>
                     <AllCustom setUrl={setUrl} />
+                </Route>
+                <Route path="/custom/:id" exact>
+                    <Custom setUrl={setUrl} />
                 </Route>
             </Switch>
         </Router>

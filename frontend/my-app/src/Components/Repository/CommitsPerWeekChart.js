@@ -19,10 +19,12 @@ export default function CommitsPerWeekChart() {
                                 gridLines: {
                                     display: false,
                                 },
+                                stacked: true,
                             },
                         ],
                         yAxes: [
                             {
+                                stacked: true,
                                 gridLines: {
                                     color: "#94A3BC",
                                     drawBorder: false,
@@ -46,10 +48,34 @@ export default function CommitsPerWeekChart() {
                     ],
                     datasets: [
                         {
-                            label: "Commits",
-                            data: [1, 2, 3, 4, 8, 0],
-                            backgroundColor: "#3963CD",
-                            borderSkipped: false,
+                            label: "benni2",
+                            data: [67.8, 9, 2],
+                            backgroundColor: "#D6E9C6", // green
+                        },
+                        {
+                            label: "Friedemann",
+                            data: [20.7],
+                            backgroundColor: "#FAEBCC", // yellow
+                        },
+                        {
+                            label: "Mutrecht",
+                            data: [11.4],
+                            backgroundColor: "#EBCCD1", // red
+                        },
+                        {
+                            label: "hirte",
+                            data: [0, 2],
+                            backgroundColor: "blue",
+                        },
+                        {
+                            label: "benni",
+                            data: [0, 2],
+                            backgroundColor: "red",
+                        },
+                        {
+                            label: "huh",
+                            data: [0, 8],
+                            backgroundColor: "orange",
                         },
                     ],
                 }}
