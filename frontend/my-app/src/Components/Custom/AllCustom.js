@@ -4,7 +4,7 @@ import AddButton from '../Shared/AddButton'
 
 export default function AllCustom({ setUrl }) {
     useEffect(() => {
-        setUrl("custom");
+        setUrl("Custom");
     }, []);
     return (
         <div className="ml-16.625">
@@ -15,39 +15,46 @@ export default function AllCustom({ setUrl }) {
                     name="Custom1"
                     description="Custom 1 description..."
                     remainingdays={2}
+                    chart={12.4}
                 />
                 <CustomContainer
                     name="Custom1"
                     description="Custom 1 description..."
                     remainingdays={0}
+                    chart={12.4}
                 />
                 <CustomContainer
                     name="Custom1"
                     description="Custom 1 description..."
                     remainingdays={30}
+                    chart={-12.4}
                 />
                 <CustomContainer
                     name="Custom1"
                     description="Custom 1 description..."
                     remainingdays={1}
+                    chart={12.4}
                 />
                 <CustomContainer
                     name="Custom1"
                     description="Custom 1 description..."
                     remainingdays={0}
+                    chart={-12.4}
                 />
                 <CustomContainer
                     name="Custom1"
                     description="Custom 1 description..."
                     remainingdays={23}
+                    chart={12.4}
                 />
                 <CustomContainer
                     name="Custom1"
                     description="Custom 1 description..."
                     remainingdays={123}
+                    chart={12.4}
                 />
                 <AddButton 
-                    title="server"
+                    title="custom"
                 />
             </div>
         </div>

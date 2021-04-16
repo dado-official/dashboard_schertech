@@ -26,10 +26,11 @@ export default function CustomContainer(props) {
                 </div>
             </div>
             <p className="text-unclicked text-sm mt-2">{props.description}</p>
-            <div className=" bg-hover rounded-0.938">
-                <p className={`${props.chart >= 0 ? "text-onlineGreen" : "text-offlineRed"}`}>{props.chart}</p>
-            </div>
+            
             <div className="flex mt-4 justify-between">
+            <div className=" bg-hover rounded-0.938  flex items-center justify-center p-2">
+                <p className={`${props.chart >= 0 ? "text-onlineGreen" : "text-offlineRed"}`}>{props.chart >= 0 ? "+":""}{props.chart}%</p>
+            </div>
                 <h6
                     className={`text-unclicked hover:text-white font-semi text-2xl transition eae-in-out duration-300 cursor-pointer ${
                         !hover ? " opacity-0" : ""
