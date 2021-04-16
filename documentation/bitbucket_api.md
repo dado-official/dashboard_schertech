@@ -35,7 +35,8 @@ repo_slug | The name of the repository slug (name)
 #### Body parameters
 Parameter | Description
 --- | ---
-TODO | 
+new_workspace | The new name of the workspace
+new_repo_slug | The new name of the repository slug (name)
 
 
 
