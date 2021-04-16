@@ -16,7 +16,10 @@
 Parameter | Description
 --- | --- 
 hostname | The hostname or IP of the server
-
+db_port | The port of the database
+db_username | The DB username
+db_password | The password of the DB user
+description | The description of the Serve
 
 
 ## Get information about a specific server
@@ -38,7 +41,11 @@ hostname | The hostname of IP of the server
 #### Body parameters
 Parameter | Description
 --- | ---
-TODO | 
+new_hostname | The new hostname of IP of the server
+db_port | The new port of the database
+db_username | The new DB username
+db_password | The new password of the DB user
+description | The new description of the Server
 
 
 
