@@ -35,14 +35,14 @@ router.get("/:workspace/:repo_slug", async (req, res) => {
         //branch anzahl mit link ganz am Ende size
         //Zeit moment.js Library
 
-        resultObject={
+        resultObject = {
             owner_name: data.owner.display_name,
             is_private: data.is_private,
             created_on: data.created_on,
             last_updated: data.last_updated,
 
 
-        }
+        };
         res.send(data);
     } catch (err) {
         const {error, status, message} = err;
@@ -70,8 +70,40 @@ router.post("/", async (req, res) => {
     });
 });
 
-//TODO
 //Update a specific repository
+router.put("/:hostname", (req, res) => {
+    const {workspace, repo_slug} = req.params;
+    const {new_workspace, new_repo_slug} = req.body;
+    //TODO make this better, if possible
+    //Create update statement, only update if a value is given
+    let values = [];
+    let sql = "UPDATE servers SET ";
+    if (new_workspace) {
+        sql += "workspace = ?, ";
+        values.push(new_workspace);
+    }
+    if (new_repo_slug) {
+        sql += "repo_slug = ?, ";
+        values.push(new_repo_slug);
+    }
+
+    sql += "WHERE workspace = ? AND repo_slug = ?;";
+    values.push(workspace);
+    values.push(repo_slug);
+
+    //Regex to remove the last comma in this string:
+    //https://stackoverflow.com/questions/5497318/replace-last-occurrence-of-character-in-string/
+    sql = sql.replace(/,([^,]*)$/, "$1");
+
+    db.run(sql, values, (err) => {
+        if (err) {
+            console.log(err);
+            return res.sendStatus(400);
+        }
+
+        res.sendStatus(200);
+    });
+});
 
 
 //Deletes a specific repository

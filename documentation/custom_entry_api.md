@@ -34,10 +34,10 @@ id | The id of the entry
 #### Body parameters (Use at least one of them)
 Parameter | Description
 --- | ---
-title | The title of the entry.
-description | The description of the entry.
+title | The new title of the entry.
+description | The new description of the entry.
 frequency | How often you enter new values (d=daily, w=weekly, m=monthly, y=yearly).
-target_value | The value you want to reach.
+target_value | The new value you want to reach.
 
 
 
@@ -96,7 +96,7 @@ value_id | The id of the value
 #### Body parameters
 Parameter | Description
 --- | ---
-value | The value you want to store
+value | The new value you want to store
 
 
 
