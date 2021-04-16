@@ -30,7 +30,7 @@ router.post("/", (req, res) => {
         OR IGNORE 
         INTO custom_entries(title, description, frequency, target_value)
         VALUES(?, ?, ?, ?)`;
-    console.log(title);
+
     db.run(sql, [title, description, frequency, target_value], (err) => {
         if (err) {
             console.log(err);
