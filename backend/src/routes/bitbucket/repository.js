@@ -217,4 +217,32 @@ router.get("/:workspace/:repo_slug/weeklycommits", async (req, res) => {
     }
 });
 
+//returns all commits in a Repository
+router.get("/:workspace/:repo_slug/allcommits", async (req, res) => {
+    const {workspace, repo_slug} = req.params;
+    let pagelen = 100
+    let page = 1
+    let anzahl = 0
+    
+        try {
+            while(true){
+                const {data} = await bitbucket
+                    .repositories
+                    .listCommits({workspace: workspace, repo_slug: repo_slug, page: page, pagelen: pagelen, revision: ""});
+
+                let commitData = reduceCommitData(data);
+                //Add link to the Bitbucket repository
+                commitData["link"] = `https://bitbucket.org/${workspace}/${repo_slug}/commits/`;
+                anzahl = anzahl + commitData.commit_number
+                ++page
+                if(commitData.commit_number < 30){
+                    return res.send(commitData);
+                }   
+            }
+        } catch (err) {
+            const {error, status, message} = err;
+            console.log("ERROR:", error, status, message);
+            res.sendStatus(status);
+        }    
+});
 module.exports = router;
