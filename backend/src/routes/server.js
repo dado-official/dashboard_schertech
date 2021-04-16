@@ -41,13 +41,13 @@ router.get("/:hostname", async (req, res) => {
         console.log("Username: " + username + " Password: " + password);
 
 
-        const connection = await mysql.createConnection({
+        const connection = await mysql.createConnection({  //create connection to db
             host: req.params.hostname,
             user: username,
             password: password  
         });
 
-        connection.ping(err => {
+        connection.ping(err => { //check if db is online
             try{
                 if(err){
                     console.log("Error connecting");

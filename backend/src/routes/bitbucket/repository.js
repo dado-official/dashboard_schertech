@@ -31,8 +31,17 @@ router.get("/:workspace/:repo_slug", async (req, res) => {
             .repositories
             .get({workspace: req.params.workspace, repo_slug: req.params.repo_slug});
         //data.links.avatar.href Repository Avatar
+        //branch anzahl mit link ganz am Ende size
+        //Zeit moment.js Library
+
+        resultObject={
+            owner_name: data.owner.display_name,
+            is_private: data.is_private,
+            created_on: data.created_on,
+            last_updated: data.last_updated,
 
 
+        }
         res.send(data);
     } catch (err) {
         const {error, status, message} = err;
