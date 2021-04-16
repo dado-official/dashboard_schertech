@@ -15,6 +15,7 @@ export default function Sidebarelement(props) {
                 pt-1
                 pb-1 
                 pl-1.131 
+                pr-1.131 
                 flex flex-row content-evenly items-center 
                 bg-primary 
                 hover:text-white
@@ -23,19 +24,18 @@ export default function Sidebarelement(props) {
                         ? "text-white bg-hover"
                         : "text-unclicked"
                 }
-        `}
-        >
-            <Icon
-                color={`${props.url === props.title ? "white" : color}`}
-            ></Icon>
-            <p
-                className=" 
-                    pl-3
-                    align-middle 
-                    "
-            >
-                {props.title}
-            </p>
+            `}>
+            <div className="w-full flex justify-between flex-row items-center ">
+                <div className="flex flex-row items-center">
+                    <Icon color={`${props.url === props.title ? "white" : color}`}></Icon>
+                    <p className=" pl-3 align-middle">{props.title}</p>
+                </div>
+                <div className={` ${props.alert === 0 ? "hidden": ""} h-1.25 w-1.25 bg-offlineRed rounded-0.313 flex items-center justify-center`}>
+                    <p className="text-sm text-black font-bold">{props.alert}</p>
+                </div>
+            </div>
+            
+            
         </Link>
     );
 }

@@ -33,7 +33,7 @@ export default function AllServers({ setUrl }) {
                     name="Repository1"
                     description="Repository1 descritpion..."
                 />
-                <AddButton />
+                <AddButton title="repository" />
             </div>
         </div>
     );
