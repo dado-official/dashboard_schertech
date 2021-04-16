@@ -1,0 +1,43 @@
+import React,{useState} from 'react'
+
+export default function CustomContainer(props) {
+    const [hover, setHover] = useState(false);
+    return (
+        <div
+            className={`bg-primary hover:bg-backgroundHover tranition ease-in-out cursor-pointer duration-500 rounded-0.938 py-3 px-4 w-full border-2 ${
+                props.remainingdays === 0 ? " border-offlineRed" : " border-onlineGreen"
+            }`}
+            onMouseEnter={() => setHover(true)}
+            onMouseLeave={() => setHover(false)}
+        >
+            <div className="flex justify-between">
+                <h6 className="text-white ">{props.name}</h6>
+                <div className="flex gap-2 items-center">
+                    <h6 className="text-unclicked">
+                        enter Data: 
+                    </h6>
+                    <div
+                        className={ `${
+                            props.remainingdays !== 0 ? "text-onlineGreen" : " text-offlineRed"
+                        }`}
+                    >
+                        {props.remainingdays === 0 ? "today": "in " + props.remainingdays + " days"}
+                    </div>
+                </div>
+            </div>
+            <p className="text-unclicked text-sm mt-2">{props.description}</p>
+            <div className=" bg-hover rounded-0.938">
+                <p className={`${props.chart >= 0 ? "text-onlineGreen" : "text-offlineRed"}`}>{props.chart}</p>
+            </div>
+            <div className="flex mt-4 justify-between">
+                <h6
+                    className={`text-unclicked hover:text-white font-semi text-2xl transition eae-in-out duration-300 cursor-pointer ${
+                        !hover ? " opacity-0" : ""
+                    }`}
+                >
+                    x
+                </h6>
+            </div>
+        </div>
+    )
+}

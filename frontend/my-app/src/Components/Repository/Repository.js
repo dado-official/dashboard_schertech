@@ -3,7 +3,7 @@ import { BiLockAlt } from "react-icons/bi";
 import { BiLockOpenAlt } from "react-icons/bi";
 import Insights from "./Insights";
 import LatestCommits from "./LatestCommits";
-import MostCommitsChart from "./MostCommitsChart";
+//import MostCommitsChart from "./MostCommitsChart";
 
 export default function Repository({ setUrl }) {
     const [name, setName] = useState("Repositoryname");
