@@ -26,39 +26,43 @@ router.get("/", async (req, res) => {
 
 //Checks if database of server is reachable
 router.get("/:hostname", async (req, res) => {
-    var username;
-    var password;
-    let sql = "SELECT * FROM servers WHERE hostname=?";
-    db.get(sql, [req.params.hostname], async (err, row) => {   //gets username and password from local database
+    const {hostname} = req.params;
+    let sql = `
+        SELECT * 
+        FROM servers 
+        WHERE hostname = ?`;
+
+    db.get(sql, [hostname], async (err, row) => {   //gets username and password from local database
         if (err) {
             console.log(err);
             return res.sendStatus(400);
         }
 
-        username = row.db_username.toString();
-        password = row.db_password.toString();
+        if (!row) {
+            console.log("Couldn't find any data");
+            return res.sendStatus(400);
+        }
 
-        console.log("Username: " + username + " Password: " + password);
-
+        const {db_username, db_password, db_port} = row
+        console.log(`Username: ${db_username} Password: ${db_password} Port: ${db_port}`)
 
         const connection = await mysql.createConnection({  //create connection to db
-            host: req.params.hostname,
-            user: username,
-            password: password
+            host: hostname,
+            user: db_username,
+            password: db_password
         });
 
         connection.ping(err => { //check if db is online
             try {
                 if (err) {
-                    console.log("Error connecting");
                     throw new Error("Database not reachable");
                 } else {
                     console.log("Pingable!");
-                    res.send("true");
+                    res.send(true);
                 }
             } catch (e) {
                 console.log(e.message);
-                res.send("false");
+                res.send(false);
             } finally {
                 connection.end();
             }
@@ -69,7 +73,8 @@ router.get("/:hostname", async (req, res) => {
 
 //Adds a new server
 router.post("/", async (req, res) => {
-    const {hostname, db_port, db_username, db_password, description} = req.body;
+    const {hostname, db_port = 3306, db_username, db_password, description} = req.body;
+    console.log(db_port);
     let sql = `
         INSERT
         OR IGNORE 
@@ -95,9 +100,9 @@ router.put("/:hostname", (req, res) => {
     //Create update statement, only update if a value is given
     let values = [];
     let sql = "UPDATE servers SET ";
-    if(new_hostname){
-        sql += "hostname = ?, "
-        values.push(new_hostname)
+    if (new_hostname) {
+        sql += "hostname = ?, ";
+        values.push(new_hostname);
     }
     if (db_port) {
         sql += "db_port = ?, ";
@@ -138,7 +143,7 @@ router.delete("/:hostname", async (req, res) => {
     let sql = `
         DELETE
         FROM servers
-        WHERE hostname =  = ? `;
+        WHERE hostname  = ? `;
 
     db.run(sql, [hostname], (err) => {
         if (err) {

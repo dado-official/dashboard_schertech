@@ -1,3 +1,4 @@
+# [Home](../README.md)
 # Server API documentation
 
 # Base URL
