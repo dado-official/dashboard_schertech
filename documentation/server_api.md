@@ -1,34 +1,50 @@
 # Server API documentation
 
+# Base URL
+    /api/server
 
-## Base URL
-    /server
 
-### Get a list of all servers that are stored on the database
+
+## Get a list of all servers that are stored on the database
 `GET /`
 
 
-### Add a new server to the database
+
+## Add a new server to the database
 `POST /`
 #### Body parameters
-- hostname:
+Parameter | Description
+--- | --- 
+hostname | The hostname or IP of the server
 
 
-### Get information about a specific server
+
+## Get information about a specific server
 `GET /:hostname`
 #### Path parameters
-- hostname:
+Parameter | Description
+--- | ---
+hostname | The hostname or IP of the server
 
 
-### Update information about the server
+
+## Update information about the server
 `PUT /:hostname`
 #### Path parameters
-- hostname:
+Parameter | Description
+--- | ---
+hostname | The hostname of IP of the server
+
 #### Body parameters
-- TODO
+Parameter | Description
+--- | ---
+TODO | 
 
 
-### Delete a server from the database
+
+## Delete a server from the database
 `DELETE /:hostname`
 #### Path parameters
-- hostname:
+Parameter | Description
+--- | ---
+hostname | The hostname or IP of the server
