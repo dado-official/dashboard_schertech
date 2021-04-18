@@ -1,16 +1,16 @@
-import React,{useEffect} from 'react'
-import CustomContainer from './CustomContainer';
-import AddButton from '../Shared/AddButton'
+import React, { useEffect } from "react";
+import CustomContainer from "./CustomContainer";
+import AddButton from "../Shared/AddButton";
 
 export default function AllCustom({ setUrl }) {
     useEffect(() => {
         setUrl("Custom");
     }, []);
     return (
-        <div className="ml-16.625">
+        <div className="main">
             <h2 className={`text-white text-2xl font-medium`}>Custom</h2>
             <p className=" text-unclicked">All the current customs</p>
-            <div className="grid grid-flow-row grid-cols-4 gap-8 mt-4">
+            <div className="grid grid-flow-row gap-8 mt-4 responsiveGrid">
                 <CustomContainer
                     name="Custom1"
                     description="Custom 1 description..."
@@ -53,10 +53,8 @@ export default function AllCustom({ setUrl }) {
                     remainingdays={123}
                     chart={12.4}
                 />
-                <AddButton 
-                    title="custom"
-                />
+                <AddButton title="custom" />
             </div>
         </div>
-    )
+    );
 }

@@ -1,6 +1,9 @@
 import React from "react";
 import { AiOutlineBarChart } from "react-icons/ai";
 import { Bar } from "react-chartjs-2";
+import { defaults } from "react-chartjs-2";
+defaults.global.defaultFontFamily = "Montserrat";
+defaults.global.defaultFontColor = "#94A3BC";
 
 export default function MostCommitsChart() {
     return (

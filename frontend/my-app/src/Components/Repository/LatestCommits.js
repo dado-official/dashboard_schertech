@@ -1,6 +1,9 @@
 import React from "react";
 import { FaHistory } from "react-icons/fa";
 import Commit from "./Commit";
+import { defaults } from "react-chartjs-2";
+defaults.global.defaultFontFamily = "Montserrat";
+defaults.global.defaultFontColor = "#94A3BC";
 
 export default function LatestCommits() {
     return (

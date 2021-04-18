@@ -7,6 +7,17 @@
     font-family: "Montserrat", sans-serif;
 }
 
+*::-webkit-scrollbar {
+    width: 12px;
+    background-color: #000000;
+}
+
+*::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.075);
+    background-color: rgb(78, 78, 78);
+}
+
 body {
     background-color: #161616;
 }
@@ -20,4 +31,43 @@ body {
         #212121 1rem,
         #212121 2rem
     );
+}
+
+.responsiveGrid {
+    @apply grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4;
+}
+
+.main {
+    @apply lg:ml-16.625 mt-10 lg:mt-0;
+}
+
+@media (max-width: 1023px) {
+    .slidein {
+        transform: translateX(0);
+        transition: all 1s;
+        animation: ease-in slide 0.3s;
+    }
+
+    @keyframes slide {
+        from {
+            transform: translateX(-100%);
+        }
+        to {
+            transform: translateX(0);
+        }
+    }
+    .slideout {
+        transform: translateX(-100%);
+        transition: all 1s;
+        animation: ease-in slide2 0.3s;
+    }
+
+    @keyframes slide2 {
+        from {
+            transform: translateX(0);
+        }
+        to {
+            transform: translateX(-100%);
+        }
+    }
 }

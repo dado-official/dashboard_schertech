@@ -1,22 +1,46 @@
 import React, { useState } from "react";
 import SidebarElement from "./Sidebarelement";
-import ServerContainer from "../AllServers/ServerContainer";
-//import Rerpository from "../TabRepositories/repositories"
-//import Scrum from "../TabScrum/scrum"
 
 import { HiServer } from "react-icons/hi";
 import { IoLogoBitbucket } from "react-icons/all";
 import { BiCustomize } from "react-icons/bi";
+import { RiCloseFill } from "react-icons/ri";
 
-const Sidebar = ({ url }) => {
+const Sidebar = ({ url, setOpenSidebar, openSidebar }) => {
     return (
         <header
             id="sidebarMainContainer"
-            className="bg-primary fixed rounded-0.938 h-maxHeight w-14.625 pr-1.188 pl-1.188 pt-1.688 "
+            className={`bg-primary z-20 fixed top-0 lg:top-auto left-0 lg:left-auto lg:rounded-0.938 h-full lg:h-maxHeight w-full lg:w-14.625 pr-1.188 pl-1.188 pt-1.688 ${
+                openSidebar ? "block slidein" : "slideout"
+            } lg:block`}
         >
-            <SidebarElement icon={HiServer} title="Server" url={url} alert={0}/>
-            <SidebarElement icon={IoLogoBitbucket} title="Repository" url={url} alert={1}/>
-            <SidebarElement icon={BiCustomize} title="Custom" url={url} alert={0}/>
+            <div
+                className="flex justify-end py-1 cursor-pointer lg:hidden mb-2"
+                onClick={() => setOpenSidebar(false)}
+            >
+                <RiCloseFill size="30" color="white" />
+            </div>
+            <SidebarElement
+                icon={HiServer}
+                title="Server"
+                url={url}
+                alert={0}
+                setOpenSidebar={setOpenSidebar}
+            />
+            <SidebarElement
+                icon={IoLogoBitbucket}
+                title="Repository"
+                url={url}
+                alert={1}
+                setOpenSidebar={setOpenSidebar}
+            />
+            <SidebarElement
+                icon={BiCustomize}
+                title="Custom"
+                url={url}
+                alert={0}
+                setOpenSidebar={setOpenSidebar}
+            />
         </header>
     );
 };

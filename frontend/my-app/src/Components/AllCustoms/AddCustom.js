@@ -15,7 +15,7 @@ const AddCustom = () => {
     }
 
     return (
-        <div className="ml-14.625 h-full flex flex-wrap content-center">
+        <div className="main h-full flex flex-wrap content-center">
             <div className=" bg-primary rounded-0.938 w-22.625 h-35.063 m-auto p-1.875 pt-2.75 ">
                 <p className=" text-center text-white mb-2.813">Add Custom</p>
                 <p className=" text-white text-xs ">Custom Name</p>
