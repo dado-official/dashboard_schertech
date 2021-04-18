@@ -44,7 +44,7 @@ body {
 @media (max-width: 1023px) {
     .slidein {
         transform: translateX(0);
-        transition: all 1s;
+        transition: all 0.5s ease-in;
         animation: ease-in slide 0.3s;
     }
 
@@ -58,7 +58,7 @@ body {
     }
     .slideout {
         transform: translateX(-100%);
-        transition: all 1s;
+        transition: all 0.5s ease-in;
         animation: ease-in slide2 0.3s;
     }
 
