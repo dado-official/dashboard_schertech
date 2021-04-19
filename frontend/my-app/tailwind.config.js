@@ -9,7 +9,6 @@ module.exports = {
                 background: "#161616",
                 backgroundHover: "#212121",
                 hover: "#343434",
-                hoverLight: "#3d3d3d",
                 onlineGreen: "#2DFD99",
                 offlineRed: "#FF4B77",
                 commitBlue: "#3963CD",
@@ -21,8 +20,10 @@ module.exports = {
                 13.313: "13.313rem",
                 0.938: "0.938rem",
                 0.688: "0.688rem",
+                0.875: "0.875rem",
                 1.131: "1.131rem",
                 1.188: "1.188rem",
+                1.25: "1.25rem",
                 1.688: "1.688rem",
                 2.563: "2.563rem",
                 2.75: "2.75rem",
@@ -31,9 +32,12 @@ module.exports = {
                 14.625: "14.625rem",
                 16.625: "16.625rem",
                 22.625: "22.625rem",
+                23: "23rem",
+                30.563: "30.563rem",
                 35.063: "35.063rem",
                 48.688: "48.688rem",
                 12.625: "12.625rem",
+                5.063: "5.063rem",
                 addMaxHeight: "calc(( 100% - 2 / 48.688rem ) )",
                 maxHeight: "calc(100% - 4rem)",
                 minContent: "min-content",
@@ -41,6 +45,8 @@ module.exports = {
             },
             borderRadius: {
                 0.938: "0.938rem",
+                0.625: "0.625rem",
+                0.313: "0.313rem"
             },
             boxShadow: {
                 focusAdd: "0px 0px 4px 3px #3963CD"

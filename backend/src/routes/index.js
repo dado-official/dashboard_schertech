@@ -1,11 +1,9 @@
 const router = require("express").Router();
 
-const bitbucket = require("./bitbucket");
+const repository = require("./bitbucket/repository");
 const server = require("./server");
-const custom = require("./custom");
 
-router.use("/bitbucket", bitbucket);
+router.use("/repository", repository);
 router.use("/server", server);
-router.use("/custom", custom);
 
 module.exports = router;

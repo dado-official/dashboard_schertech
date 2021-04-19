@@ -4,13 +4,16 @@ import "./App.css";
 import AllServers from "./Components/AllServers/AllServers";
 import AllRepositories from "./Components/AllRepositories/AllRepositories.";
 import Repository from "./Components/Repository/Repository";
-import AddServer from "./Components/AllServers/AddServer"
+import AddServer from "./Components/AllServers/AddServer";
+import AddRepository from "./Components/AllRepositories/AddRepository";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import AllCustom from "./Components/Custom/AllCustom";
+import Custom from "./Components/Custom/Custom";
+import AddCustom from "./Components/Custom/AddCustom";
 
 function App() {
     const [url, setUrl] = useState();
     return (
-
         <Router>
             <Sidebar url={url} setUrl={setUrl} />
             <Switch>
@@ -20,14 +23,23 @@ function App() {
                 <Route path="/repository" exact>
                     <AllRepositories setUrl={setUrl} />
                 </Route>
+                <Route path={"/repository/add"}>
+                    <AddRepository />
+                </Route>
                 <Route path="/repository/:id">
                     <Repository setUrl={setUrl} />
                 </Route>
-                <Route path="/scrum" exact>
-                    <p>g</p>
-                </Route>
                 <Route path={"/server/add"}>
-                  <AddServer/>
+                    <AddServer />
+                </Route>
+                <Route path={"/custom/add"}>
+                    <AddCustom />
+                </Route>
+                <Route path="/custom" exact>
+                    <AllCustom setUrl={setUrl} />
+                </Route>
+                <Route path="/custom/:id" exact>
+                    <Custom setUrl={setUrl} />
                 </Route>
             </Switch>
         </Router>

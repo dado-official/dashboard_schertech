@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { BiLockAlt } from "react-icons/bi";
 import { BiLockOpenAlt } from "react-icons/bi";
+import Insights from "./Insights";
 import LatestCommits from "./LatestCommits";
 import MostCommitsChart from "./MostCommitsChart";
+import CommitsPerWeekChart from "./CommitsPerWeekChart";
 
 export default function Repository({ setUrl }) {
     const [name, setName] = useState("Repositoryname");
@@ -14,7 +16,7 @@ export default function Repository({ setUrl }) {
     }, []);
 
     return (
-        <div className="ml-16.625">
+        <div className="ml-16.625 pb-8">
             <div className="flex justify-between">
                 <div className="flex gap-4">
                     <img
@@ -42,9 +44,26 @@ export default function Repository({ setUrl }) {
                     Go to Repository
                 </button>
             </div>
-            <div className="grid grid-flow-rows grid-cols-4 gap-8 mt-8">
-                <LatestCommits />
-                <MostCommitsChart />
+            <div className="flex">
+                <div className="grid grid-flow-rows grid-cols-4 gap-8 mt-8">
+                    <LatestCommits />
+                    <div className="flex flex-col gap-8 col-span-2">
+                        <MostCommitsChart />
+                        <CommitsPerWeekChart />
+                    </div>
+                    <Insights
+                        members="42"
+                        contributors="21"
+                        admins="2"
+                        owner="seppele"
+                        linesofcode="22.6K"
+                        files="73"
+                        commits="93"
+                        additions="70.3K"
+                        deletions="7.7K"
+                        branches="2"
+                    />
+                </div>
             </div>
         </div>
     );
