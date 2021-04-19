@@ -1,6 +1,8 @@
 const router = require("express").Router();
 const bitbucket = require("./bitbucket");
 const db = require("@database/db");
+const moment= require("moment");
+moment.locale("de");
 
 
 //Returns a list of all the repositories
@@ -28,22 +30,50 @@ router.get("/", async (req, res) => {
 router.get("/:workspace/:repo_slug", async (req, res) => {
     const {workspace, repo_slug} = req.params;
     try {
-        const {data} = await bitbucket
+
+          const {data} = await bitbucket
             .repositories
-            .get({workspace: workspace, repo_slug: repo_slug});
+            .get({workspace: workspace, repo_slug: repo_slug}); 
         //data.links.avatar.href Repository Avatar
         //branch anzahl mit link ganz am Ende size
-        //Zeit moment.js Library
+        
+        var last_update_formatted=moment(data.updated_on).format("L");
+        var lastUpdate=moment(data.updated_on).format("Do MMMM YYYY, h:mm:ss")
+        var last_update_fromnow=moment(lastUpdate, "Do MMMM YYYY, h:mm:ss").fromNow();
+
+        var created_on_formatted=moment(data.created_on).format("L");
+ 
 
         resultObject={
             owner_name: data.owner.display_name,
             is_private: data.is_private,
-            created_on: data.created_on,
-            last_updated: data.last_updated,
-
+            created_on: created_on_formatted,
+            last_updated_formatted: last_update_formatted,
+            last_update_fromnow: last_update_fromnow,
 
         }
-        res.send(data);
+
+        res.send(data); 
+    } catch (err) {
+        const {error, status, message} = err;
+        console.log("ERROR:", error, status, message);
+        res.sendStatus(status);
+    }
+});
+
+router.get("/:workspace/:repo_slug/test", async (req, res) => {
+    const {workspace, repo_slug} = req.params;
+    try {
+
+          const {data} = await bitbucket
+            .repositories
+            .listRefs({workspace: workspace, repo_slug: repo_slug, pagelen: 100});
+
+            let branchData = reduceBranchData(data);
+            //Add link to the Bitbucket repository
+            branchData["link"] = `https://bitbucket.org/${workspace}/${repo_slug}/branches/`;
+
+        res.send(branchData); 
     } catch (err) {
         const {error, status, message} = err;
         console.log("ERROR:", error, status, message);
@@ -134,6 +164,25 @@ function reduceCommitData(data) {
     return {
         commit_number: commits.length,
         commits: commits,
+    };
+}
+
+function reduceBranchData(data){
+    let branches=[];
+
+    data.values.forEach((branch) => {
+        let reducedBranch={
+            name: branch.name,
+            author: branch.target.author?.user?.display_name || "",
+
+        }
+        branches.push(reducedBranch);
+    });
+    
+
+    return{
+        branch_number: branches.length,
+        branches: branches,
     };
 }
 
