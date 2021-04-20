@@ -2,7 +2,6 @@ const router = require("express").Router();
 const db = require("@database/db");
 const mysql = require("mysql");
 
-
 //Returns a list of all the servers
 router.get("/", async (req, res) => {
     let sql = `
@@ -26,13 +25,14 @@ router.get("/", async (req, res) => {
 
 //Checks if database of server is reachable
 router.get("/:hostname", async (req, res) => {
-    const {hostname} = req.params;
+    const { hostname } = req.params;
     let sql = `
         SELECT * 
         FROM servers 
         WHERE hostname = ?`;
 
-    db.get(sql, [hostname], async (err, row) => {   //gets username and password from local database
+    db.get(sql, [hostname], async (err, row) => {
+        //gets username and password from local database
         if (err) {
             console.log(err);
             return res.sendStatus(400);
@@ -43,37 +43,46 @@ router.get("/:hostname", async (req, res) => {
             return res.sendStatus(400);
         }
 
-        const {db_username, db_password, db_port} = row;
-        console.log(`Username: ${db_username} Password: ${db_password} Port: ${db_port}`);
+        const { db_username, db_password, db_port } = row;
+        console.log(
+            `Username: ${db_username} Password: ${db_password} Port: ${db_port}`
+        );
 
-        const connection = await mysql.createConnection({  //create connection to db
+        const connection = await mysql.createConnection({
+            //create connection to db
             host: hostname,
             user: db_username,
-            password: db_password
+            password: db_password,
         });
 
-        connection.ping(err => { //check if db is online
+        connection.ping((err) => {
+            //check if db is online
             try {
                 if (err) {
                     throw new Error("Database not reachable");
                 } else {
                     console.log("Pingable!");
-                    res.send({reachable: true});
+                    res.send({ reachable: true });
                 }
             } catch (e) {
                 console.log(e.message);
-                res.send({reachable: false});
+                res.send({ reachable: false });
             } finally {
                 connection.end();
             }
-
         });
     });
 });
 
 //Adds a new server
 router.post("/", async (req, res) => {
-    const {hostname, db_port = 3306, db_username, db_password, description} = req.body;
+    const {
+        hostname,
+        db_port = 3306,
+        db_username,
+        db_password,
+        description,
+    } = req.body;
     console.log(db_port);
     let sql = `
         INSERT
@@ -81,20 +90,30 @@ router.post("/", async (req, res) => {
         INTO servers(hostname, db_port, db_username, db_password, description)
         VALUES(?, ?, ?, ?, ?)`;
 
-    db.run(sql, [hostname, db_port, db_username, db_password, description], (err) => {
-        if (err) {
-            console.log(err);
-            return res.sendStatus(400);
-        }
+    db.run(
+        sql,
+        [hostname, db_port, db_username, db_password, description],
+        (err) => {
+            if (err) {
+                console.log(err);
+                return res.sendStatus(400);
+            }
 
-        res.sendStatus(200);
-    });
+            res.sendStatus(200);
+        }
+    );
 });
 
 //Update a specific sever
 router.put("/:hostname", (req, res) => {
-    const {hostname} = req.params;
-    const {new_hostname, db_port, db_username, db_password, description} = req.body;
+    const { hostname } = req.params;
+    const {
+        new_hostname,
+        db_port,
+        db_username,
+        db_password,
+        description,
+    } = req.body;
 
     //TODO make this better, if possible
     //Create update statement, only update if a value is given
@@ -139,7 +158,7 @@ router.put("/:hostname", (req, res) => {
 
 //Deletes a specific server
 router.delete("/:hostname", async (req, res) => {
-    const {hostname} = req.params;
+    const { hostname } = req.params;
     let sql = `
         DELETE
         FROM servers
