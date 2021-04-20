@@ -67,13 +67,13 @@ router.get("/:workspace/:repo_slug/test", async (req, res) => {
 
           const {data} = await bitbucket
             .repositories
-            .listRefs({workspace: workspace, repo_slug: repo_slug, pagelen: 100});
+            .listRefs({workspace: workspace, repo_slug: repo_slug});
 
             let branchData = reduceBranchData(data);
             //Add link to the Bitbucket repository
             branchData["link"] = `https://bitbucket.org/${workspace}/${repo_slug}/branches/`;
 
-        res.send(branchData); 
+        res.send(branchData);
     } catch (err) {
         const {error, status, message} = err;
         console.log("ERROR:", error, status, message);
@@ -206,6 +206,7 @@ function reduceBranchData(data){
         let reducedBranch={
             name: branch.name,
             author: branch.target.author?.user?.display_name || "",
+            //next: branch.next
 
         }
         branches.push(reducedBranch);
