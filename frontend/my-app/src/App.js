@@ -7,15 +7,23 @@ import Repository from "./Components/Repository/Repository";
 import AddServer from "./Components/AllServers/AddServer";
 import AddRepository from "./Components/AllRepositories/AddRepository";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import AllCustom from "./Components/Custom/AllCustom";
+import AllCustom from "./Components/AllCustoms/AllCustom";
 import Custom from "./Components/Custom/Custom";
-import AddCustom from "./Components/Custom/AddCustom";
+import AddCustom from "./Components/AllCustoms/AddCustom";
+import Navbar from "./Components/Navbar/Navbar";
 
 function App() {
     const [url, setUrl] = useState();
+    const [openSidebar, setOpenSidebar] = useState(false);
     return (
         <Router>
-            <Sidebar url={url} setUrl={setUrl} />
+            <Sidebar
+                url={url}
+                setUrl={setUrl}
+                openSidebar={openSidebar}
+                setOpenSidebar={setOpenSidebar}
+            />
+            <Navbar setOpenSidebar={setOpenSidebar} />
             <Switch>
                 <Route path={["/server", "/"]} exact>
                     <AllServers setUrl={setUrl} />

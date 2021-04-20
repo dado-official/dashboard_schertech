@@ -13,7 +13,7 @@ module.exports = {
                 offlineRed: "#FF4B77",
                 commitBlue: "#3963CD",
                 commitBlueHover: "#4c7aed",
-                input: "#343434"
+                input: "#343434",
             },
             spacing: {
                 1.875: "1.875rem",
@@ -42,17 +42,17 @@ module.exports = {
                 maxHeight: "calc(100% - 4rem)",
                 minContent: "min-content",
                 0.875: "0.875rem",
+                navbarWidth: "calc(100% - 4rem)",
             },
             borderRadius: {
                 0.938: "0.938rem",
                 0.625: "0.625rem",
-                0.313: "0.313rem"
+                0.313: "0.313rem",
             },
             boxShadow: {
-                focusAdd: "0px 0px 4px 3px #3963CD"
-            }
+                focusAdd: "0px 0px 4px 3px #3963CD",
+            },
         },
-    
     },
     variants: {
         extend: {},

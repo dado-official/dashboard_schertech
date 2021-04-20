@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { AiOutlineBarChart } from "react-icons/ai";
-import { Bar } from "react-chartjs-2";
 import { Line } from "react-chartjs-2";
+import { defaults } from "react-chartjs-2";
+defaults.global.defaultFontFamily = "Montserrat";
+defaults.global.defaultFontColor = "#94A3BC";
 
-export default function Chart({ wishValue }) {
+export default function Chart({ wishValue, dataArray, labels }) {
     const [data, setData] = useState([]);
 
     useEffect(() => {
@@ -14,18 +16,23 @@ export default function Chart({ wishValue }) {
         setData([
             {
                 label: "Commits",
-                data: [1, 2, 3, 4, 8, 0, 2, 5, 9, 1, 5],
+                data: dataArray,
                 borderSkipped: false,
                 borderColor: "#3963CD",
                 backgroundColor: gradient,
             },
             {
                 label: "Wish Value",
-                data: [8, 8, 8, 8, 8, 8, 8, 8, 8, 8],
-                borderColor: "#2DFD99",
+                radius: 0,
+                data: Array(dataArray.length).fill(wishValue),
+                borderCapStyle: "butt",
+                borderDash: [15, 15],
+                hoverRadius: 0,
+                borderColor: "rgb(45, 253, 153, 0.9)",
+                fill: false,
             },
         ]);
-    }, []);
+    }, [dataArray, wishValue]);
 
     return (
         <div className="bg-primary tranition ease-in-out w-full col-span-3 rounded-0.938 px-6 py-4 h-minContent pb-6">
@@ -36,23 +43,33 @@ export default function Chart({ wishValue }) {
             <Line
                 id="canvas"
                 options={{
-                    /*elements: {
+                    legend: {
+                        position: "bottom",
+                        labels: {
+                            padding: 20,
+                        },
+                    },
+                    elements: {
                         point: {
                             radius: 4,
                             borderWidth: 3,
                             hoverRadius: 6,
+                            hoverBorderWidth: 5,
                         },
                         line: {
-                            borderWidth: 1,
+                            borderWidth: 2,
                             borderColor: "rgb(57, 99, 205, 0.5)",
                         },
-                    },*/
+                    },
                     scales: {
                         xAxes: [
                             {
                                 gridLines: {
                                     color: "rgb(148, 163, 188,0.3)",
                                     drawBorder: false,
+                                },
+                                ticks: {
+                                    maxTicksLimit: 10,
                                 },
                             },
                         ],
@@ -71,18 +88,7 @@ export default function Chart({ wishValue }) {
                     },
                 }}
                 data={{
-                    labels: [
-                        "Red",
-                        "Blue",
-                        "Yellow",
-                        "Green",
-                        "Purple",
-                        "Orange",
-                        "123",
-                        "sdf",
-                        "213",
-                        "12",
-                    ],
+                    labels: labels,
                     datasets: data,
                 }}
             />

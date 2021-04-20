@@ -16,7 +16,7 @@ export default function Repository({ setUrl }) {
     }, []);
 
     return (
-        <div className="ml-16.625 pb-8">
+        <div className="main pb-8">
             <div className="flex justify-between">
                 <div className="flex gap-4">
                     <img
@@ -40,12 +40,12 @@ export default function Repository({ setUrl }) {
                         </div>
                     </div>
                 </div>
-                <button className="bg-commitBlue hover:bg-commitBlueHover transition ease-in-out duration-500 px-4 py-2 text-white rounded-0.938 h-minContent">
+                <button className="bg-commitBlue hover:bg-commitBlueHover transition ease-in-out duration-300 px-4 py-2 text-white rounded-0.938 h-minContent">
                     Go to Repository
                 </button>
             </div>
-            <div className="flex">
-                <div className="grid grid-flow-rows grid-cols-4 gap-8 mt-8">
+            <div className="flex w-full">
+                <div className="grid grid-flow-rows grid-cols-4 gap-8 mt-8 w-full">
                     <LatestCommits />
                     <div className="flex flex-col gap-8 col-span-2">
                         <MostCommitsChart />

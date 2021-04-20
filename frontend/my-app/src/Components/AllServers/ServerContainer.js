@@ -5,7 +5,7 @@ export default function ServerContainer({ name, description, online }) {
     const [hover, setHover] = useState(false);
     return (
         <div
-            className={`bg-primary hover:bg-backgroundHover tranition ease-in-out cursor-pointer duration-500 rounded-0.938 py-3 px-4 w-full border-2 ${
+            className={`bg-primary hover:bg-backgroundHover tranition ease-in-out cursor-pointer duration-300 rounded-0.938 py-3 px-4 w-full border-2 ${
                 online ? "border-onlineGreen" : "border-offlineRed"
             }`}
             onMouseEnter={() => setHover(true)}
