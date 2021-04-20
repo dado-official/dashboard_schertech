@@ -7,10 +7,10 @@ export default function AllServers({ setUrl }) {
         setUrl("Server");
     }, []);
     return (
-        <div className="ml-16.625">
+        <div className="main">
             <h2 className={`text-white text-2xl font-medium`}>Servers</h2>
             <p className=" text-unclicked">All the current servers</p>
-            <div className="grid grid-flow-row grid-cols-4 gap-8 mt-4">
+            <div className="grid grid-flow-row gap-8 mt-4 responsiveGrid">
                 <ServerContainer
                     name="Server1"
                     description="Server1 description..."
@@ -41,9 +41,7 @@ export default function AllServers({ setUrl }) {
                     name="Server1"
                     description="Server1 description..."
                 />
-                <AddButton 
-                    title="server"
-                />
+                <AddButton title="server" />
             </div>
         </div>
     );
