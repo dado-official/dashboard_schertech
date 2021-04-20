@@ -14,19 +14,21 @@ export default function CustomContainer(props) {
         >
             <div className="flex justify-between">
                 <h6 className="text-white ">{props.name}</h6>
-                <div className="flex gap-2 items-center">
-                    <h6 className="text-unclicked">enter Data:</h6>
-                    <div
-                        className={`${
-                            props.remainingdays !== 0
-                                ? "text-onlineGreen"
-                                : " text-offlineRed"
-                        }`}
-                    >
-                        {props.remainingdays === 0
-                            ? "today"
-                            : "in " + props.remainingdays + " days"}
-                    </div>
+                <div className="flex justify-between items-center">
+                    <h6 className="text-unclicked">
+                        enter Data:{" "}
+                        <span
+                            className={`${
+                                props.remainingdays !== 0
+                                    ? "text-onlineGreen"
+                                    : " text-offlineRed"
+                            }`}
+                        >
+                            {props.remainingdays === 0
+                                ? "today"
+                                : "in " + props.remainingdays + " days"}
+                        </span>
+                    </h6>
                 </div>
             </div>
             <p className="text-unclicked text-sm mt-2">{props.description}</p>
