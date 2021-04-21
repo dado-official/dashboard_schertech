@@ -19,6 +19,7 @@
         description
         frequency
         target_value
+        date
     }
 ]
 ````
@@ -65,7 +66,7 @@ id | The id of the entry
 
 # Values
 
-## Get a list of all values from an entry
+## Get a list of all values from an entry and other information
 `GET /:entry_id`  
 #### Path parameters
 Parameter | Description
@@ -82,6 +83,13 @@ entry_id | The id of the entry
         date
     }
 ]
+title
+description
+frequency
+target_value
+date
+remaining_time
+values_number
 ````
 
 

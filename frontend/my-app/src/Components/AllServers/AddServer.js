@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import Input from "../Shared/Input";
 import TextArea from "../Shared/TextArea";
+import axios from "axios";
+import { useHistory } from "react-router-dom";
 
 const AddServer = () => {
     const [serverName, setServerName] = useState("");
@@ -10,6 +12,8 @@ const AddServer = () => {
     const [password, setPassword] = useState("");
     const [desciption, setDescription] = useState("");
 
+    const history = useHistory();
+
     function subm() {
         console.log("Server Name: ", serverName);
         console.log("Location: ", location);
@@ -17,6 +21,18 @@ const AddServer = () => {
         console.log("username: ", username);
         console.log("password: ", password);
         console.log("Description: ", desciption);
+        axios
+            .post("http://localhost:4000/api/server", {
+                servername: serverName,
+                hostname: ipAddress,
+                desciption: desciption,
+                db_password: password,
+                db_username: username,
+            })
+            .then((res) => {
+                console.log(res.data);
+                history.push("/server");
+            });
     }
 
     return (

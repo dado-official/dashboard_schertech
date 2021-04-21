@@ -29,7 +29,7 @@
 Parameter | Description
 --- | --- 
 hostname | The hostname or IP of the server
-db_port | The port of the database
+db_port (optional) | The port of the database
 db_username | The DB username
 db_password | The password of the DB user
 description | The description of the Serve

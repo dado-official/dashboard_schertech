@@ -2,9 +2,16 @@ import React, { useState, useEffect } from "react";
 import Locaction from "./Location";
 import axios from "axios";
 
-export default function ServerContainer({ name, description }) {
+export default function ServerContainer({ name, description, setDel }) {
     const [hover, setHover] = useState(false);
     const [online, setOnline] = useState();
+
+    function deleteHandler() {
+        axios.delete(`http://localhost:4000/api/server/${name}`).then((res) => {
+            setDel((prev) => !prev);
+            console.log("delete");
+        });
+    }
 
     useEffect(() => {
         axios.get(`http://localhost:4000/api/server/${name}`).then((res) => {
@@ -52,6 +59,7 @@ export default function ServerContainer({ name, description }) {
                     className={`text-unclicked hover:text-white font-semi text-2xl transition eae-in-out duration-300 cursor-pointer ${
                         !hover ? " opacity-0" : ""
                     }`}
+                    onClick={deleteHandler}
                 >
                     x
                 </h6>

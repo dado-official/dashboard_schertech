@@ -16,7 +16,7 @@ router.get("/", async (req, res) => {
 
         if (rows.length === 0) {
             console.log("Result is empty");
-            return res.sendStatus(204);
+            return res.send([]);
         }
 
         res.send(rows);
@@ -25,7 +25,7 @@ router.get("/", async (req, res) => {
 
 //Checks if database of server is reachable
 router.get("/:hostname", async (req, res) => {
-    const { hostname } = req.params;
+    const {hostname} = req.params;
     let sql = `
         SELECT * 
         FROM servers 
@@ -43,7 +43,7 @@ router.get("/:hostname", async (req, res) => {
             return res.sendStatus(400);
         }
 
-        const { db_username, db_password, db_port } = row;
+        const {db_username, db_password, db_port} = row;
         console.log(
             `Username: ${db_username} Password: ${db_password} Port: ${db_port}`
         );
@@ -62,11 +62,11 @@ router.get("/:hostname", async (req, res) => {
                     throw new Error("Database not reachable");
                 } else {
                     console.log("Pingable!");
-                    res.send({ reachable: true });
+                    res.send({reachable: true});
                 }
             } catch (e) {
                 console.log(e.message);
-                res.send({ reachable: false });
+                res.send({reachable: false});
             } finally {
                 connection.end();
             }
@@ -78,6 +78,8 @@ router.get("/:hostname", async (req, res) => {
 router.post("/", async (req, res) => {
     const {
         hostname,
+        server_name = "",
+        location = "",
         db_port = 3306,
         db_username,
         db_password,
@@ -87,12 +89,12 @@ router.post("/", async (req, res) => {
     let sql = `
         INSERT
         OR IGNORE 
-        INTO servers(hostname, db_port, db_username, db_password, description)
-        VALUES(?, ?, ?, ?, ?)`;
+        INTO servers(hostname, serer_name, location, db_port, db_username, db_password, description)
+        VALUES(?, ?, ?, ?, ?, ?, ?`;
 
     db.run(
         sql,
-        [hostname, db_port, db_username, db_password, description],
+        [hostname, server_name, location, db_port, db_username, db_password, description],
         (err) => {
             if (err) {
                 console.log(err);
@@ -106,9 +108,11 @@ router.post("/", async (req, res) => {
 
 //Update a specific sever
 router.put("/:hostname", (req, res) => {
-    const { hostname } = req.params;
+    const {hostname} = req.params;
     const {
         new_hostname,
+        server_name,
+        location,
         db_port,
         db_username,
         db_password,
@@ -122,6 +126,14 @@ router.put("/:hostname", (req, res) => {
     if (new_hostname) {
         sql += "hostname = ?, ";
         values.push(new_hostname);
+    }
+    if (server_name) {
+        sql += "server_name = ?, ";
+        values.push(server_name);
+    }
+    if (location) {
+        sql += "location = ?, ";
+        values.push(location);
     }
     if (db_port) {
         sql += "db_port = ?, ";
@@ -158,7 +170,7 @@ router.put("/:hostname", (req, res) => {
 
 //Deletes a specific server
 router.delete("/:hostname", async (req, res) => {
-    const { hostname } = req.params;
+    const {hostname} = req.params;
     let sql = `
         DELETE
         FROM servers
