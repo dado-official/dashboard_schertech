@@ -110,9 +110,10 @@ router.get("/:entry_id", (req, res) => {
     const {entry_id} = req.params;
     let sql = `
         SELECT *
-        FROM custom_values 
-        INNER JOIN custom_entries
-        WHERE custom_entries.id = ? AND custom_values.entry_id = ?`;
+        FROM custom_values
+                 INNER JOIN custom_entries
+        WHERE custom_entries.id = ?
+          AND custom_values.entry_id = ?`;
 
     db.all(sql, [entry_id, entry_id], (err, rows) => {
         if (err) {
