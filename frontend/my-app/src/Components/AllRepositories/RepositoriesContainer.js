@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import Commit from "./Commit";
 import axios from 'axios'
+import { useHistory } from "react-router-dom";
 
 export default function RepositoryContainer({ name, description, workspace, repo_slug }) {
     const [hover, setHover] = useState(false);
     const [owner, setOwner] = useState("");
     const [lastEdit, setEdit] = useState("");
+    const history = useHistory();
 
     useEffect(() => {
         axios.get("http://localhost:4000/api/repository/" + workspace + "/" + repo_slug +"/").then((resp) => {
@@ -13,6 +15,10 @@ export default function RepositoryContainer({ name, description, workspace, repo
             setEdit(resp.data.last_update_fromnow)
         });
     },[])
+
+    function removeRepository(){
+        axios.delete("http://localhost:4000/api/repository/" + workspace + "/" + repo_slug +"/").then((resp) => {history.push("/repository")});
+    }
 
     return (
         <div
@@ -30,6 +36,7 @@ export default function RepositoryContainer({ name, description, workspace, repo
             <div className="flex mt-4 justify-between">
                 <Commit lastedit={lastEdit} />
                 <h6
+                    onClick={removeRepository}
                     className={`text-unclicked hover:text-white font-semi text-2xl transition eae-in-out duration-300 cursor-pointer ${
                         !hover ? " opacity-0" : ""
                     }`}
