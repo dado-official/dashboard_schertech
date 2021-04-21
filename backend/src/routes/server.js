@@ -16,7 +16,7 @@ router.get("/", async (req, res) => {
 
         if (rows.length === 0) {
             console.log("Result is empty");
-            return res.sendStatus(204);
+            return res.send([]);
         }
 
         res.send(rows);

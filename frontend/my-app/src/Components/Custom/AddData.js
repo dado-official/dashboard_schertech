@@ -1,7 +1,8 @@
 import React, { useState } from "react";
+import axios from "axios";
 import { IoMdAdd } from "react-icons/io";
 
-export default function AddData({ setData, setLabels, labels }) {
+export default function AddData({ setData, setLabels, labels, id }) {
     const [input, setInput] = useState("");
     const [error, setError] = useState("");
 
@@ -15,7 +16,16 @@ export default function AddData({ setData, setLabels, labels }) {
 
             today = mm + "/" + dd + "/" + yyyy;
             setLabels((prev) => [...prev, today]);
+
             setInput("");
+
+            axios
+                .post(`http://localhost:4000/api/custom/${id}`, {
+                    value: parseFloat(input),
+                })
+                .then((res) => {
+                    console.log(res.data);
+                });
         }
     }
 
