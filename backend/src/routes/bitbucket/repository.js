@@ -53,7 +53,7 @@ router.get("/:workspace/:repo_slug", async (req, res) => {
 
         };
 
-        res.send(data);
+        res.send(resultObject); 
     } catch (err) {
         const {error, status, message} = err;
         console.log("ERROR:", error, status, message);
@@ -83,14 +83,14 @@ router.get("/:workspace/:repo_slug/test", async (req, res) => {
 
 //Adds a new repository
 router.post("/", async (req, res) => {
-    const {workspace, repo_slug} = req.body;
+    const {workspace, repo_slug, name, description} = req.body;
     let sql = `
         INSERT
         OR IGNORE 
-        INTO repositories(workspace, repo_slug)
-        VALUES(?, ?)`;
+        INTO repositories(workspace, repo_slug, name, description)
+        VALUES(?, ?, ?, ?)`;
 
-    db.run(sql, [workspace, repo_slug], (err) => {
+    db.run(sql, [workspace, repo_slug, name, description], (err) => {
         if (err) {
             console.log(err);
             return res.sendStatus(400);
