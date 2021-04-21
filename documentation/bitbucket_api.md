@@ -16,7 +16,14 @@ which is used to know what repositories to monitor.
 
 #### Response
 ````
-TODO: not finished
+[
+    {
+        workspace
+        repo_slug
+        description
+        name
+    }
+]
 ````
 
 
@@ -65,6 +72,17 @@ Parameter | Description
 workspace | The name of the workspace
 repo_slug | The name of the repository slug (name)
 
+#### Response
+````
+{
+    TODO
+}
+````
+
+
+
+## Get the changed lines TODO
+
 
 
 # Commits
@@ -77,4 +95,10 @@ Parameter | Description
 workspace | The name of the workspace
 repo_slug | The name of the repository slug (name)
 
-## TODO not finished
+
+
+## Get weekly commits TODO
+
+
+
+## Get all commits TODO
