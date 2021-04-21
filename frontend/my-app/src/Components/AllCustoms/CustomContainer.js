@@ -1,9 +1,23 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import axios from "axios";
 
 export default function CustomContainer(props) {
     const [hover, setHover] = useState(false);
+
+    function deleteHandler(e) {
+        e.preventDefault();
+        axios
+            .delete(`http://localhost:4000/api/custom/${props.id}`)
+            .then((res) => {
+                console.log("delete");
+                props.setDel((prev) => !prev);
+            });
+    }
+
     return (
-        <div
+        <Link
+            to={`custom/${props.id}`}
             className={`bg-primary hover:bg-backgroundHover tranition ease-in-out cursor-pointer duration-300 rounded-0.938 py-3 px-4 w-full border-2 ${
                 props.remainingdays === 0
                     ? " border-offlineRed"
@@ -50,10 +64,11 @@ export default function CustomContainer(props) {
                     className={`text-unclicked hover:text-white font-semi text-2xl transition eae-in-out duration-300 cursor-pointer ${
                         !hover ? " opacity-0" : ""
                     }`}
+                    onClick={deleteHandler}
                 >
                     x
                 </h6>
             </div>
-        </div>
+        </Link>
     );
 }

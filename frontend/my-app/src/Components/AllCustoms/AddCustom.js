@@ -2,16 +2,32 @@ import React, { useState } from "react";
 import Input from "../Shared/Input";
 import TextArea from "../Shared/TextArea";
 import { RangeStepInput } from "react-range-step-input";
+import { useHistory } from "react-router-dom";
+import axios from "axios";
 
 const AddCustom = () => {
     const [customName, setCustomName] = useState("");
     const [interval, setInterval] = useState(1);
     const [desciption, setDescription] = useState("");
+    const [wishValue, setWishValue] = useState();
+
+    const history = useHistory();
 
     function subm() {
         console.log("Custom Name: ", customName);
         console.log("Interval: ", interval);
         console.log("Description: ", desciption);
+        axios
+            .post("http://localhost:4000/api/custom", {
+                title: customName,
+                description: desciption,
+                frequency: interval,
+                target_value: wishValue,
+            })
+            .then((res) => {
+                history.push("/custom");
+                console.log(res.data);
+            });
     }
 
     return (
@@ -34,6 +50,8 @@ const AddCustom = () => {
                 <Input state={interval} setState={setInterval}>
                     {interval}
                 </Input>
+                <p className=" text-white text-xs ">Wish Value</p>
+                <Input state={wishValue} setState={setWishValue} />
                 <p className=" text-white text-xs ">Description</p>
                 <TextArea
                     state={desciption}

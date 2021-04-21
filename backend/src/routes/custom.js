@@ -24,7 +24,7 @@ router.get("/", (req, res) => {
 
 //Adds a new entry
 router.post("/", (req, res) => {
-    const {title, description, frequency, target_value} = req.body;
+    const { title, description, frequency, target_value } = req.body;
     let sql = `
         INSERT
         OR IGNORE 
@@ -43,8 +43,8 @@ router.post("/", (req, res) => {
 
 //Updates a specific entry
 router.put("/:id", (req, res) => {
-    const {id} = req.params;
-    const {title, description, frequency, target_value} = req.body;
+    const { id } = req.params;
+    const { title, description, frequency, target_value } = req.body;
 
     //TODO make this better, if possible
     //Create update statement, only update if a value is given
@@ -85,7 +85,7 @@ router.put("/:id", (req, res) => {
 
 //Deletes an entry and all values connected to it
 router.delete("/:id", (req, res) => {
-    const {id} = req.params;
+    const { id } = req.params;
     let sql = `
         DELETE
         FROM custom_entries
@@ -101,10 +101,9 @@ router.delete("/:id", (req, res) => {
     });
 });
 
-
 //Returns all the values from a specific entry
 router.get("/:entry_id", (req, res) => {
-    const {entry_id} = req.params;
+    const { entry_id } = req.params;
     let sql = `
         SELECT *
         FROM custom_values
@@ -127,7 +126,7 @@ router.get("/:entry_id", (req, res) => {
 
 //Returns a specific value from a specific entry
 router.get("/:entry_id/:value_id", (req, res) => {
-    const {entry_id, value_id} = req.params;
+    const { entry_id, value_id } = req.params;
     let sql = `
         SELECT *
         FROM custom_values
@@ -146,8 +145,8 @@ router.get("/:entry_id/:value_id", (req, res) => {
 
 //Adds a new value to a specific entry
 router.post("/:entry_id", (req, res) => {
-    const {entry_id} = req.params;
-    const {value} = req.body;
+    const { entry_id } = req.params;
+    const { value } = req.body;
     let sql = `
         INSERT
         OR IGNORE
@@ -166,8 +165,8 @@ router.post("/:entry_id", (req, res) => {
 
 //Updates a specific value
 router.put("/:entry_id/:value_id", (req, res) => {
-    const {entry_id, value_id} = req.params;
-    const {value} = req.body;
+    const { entry_id, value_id } = req.params;
+    const { value } = req.body;
     let sql = `
         UPDATE custom_values
         SET value = ?
@@ -184,10 +183,9 @@ router.put("/:entry_id/:value_id", (req, res) => {
     res.sendStatus(200);
 });
 
-
 //Deletes a specific value from a specific entry
 router.delete("/:entry_id/:value_id", (req, res) => {
-    const {entry_id, value_id} = req.params;
+    const { entry_id, value_id } = req.params;
     let sql = `
         DELETE
         FROM custom_values
@@ -203,6 +201,5 @@ router.delete("/:entry_id/:value_id", (req, res) => {
         res.sendStatus(200);
     });
 });
-
 
 module.exports = router;
