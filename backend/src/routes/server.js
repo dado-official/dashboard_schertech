@@ -27,8 +27,8 @@ router.get("/", async (req, res) => {
 router.get("/:hostname", async (req, res) => {
     const {hostname} = req.params;
     let sql = `
-        SELECT * 
-        FROM servers 
+        SELECT *
+        FROM servers
         WHERE hostname = ?`;
 
     db.get(sql, [hostname], async (err, row) => {
@@ -174,7 +174,7 @@ router.delete("/:hostname", async (req, res) => {
     let sql = `
         DELETE
         FROM servers
-        WHERE hostname  = ? `;
+        WHERE hostname = ? `;
 
     db.run(sql, [hostname], (err) => {
         if (err) {
