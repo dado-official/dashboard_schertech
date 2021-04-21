@@ -105,7 +105,7 @@ router.delete("/:id", (req, res) => {
 });
 
 
-//Returns all the values from a specific entry and the completion percent
+//Returns all the values from a specific entry and other information
 router.get("/:entry_id", (req, res) => {
     const {entry_id} = req.params;
     let sql = `
@@ -125,10 +125,17 @@ router.get("/:entry_id", (req, res) => {
             return res.sendStatus(204);
         }
 
+        //Calculate the remaining time
         let lastDate = moment.unix(rows[rows.length - 1].date);
         let nextDate = lastDate.add(rows[0].frequency, "days");
         let currentDate = moment();
         let remainingTime = moment.duration(nextDate.diff(currentDate)).format("dd:hh:mm");
+
+        //Calculate the progress in percent new / old - 1
+        let newValue = rows[rows.length - 1].value;
+        let oldValue = rows[rows.length - 2]?.value || rows[rows.length - 1].value;
+        let progress = (newValue - oldValue) / oldValue * 100;
+
 
         const entryInfo = {
             title: rows[0].title,
@@ -138,9 +145,10 @@ router.get("/:entry_id", (req, res) => {
             date: rows[0].date,
             remaining_time: remainingTime,
             values_number: rows.length,
+            progress: Math.round(progress * 100) / 100
         };
 
-        res.send(Object.assign({}, entryInfo, rows));
+        res.send({...entryInfo, data: rows});
     });
 });
 
