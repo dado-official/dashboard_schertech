@@ -172,3 +172,41 @@ body {
 .centerAbsolute {
     transform: translate(-50%, -50%);
 }
+.gradient-border {
+    --borderWidth: 2px;
+    background: #1d1f20;
+    position: relative;
+    border-radius: 10px;
+}
+.gradient-border:after {
+    content: "";
+    position: absolute;
+    top: calc(-1 * var(--borderWidth));
+    left: calc(-1 * var(--borderWidth));
+    height: calc(100% + var(--borderWidth) * 2);
+    width: calc(100% + var(--borderWidth) * 2);
+    background: linear-gradient(90deg, #ff4b77, #3963cd, #ff4b77);
+    border-radius: 10px;
+    z-index: -1;
+    animation: animatedgradient 1.5s ease alternate infinite;
+    background-size: 300% 300%;
+}
+
+@keyframes animatedgradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 50% 0%;
+    }
+}
+
+.padding-3 {
+    padding-top: 14px;
+    padding-bottom: 14px;
+    padding-left: 18px;
+    padding-right: 18px;
+}

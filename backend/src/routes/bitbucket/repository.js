@@ -221,7 +221,7 @@ function reduceBranchData(data) {
 
 // Specific information
 
-//Retruns who and how often a commit was made in a repository
+//Returns who and how often a commit was made in a repository
 router.get("/:workspace/:repo_slug/weeklycommits", async (req, res) => {
     try {
         const {data} = await bitbucket

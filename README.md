@@ -5,6 +5,7 @@
 - Node.js v14 or higher
 
 
+
 ## Instructions
 
 ### Start backend
@@ -18,6 +19,7 @@ npm start
 cd frontend/my-app
 npm start
 ````
+
 
 
 ## API functions
