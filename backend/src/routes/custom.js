@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const db = require("@database/db");
 const moment = require("moment");
-const momentDurationFormatSetup = require("moment-duration-format");
+const momentDurationFormatSetup = require("moment-duration-format");    //Used for moment.duration().format()
 
 
 //Returns a list of all the custom entries

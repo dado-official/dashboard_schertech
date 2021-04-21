@@ -145,7 +145,7 @@ router.put("/:hostname", (req, res) => {
     }
     if (db_port) {
         sql += "db_port = ?, ";
-        values.push();
+        values.push(db_port);
     }
     if (db_username) {
         sql += "db_username = ?, ";
