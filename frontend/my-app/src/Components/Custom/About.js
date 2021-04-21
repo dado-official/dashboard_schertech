@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { AiOutlineInfoCircle } from "react-icons/ai";
+import axios from "axios";
 
 export default function About({
     frequency,
     wishValue,
     setWishValue,
     description,
+    id,
 }) {
     const [error, setError] = useState("");
     const [input, setInput] = useState(wishValue);
@@ -17,10 +19,21 @@ export default function About({
         } else {
             if (e.target.value !== "") {
                 setWishValue(parseFloat(e.target.value));
+                axios
+                    .put(`http://localhost:4000/api/custom/${id}/`, {
+                        target_value: parseFloat(e.target.value),
+                    })
+                    .then((res) => {
+                        console.log("updated");
+                    });
             }
             setError("");
         }
     }
+
+    useEffect(() => {
+        setInput(wishValue);
+    }, [wishValue]);
 
     function isNumeric(num) {
         return !isNaN(num);

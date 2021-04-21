@@ -144,7 +144,7 @@ router.get("/:entry_id", (req, res) => {
             values_number: rows.length,
         };
 
-        res.send(Object.assign({}, entryInfo, rows));
+        res.send({ ...entryInfo, data: rows });
     });
 });
 
