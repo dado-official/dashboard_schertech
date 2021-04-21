@@ -25,9 +25,10 @@ const AddServer = () => {
             .post("http://localhost:4000/api/server", {
                 servername: serverName,
                 hostname: ipAddress,
-                desciption: desciption,
+                description: desciption,
                 db_password: password,
                 db_username: username,
+                location: location,
             })
             .then((res) => {
                 console.log(res.data);
