@@ -11,9 +11,12 @@
   "license": "MIT",
   "dependencies": {
     "bitbucket": "^2.5.1",
+    "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "module-alias": "^2.2.2",
+    "moment": "^2.29.1",
+    "mysql": "^2.18.1",
     "nodemon": "^2.0.7",
     "sqlite3": "^5.0.2"
   },

@@ -1,10 +1,12 @@
 import React, { useEffect } from "react";
 import ServerContainer from "../AllServers/ServerContainer";
 import AddButton from "../Shared/AddButton";
+import axios from "axios"
 
 export default function AllServers({ setUrl }) {
     useEffect(() => {
         setUrl("Server");
+        axios.
     }, []);
     return (
         <div className="main">
