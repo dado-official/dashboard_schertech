@@ -20,14 +20,14 @@ export default function AllServers({ setUrl }) {
             </h2>
             <p className=" text-unclicked">All the current repositories</p>
             <div className="grid grid-flow-row responsiveGrid gap-8 mt-4">
-                {data.map((element) => (
+                {data != [] ? data.map((element) => (
                     <RepositoriesContaier
                         name={element.name}
                         description={element.description}
                         workspace={element.workspace}
                         repo_slug={element.repo_slug}
                     />
-                ))}
+                )):<br/>}
                 <AddButton title="repository" />
             </div>
         </div>

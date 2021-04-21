@@ -17,7 +17,12 @@ export default function RepositoryContainer({ name, description, workspace, repo
     },[])
 
     function removeRepository(){
-        axios.delete("http://localhost:4000/api/repository/" + workspace + "/" + repo_slug +"/").then((resp) => {history.push("/repository")});
+        axios.delete("http://localhost:4000/api/repository/" + workspace + "/" + repo_slug +"/")
+        .then((resp) => {
+            console.log("fabian")
+            history.push("/repositor")
+            history.push("/repository")
+        });
     }
 
     return (

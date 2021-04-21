@@ -15,13 +15,15 @@ const AddRepository = () => {
     function subm() {
 
         let data = {
-            name: reponame,
-            repo_slug: reposlug,
             workspace: workspace,
+            repo_slug: reposlug,
+            name: reponame,
             description: description
         }
 
-        axios.post("http://localhost:4000/api/repository", data).then((res) => { history.push("/repository")});
+        axios.post("http://localhost:4000/api/repository", data).then((res) => { 
+            history.push("/repository")
+        });
     }
 
     return (
