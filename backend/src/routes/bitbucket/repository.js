@@ -295,4 +295,83 @@ router.get("/:workspace/:repo_slug/allcommits", async (req, res) => {
             res.sendStatus(status);
         }    
 });
+
+router.get("/repo/:workspace/:repo_slug/lineschanged", async (req, res) => {
+    const {workspace, repo_slug} = req.params;
+    const pagelen = 100
+    let page = 1
+    let anzahl = 0
+    let currentcommit
+    let nextcommit
+    let i = 0
+    let totaladded = 0
+    let totalremoved = 0
+    let result
+    let totaladded_totalremoved_arr
+    
+        try {
+            while(true){
+                const {data} = await bitbucket
+                    .repositories
+                    .listCommits({workspace: workspace, repo_slug: repo_slug, page: page, pagelen: pagelen, revision: ""});
+                
+                let commitData = reduceCommitData(data);
+                //Add link to the Bitbucket repository
+                commitData["link"] = `https://bitbucket.org/${workspace}/${repo_slug}/commits/`;
+                
+                while(i<commitData.commit_number){
+                    if(commitData == undefined){
+                        ++i
+                    } else {
+                        currentcommit = commitData.commits[i].hash
+                        nextcommit = commitData.commits[++i].hash
+                        result = await diffstatCheck(workspace,repo_slug,currentcommit+".."+nextcommit)                       
+                    }
+
+                    if(result == undefined){
+                        ++i;
+                    } else {
+                        totaladded = totaladded + result[0]
+                        totalremoved = totalremoved + result[1]
+                        ++i;
+                    }
+                    
+                }
+                i=0;
+
+                anzahl = anzahl + commitData.commit_number
+                ++page
+
+                if(commitData.commit_number < 100){
+                    totaladded_totalremoved_arr = [totaladded, totalremoved]
+                    console.log("Sepp:"+ totaladded, totalremoved)
+                    return res.send(totaladded_totalremoved_arr)
+                }
+            }
+        } catch (err) {
+            const {error, status, message} = err;
+            console.log("ERROR:", error, status, message);
+            res.sendStatus(status);
+        }
+    }
+);
+
+async function diffstatCheck(workspace, reposlug, spec){
+    let lines_added_lines_removed_arr
+    let all_lines_added = 0
+    let all_lines_removed = 0
+    try {
+        const {data} = await bitbucket
+            .repositories
+            .listDiffStats({workspace:workspace, repo_slug: reposlug, spec: spec});
+            data.values.forEach(value => {
+                all_lines_added = all_lines_added + value.lines_added
+                all_lines_removed = all_lines_removed + value.lines_removed
+                lines_added_lines_removed_arr = [all_lines_added, all_lines_removed]
+        });
+        return (lines_added_lines_removed_arr)
+    } catch (err) {
+        return(lines_added_lines_removed_arr);
+    }
+}
 module.exports = router;
