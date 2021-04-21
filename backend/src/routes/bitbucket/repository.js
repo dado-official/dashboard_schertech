@@ -296,6 +296,7 @@ router.get("/:workspace/:repo_slug/allcommits", async (req, res) => {
         }    
 });
 
+//returns all lines added and removed in a repository
 router.get("/repo/:workspace/:repo_slug/lineschanged", async (req, res) => {
     const {workspace, repo_slug} = req.params;
     const pagelen = 100
