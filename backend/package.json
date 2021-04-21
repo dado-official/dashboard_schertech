@@ -18,8 +18,10 @@
     "moment": "^2.29.1",
     "moment-duration-format": "^2.3.2",
     "mysql": "^2.18.1",
-    "nodemon": "^2.0.7",
     "sqlite3": "^5.0.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
   },
   "_moduleAliases": {
     "@root": ".",
