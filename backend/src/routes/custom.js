@@ -57,7 +57,7 @@ router.put("/:id", (req, res) => {
     let values = [];
     let sql = "UPDATE custom_entries SET ";
     if (title) {
-        sql += "title = ?, ";
+        sql += "title = ?7, ";
         values.push(title);
     }
     if (description) {
