@@ -5,6 +5,21 @@
 - Node.js v14 or higher
 
 
+## Instructions
+
+### Start backend
+````
+cd bakend
+npm start
+````
+
+### Start frontend
+````
+cd frontend/my-app
+npm start
+````
+
+
 ## API functions
 
 ### Bitbucket

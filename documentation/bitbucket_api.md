@@ -67,6 +67,10 @@ repo_slug | The name of the repository slug (name)
 
 
 
+## Get the changed lines TODO
+
+
+
 # Commits
 
 ## Get a list with the last 30 commits from the repository
@@ -77,4 +81,10 @@ Parameter | Description
 workspace | The name of the workspace
 repo_slug | The name of the repository slug (name)
 
-## TODO not finished
+
+
+## Get weekly commits TODO
+
+
+
+## Get all commits TODO
