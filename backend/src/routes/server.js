@@ -25,7 +25,7 @@ router.get("/", async (req, res) => {
 
 //Checks if database of server is reachable
 router.get("/:hostname", async (req, res) => {
-    const { hostname } = req.params;
+    const {hostname} = req.params;
     let sql = `
         SELECT * 
         FROM servers 
@@ -43,7 +43,7 @@ router.get("/:hostname", async (req, res) => {
             return res.sendStatus(400);
         }
 
-        const { db_username, db_password, db_port } = row;
+        const {db_username, db_password, db_port} = row;
         console.log(
             `Username: ${db_username} Password: ${db_password} Port: ${db_port}`
         );
@@ -62,11 +62,11 @@ router.get("/:hostname", async (req, res) => {
                     throw new Error("Database not reachable");
                 } else {
                     console.log("Pingable!");
-                    res.send({ reachable: true });
+                    res.send({reachable: true});
                 }
             } catch (e) {
                 console.log(e.message);
-                res.send({ reachable: false });
+                res.send({reachable: false});
             } finally {
                 connection.end();
             }
@@ -85,12 +85,12 @@ router.post("/", async (req, res) => {
         db_password,
         description,
     } = req.body;
-    console.log(db_port);
+
     let sql = `
         INSERT
         OR IGNORE 
         INTO servers(hostname, server_name, location, db_port, db_username, db_password, description)
-        VALUES(?, ?, ?, ?, ?, ?, ?`;
+        VALUES(?, ?, ?, ?, ?, ?, ?)`;
 
     db.run(
         sql,
@@ -116,7 +116,7 @@ router.post("/", async (req, res) => {
 
 //Update a specific sever
 router.put("/:hostname", (req, res) => {
-    const { hostname } = req.params;
+    const {hostname} = req.params;
     const {
         new_hostname,
         server_name,
@@ -178,7 +178,7 @@ router.put("/:hostname", (req, res) => {
 
 //Deletes a specific server
 router.delete("/:hostname", async (req, res) => {
-    const { hostname } = req.params;
+    const {hostname} = req.params;
     let sql = `
         DELETE
         FROM servers
