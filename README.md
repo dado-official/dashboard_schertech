@@ -10,7 +10,7 @@
 
 ### Start backend
 ````
-cd bakend
+cd backend
 npm start
 ````
 
