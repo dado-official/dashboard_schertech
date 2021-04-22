@@ -24,7 +24,7 @@ const AddServer = ({ isPopover }) => {
         console.log("Description: ", desciption);
         axios
             .post("http://localhost:4000/api/server", {
-                servername: serverName,
+                server_name: serverName,
                 hostname: ipAddress,
                 description: desciption,
                 db_password: password,
