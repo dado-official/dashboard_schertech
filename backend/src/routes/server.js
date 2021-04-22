@@ -27,8 +27,8 @@ router.get("/", async (req, res) => {
 router.get("/:hostname", async (req, res) => {
     const { hostname } = req.params;
     let sql = `
-        SELECT *
-        FROM servers
+        SELECT * 
+        FROM servers 
         WHERE hostname = ?`;
 
     db.get(sql, [hostname], async (err, row) => {
@@ -89,7 +89,7 @@ router.post("/", async (req, res) => {
     let sql = `
         INSERT
         OR IGNORE 
-        INTO servers(hostname, serer_name, location, db_port, db_username, db_password, description)
+        INTO servers(hostname, server_name, location, db_port, db_username, db_password, description)
         VALUES(?, ?, ?, ?, ?, ?, ?`;
 
     db.run(
@@ -145,7 +145,7 @@ router.put("/:hostname", (req, res) => {
     }
     if (db_port) {
         sql += "db_port = ?, ";
-        values.push(db_port);
+        values.push();
     }
     if (db_username) {
         sql += "db_username = ?, ";
@@ -182,7 +182,7 @@ router.delete("/:hostname", async (req, res) => {
     let sql = `
         DELETE
         FROM servers
-        WHERE hostname = ? `;
+        WHERE hostname  = ? `;
 
     db.run(sql, [hostname], (err) => {
         if (err) {

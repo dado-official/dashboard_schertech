@@ -53,7 +53,7 @@ router.get("/:workspace/:repo_slug", async (req, res) => {
 
         };
 
-        res.send(resultObject);
+        res.send(resultObject); 
     } catch (err) {
         const {error, status, message} = err;
         console.log("ERROR:", error, status, message);
