@@ -91,7 +91,7 @@ router.post("/", async (req, res) => {
         INSERT
         OR IGNORE 
         INTO servers(hostname, server_name, location, db_port, db_username, db_password, description)
-        VALUES(?, ?, ?, ?, ?, ?, ?`;
+        VALUES(?, ?, ?, ?, ?, ?, ?)`;
 
     db.run(
         sql,
