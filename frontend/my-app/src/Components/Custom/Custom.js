@@ -18,24 +18,26 @@ export default function Repository({ setUrl }) {
         setUrl("Custom");
         console.log("ID: " + id);
         axios.get(`http://localhost:4000/api/custom/${id}`).then((res) => {
-            console.log(res.data);
-            setApiData(res.data);
-            console.log(parseFloat(res.data.target_value));
-            setWishValue(parseFloat(res.data.target_value));
-            res.data.data.map((element) => {
-                let unix = parseFloat(element.date);
-                const dateObject = new Date(unix);
+            if (res.data.data !== undefined) {
+                console.log(res.data);
+                setApiData(res.data);
+                console.log(parseFloat(res.data.target_value));
+                setWishValue(parseFloat(res.data.target_value));
+                res.data.data.map((element) => {
+                    let unix = parseFloat(element.date);
+                    const dateObject = new Date(unix);
 
-                let dd = String(dateObject.getDate()).padStart(2, "0");
-                let mm = String(dateObject.getMonth() + 1).padStart(2, "0"); //January is 0!
-                let yyyy = dateObject.getFullYear();
+                    let dd = String(dateObject.getDate()).padStart(2, "0");
+                    let mm = String(dateObject.getMonth() + 1).padStart(2, "0"); //January is 0!
+                    let yyyy = dateObject.getFullYear();
 
-                let today = mm + "/" + dd + "/" + yyyy;
-                setLabels((prev) => [...prev, today]);
-                setData((prev) => [...prev, parseFloat(element.value)]);
+                    let today = mm + "/" + dd + "/" + yyyy;
+                    setLabels((prev) => [...prev, today]);
+                    setData((prev) => [...prev, parseFloat(element.value)]);
 
-                console.log(today);
-            });
+                    console.log(today);
+                });
+            }
         });
     }, []);
 

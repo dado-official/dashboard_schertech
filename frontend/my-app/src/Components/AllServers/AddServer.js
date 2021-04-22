@@ -4,13 +4,14 @@ import TextArea from "../Shared/TextArea";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 
-const AddServer = () => {
+const AddServer = ({ isPopover }) => {
     const [serverName, setServerName] = useState("");
     const [location, setLocation] = useState("");
     const [ipAddress, setIpAddress] = useState("");
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [desciption, setDescription] = useState("");
+    const [port, setPort] = useState("");
 
     const history = useHistory();
 
@@ -37,40 +38,44 @@ const AddServer = () => {
     }
 
     return (
-        <div className="main h-full flex flex-wrap content-center">
-            <div className=" bg-primary rounded-0.938 w-22.625 m-auto p-1.875 pt-2.75 ">
-                <p className=" text-center text-white mb-2.813">Add Server</p>
-                <p className=" text-white text-xs ">Server Name</p>
+        <div
+            className={`bg-input rounded-0.938 w-1/2 p-12 absolute mb-8 right-0 left-0 top-8 m-auto ${
+                isPopover ? "" : "hidden"
+            }`}
+        >
+            <p className="text-white mb-5 text-xl">Add Server</p>
 
-                <Input state={serverName} setState={setServerName}></Input>
-                <p className=" text-white text-xs ">IP Address</p>
-                <Input state={ipAddress} setState={setIpAddress}></Input>
-
-                <p className=" text-white text-xs ">Location</p>
-                <Input state={location} setState={setLocation}></Input>
-
-                <p className=" text-white text-xs ">Username</p>
-                <Input state={username} setState={setUsername}></Input>
-
-                <p className=" text-white text-xs ">Password</p>
-                <Input
-                    type="password"
-                    state={password}
-                    setState={setPassword}
-                ></Input>
-
-                <p className=" text-white text-xs ">Description</p>
-                <TextArea
-                    state={desciption}
-                    setState={setDescription}
-                ></TextArea>
-                <button
-                    onClick={subm}
-                    className="focus:outline-none rounded-0.625 w-full py-2 text-center text-white bg-commitBlue mb-2.75"
-                >
-                    Add Server
-                </button>
+            <div className="flex gap-4">
+                <div className="w-full">
+                    <p className=" text-white text-sm ">Server Name</p>
+                    <Input state={serverName} setState={setServerName}></Input>
+                    <p className=" text-white text-sm ">Username</p>
+                    <Input state={username} setState={setUsername}></Input>
+                    <p className=" text-white text-sm ">Port</p>
+                    <Input state={port} setState={setPort}></Input>
+                </div>
+                <div className="w-full">
+                    <p className=" text-white text-sm ">IP Address</p>
+                    <Input state={ipAddress} setState={setIpAddress}></Input>
+                    <p className=" text-white text-sm ">Password</p>
+                    <Input
+                        type="password"
+                        state={password}
+                        setState={setPassword}
+                    ></Input>
+                    <p className=" text-white text-sm ">Location</p>
+                    <Input state={location} setState={setLocation}></Input>
+                </div>
             </div>
+
+            <p className=" text-white text-sm">Description</p>
+            <TextArea state={desciption} setState={setDescription}></TextArea>
+            <button
+                onClick={subm}
+                className="focus:outline-none hover:bg-commitBlueHover rounded-0.625 py-2 px-8 text-center text-white bg-commitBlue"
+            >
+                Add Server
+            </button>
         </div>
     );
 };

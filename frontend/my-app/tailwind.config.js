@@ -4,16 +4,18 @@ module.exports = {
     theme: {
         extend: {
             colors: {
-                primary: "#1B1B1B",
+                primary: "#1f1f1f",
                 unclicked: "#94A3BC",
                 background: "#161616",
                 backgroundHover: "#212121",
                 hover: "#343434",
                 onlineGreen: "#2DFD99",
                 offlineRed: "#FF4B77",
-                commitBlue: "#3963CD",
-                commitBlueHover: "#4c7aed",
-                input: "#343434",
+                commitBlue: "#3055b3",
+                commitBlueHover: "#204196",
+                input: "#262626",
+
+                input2: "#2f2f2f",
             },
             spacing: {
                 1.875: "1.875rem",
@@ -45,12 +47,12 @@ module.exports = {
                 navbarWidth: "calc(100% - 4rem)",
             },
             borderRadius: {
-                0.938: "0.938rem",
-                0.625: "0.625rem",
+                0.938: "0.450rem",
+                0.625: "0.325rem",
                 0.313: "0.313rem",
             },
             boxShadow: {
-                focusAdd: "0px 0px 4px 3px #3963CD",
+                focusAdd: "0px 0px 2px 2px #3055b3",
             },
         },
     },

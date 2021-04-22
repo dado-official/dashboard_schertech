@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { MdAdd } from "react-icons/md";
 import { Link } from "react-router-dom";
+import { Popover } from "@headlessui/react";
 
-export default function AddButton(props) {
+export default function AddButton({ setIsPopover }) {
     return (
-        <Link
-            to={`${props.title}/add`}
+        <div
+            onClick={() => setIsPopover((prev) => !prev)}
             className="w-full relative h-full buttonBackground rounded-0.938 transition ease-in-out duration-300 cursor-pointer"
         >
             <div
@@ -15,6 +16,6 @@ export default function AddButton(props) {
                 <MdAdd color="white" size={45} />
             </div>
             <div className="bg-white opacity-0 hover:opacity-10 transition duration-300 h-full w-full ease-in-out rounded-0.938"></div>
-        </Link>
+        </div>
     );
 }

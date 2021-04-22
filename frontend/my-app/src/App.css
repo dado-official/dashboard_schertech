@@ -38,7 +38,7 @@ body {
 }
 
 .main {
-    @apply lg:ml-16.625 mt-10 lg:mt-0;
+    @apply lg:ml-16.625 mt-10 lg:mt-0 pb-8 relative;
 }
 
 @media (max-width: 1023px) {

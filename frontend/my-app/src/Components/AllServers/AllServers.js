@@ -2,10 +2,12 @@ import React, { useEffect, useState } from "react";
 import ServerContainer from "../AllServers/ServerContainer";
 import AddButton from "../Shared/AddButton";
 import axios from "axios";
+import AddServer from "./AddServer";
 
 export default function AllServers({ setUrl }) {
     const [data, setData] = useState([]);
     const [del, setDel] = useState(false);
+    const [isPopover, setIsPopover] = useState(false);
 
     useEffect(() => {
         setUrl("Server");
@@ -33,8 +35,9 @@ export default function AllServers({ setUrl }) {
                           />
                       ))
                     : null}
-                <AddButton title="server" />
+                <AddButton title="server" setIsPopover={setIsPopover} />
             </div>
+            <AddServer isPopover={isPopover} />
         </div>
     );
 }
