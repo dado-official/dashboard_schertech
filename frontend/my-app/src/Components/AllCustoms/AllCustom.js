@@ -10,7 +10,10 @@ export default function AllCustom({ setUrl }) {
     useEffect(() => {
         setUrl("Custom");
         axios.get("http://localhost:4000/api/custom").then((res) => {
-            setData(res.data);
+            console.log(res);
+            if (res.data !== "") {
+                setData(res.data);
+            }
         });
     }, [del]);
 
