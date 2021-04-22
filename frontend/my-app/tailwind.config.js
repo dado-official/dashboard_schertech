@@ -9,12 +9,14 @@ module.exports = {
                 background: "#161616",
                 backgroundHover: "#212121",
                 hover: "#343434",
-                onlineGreen: "#2DFD99",
-                offlineRed: "#FF4B77",
-                commitBlue: "#3055b3",
+                onlineGreen: "#81c784",
+                offlineRed: "#f06292",
+                light: "#bababa",
+                blue: "#64b5f6",
                 commitBlueHover: "#204196",
+                blueLight: "rgb(48, 85, 179, 0.5)",
                 input: "#262626",
-
+                whiteLite: "rgb(255, 255, 255, 0.6)",
                 input2: "#2f2f2f",
             },
             spacing: {
@@ -50,9 +52,6 @@ module.exports = {
                 0.938: "0.450rem",
                 0.625: "0.325rem",
                 0.313: "0.313rem",
-            },
-            boxShadow: {
-                focusAdd: "0px 0px 2px 2px #3055b3",
             },
         },
     },

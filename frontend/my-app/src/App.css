@@ -210,3 +210,17 @@ body {
     padding-left: 18px;
     padding-right: 18px;
 }
+
+.borderHover:hover {
+    border-bottom-width: 4px;
+    padding-bottom: 0.75rem;
+}
+
+input:focus,
+textarea:focus {
+    border-width: 0.25rem;
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+    padding-right: 0.5rem;
+    padding-left: 0.5rem;
+}

@@ -21,37 +21,17 @@ export default function ServerContainer({ name, description, setDel }) {
 
     return (
         <div
-            className={`bg-primary hover:bg-backgroundHover tranition ease-in-out cursor-pointer duration-300 w-full ${
+            className={`hover:bg-backgroundHover borderHover bg-primary border-l-4 py-3 px-5 pb-4 flex flex-col justify-between tranition ease-in-out cursor-pointer duration-300 w-full ${
                 online === undefined
-                    ? "gradient-border padding-3"
+                    ? "border-white"
                     : online
-                    ? "border-onlineGreen border-2 py-3 px-4 "
-                    : "border-offlineRed border-2 py-3 px-4 "
+                    ? "border-onlineGreen"
+                    : "border-offlineRed"
             } rounded-0.938`}
             onMouseEnter={() => setHover(true)}
             onMouseLeave={() => setHover(false)}
         >
-            <div className="flex justify-between">
-                <h6 className="text-white">{name}</h6>
-                <div className="flex gap-2 items-center">
-                    <h6 className="text-unclicked">
-                        {online === undefined
-                            ? "Waiting"
-                            : online
-                            ? "Online"
-                            : "Offline"}
-                    </h6>
-                    <div
-                        className={`rounded-full h-2 w-2 ${
-                            online === undefined
-                                ? "bg-white"
-                                : online
-                                ? "bg-onlineGreen"
-                                : "bg-offlineRed"
-                        }`}
-                    ></div>
-                </div>
-            </div>
+            <h6 className="font-medium text-white">{name}</h6>
             <p className="text-unclicked text-sm mt-2">{description}</p>
             <div className="flex mt-4 justify-between">
                 <Locaction location="Brixen, Italy" />

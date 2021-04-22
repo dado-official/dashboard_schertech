@@ -7,7 +7,8 @@ export default function Sidebarelement(props) {
     return (
         <Link
             to={`/${props.title.toLowerCase()}`}
-            onMouseEnter={() => setcolor("white")}
+            onMouseEnter={() => setcolor("#81c784")}
+            ü
             onMouseLeave={() => setcolor("#94A3BC")}
             onClick={() => {
                 props.setOpenSidebar(false);
@@ -15,26 +16,23 @@ export default function Sidebarelement(props) {
             className={` 
                 mb-2 cursor-pointer 
                 rounded-0.938 
-                pt-1
-                pb-1 
-                pl-1.131 
-                pr-1.131 
+                py-2
+                px-6
                 flex flex-row content-evenly items-center 
                 bg-primary 
-                hover:text-white
                 ${
                     props.url === props.title
-                        ? "text-white bg-hover"
-                        : "text-unclicked"
+                        ? "text-black bg-onlineGreen font-medium"
+                        : "text-unclicked hover:text-onlineGreen "
                 }
             `}
         >
             <div className="w-full flex justify-between flex-row items-center ">
                 <div className="flex flex-row items-center">
                     <Icon
-                        color={`${props.url === props.title ? "white" : color}`}
+                        color={`${props.url === props.title ? "black" : color}`}
                     ></Icon>
-                    <p className=" pl-3 align-middle">{props.title}</p>
+                    <p className="pl-3 align-middle">{props.title}</p>
                 </div>
                 <div
                     className={` ${

@@ -31,7 +31,7 @@ const Sidebar = ({ url, setOpenSidebar, openSidebar }) => {
                 icon={IoLogoBitbucket}
                 title="Repository"
                 url={url}
-                alert={1}
+                alert={0}
                 setOpenSidebar={setOpenSidebar}
             />
             <SidebarElement

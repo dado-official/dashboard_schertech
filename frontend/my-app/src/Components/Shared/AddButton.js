@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { MdAdd } from "react-icons/md";
 import { Link } from "react-router-dom";
-import { Popover } from "@headlessui/react";
 
 export default function AddButton({ setIsPopover }) {
     return (
