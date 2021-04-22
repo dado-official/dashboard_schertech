@@ -8,7 +8,8 @@ const momentDurationFormatSetup = require("moment-duration-format");
 router.get("/", (req, res) => {
     let sql = `
         SELECT *
-        FROM custom_entries`;
+        FROM custom_values
+        INNER JOIN custom_entries`;
 
     db.all(sql, (err, rows) => {
         if (err) {
@@ -20,6 +21,9 @@ router.get("/", (req, res) => {
             console.log("Result is empty");
             return res.sendStatus(204);
         }
+
+        let entryInformation = [];
+
 
         res.send(rows);
     });
