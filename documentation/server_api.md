@@ -10,12 +10,14 @@
 `GET /`  
 #### Response
 ````
-[
+Array: [
     {
         hostname
+        server_name
         db_port
         db_username
         db_password
+        location
         description
     }
 ]
@@ -29,20 +31,22 @@
 Parameter | Description
 --- | --- 
 hostname | The hostname or IP of the server
+server_name (optional) | The descriptive name of the server
 db_port (optional) | The port of the database
 db_username | The DB username
-db_password | The password of the DB user
-description | The description of the Serve
+db_password (optional) | The password of the DB user
+location (optional) | The location of the server
+description (optional) | The description of the Server
 
 
-## Get information about a specific server
+## Check if mysql is online on a specific server
 `GET /:hostname`
 #### Path parameters
 Parameter | Description
 --- | ---
 hostname | The hostname or IP of the server
 
-#### Response (Not finished)
+#### Response
 ````
 {
     reachable: boolean

@@ -27,8 +27,8 @@ router.get("/", async (req, res) => {
 router.get("/:hostname", async (req, res) => {
     const { hostname } = req.params;
     let sql = `
-        SELECT * 
-        FROM servers 
+        SELECT *
+        FROM servers
         WHERE hostname = ?`;
 
     db.get(sql, [hostname], async (err, row) => {
@@ -78,11 +78,11 @@ router.get("/:hostname", async (req, res) => {
 router.post("/", async (req, res) => {
     const {
         hostname,
-        server_name = "",
-        location = "",
+        server_name,
         db_port = 3306,
         db_username,
         db_password,
+        location,
         description,
     } = req.body;
     console.log(db_port);
@@ -93,18 +93,7 @@ router.post("/", async (req, res) => {
         INTO servers(hostname, server_name, location, db_port, db_username, db_password, description)
         VALUES(?, ?, ?, ?, ?, ?, ?)`;
 
-    db.run(
-        sql,
-        [
-            hostname,
-            server_name,
-            location,
-            db_port,
-            db_username,
-            db_password,
-            description,
-        ],
-        (err) => {
+    db.run(sql, [hostname, server_name, location, db_port, db_username, db_password, description], (err) => {
             if (err) {
                 console.log(err);
                 return res.sendStatus(400);
@@ -121,10 +110,10 @@ router.put("/:hostname", (req, res) => {
     const {
         new_hostname,
         server_name,
-        location,
         db_port,
         db_username,
         db_password,
+        location,
         description,
     } = req.body;
 
@@ -146,7 +135,7 @@ router.put("/:hostname", (req, res) => {
     }
     if (db_port) {
         sql += "db_port = ?, ";
-        values.push();
+        values.push(db_port);
     }
     if (db_username) {
         sql += "db_username = ?, ";
@@ -183,7 +172,7 @@ router.delete("/:hostname", async (req, res) => {
     let sql = `
         DELETE
         FROM servers
-        WHERE hostname  = ? `;
+        WHERE hostname = ? `;
 
     db.run(sql, [hostname], (err) => {
         if (err) {

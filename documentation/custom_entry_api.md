@@ -12,14 +12,17 @@
 `GET /`
 #### Response
 ````
-[
+Array: [
     {
         id
         title
         description
         frequency
         target_value
-        date
+        entry_date
+        remaining_time
+        values_number
+        progress
     }
 ]
 ````
@@ -75,21 +78,32 @@ entry_id | The id of the entry
 
 #### Response
 ````
-[
-    {
-        value_id
-        entry_id
-        value
-        date
-    }
-]
-title
-description
-frequency
-target_value
-date
-remaining_time
-values_number
+{
+    id
+    title
+    description
+    frequency
+    target_value
+    entry_date
+    remaining_time
+    values_number
+    progress
+    data: 
+        Array: [
+            {
+                id
+                title
+                description
+                frequency
+                target_value
+                entry_date
+                value_id
+                entry_id
+                value
+                value_date
+            }
+        ]
+}
 ````
 
 
@@ -108,7 +122,7 @@ value_id | The id of the value
     value_id
     entry_id
     value
-    date
+    value_date
 }
 ````
 
