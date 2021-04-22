@@ -17,10 +17,6 @@ export default function AllServers({ setUrl }) {
         });
     }, [del]);
 
-    const getData = async () => {
-        return Promise.all();
-    };
-
     return (
         <div className="main">
             <h2 className={`text-white text-2xl font-medium`}>Servers</h2>
