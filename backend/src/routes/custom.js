@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const axios = require("axios").default;
 const db = require("@database/db");
 const moment = require("moment");
 const momentDurationFormatSetup = require("moment-duration-format");
@@ -7,25 +8,45 @@ const momentDurationFormatSetup = require("moment-duration-format");
 //Returns a list of all the custom entries
 router.get("/", (req, res) => {
     let sql = `
-        SELECT *
-        FROM custom_values
-        INNER JOIN custom_entries`;
+        SELECT DISTINCT id
+        FROM custom_entries
+        ORDER BY id`;
 
-    db.all(sql, (err, rows) => {
+    db.all(sql, async (err, rows) => {
         if (err) {
             console.log(err);
-            return res.sendStatus(400);
+            return res.send(400);
         }
 
         if (rows.length === 0) {
             console.log("Result is empty");
-            return res.sendStatus(204);
+            return res.send(204);
         }
 
-        let entryInformation = [];
+        let entryIDs = [];
+        rows.forEach((row) => {
+            entryIDs.push(row.id);
+        });
 
+        let entries = [];
+        for (const i in entryIDs) {
+            const id = entryIDs[i];
+            const res = await axios.get(`http://localhost:4000/api/custom/${id}`);  //Todo change to environment var
 
-        res.send(rows);
+            entries.push({
+                id: id,
+                title: res.data.title,
+                description: res.data.description,
+                frequency: res.data.frequency,
+                target_value: res.data.target_value,
+                entry_date: res.data.entry_date,
+                remaining_time: res.data.remaining_time,
+                values_number: res.data.values_number,
+                progress: res.data.progress
+            });
+        }
+
+        res.send(entries);
     });
 });
 
@@ -35,10 +56,10 @@ router.post("/", (req, res) => {
     let sql = `
         INSERT
         OR IGNORE 
-        INTO custom_entries(title, description, frequency, target_value, date)
-        VALUES(?, ?, ?, ?)`;
+        INTO custom_entries(title, description, frequency, target_value, entry_date)
+        VALUES(?, ?, ?, ?, ?)`;
 
-    db.run(sql, [title, description, frequency, target_value, new Date()], (err) => {
+    db.run(sql, [title, description, frequency, target_value, moment().unix()], (err) => {
         if (err) {
             console.log(err);
             return res.sendStatus(400);
@@ -114,11 +135,13 @@ router.get("/:entry_id", (req, res) => {
     const {entry_id} = req.params;
     let sql = `
         SELECT *
-        FROM custom_values 
-        INNER JOIN custom_entries
-        WHERE custom_entries.id = ? AND custom_values.entry_id = ?`;
+        FROM custom_entries
+                 LEFT JOIN custom_values
+                           ON custom_values.entry_id = custom_entries.id
+        WHERE custom_entries.id = ?
+        ORDER BY value_id`;
 
-    db.all(sql, [entry_id, entry_id], (err, rows) => {
+    db.all(sql, [entry_id], (err, rows) => {
         if (err) {
             console.log(err);
             return res.sendStatus(400);
@@ -129,28 +152,39 @@ router.get("/:entry_id", (req, res) => {
             return res.sendStatus(204);
         }
 
-        //Calculate the remaining time
-        let lastDate = moment.unix(rows[rows.length - 1].date);
-        let nextDate = lastDate.add(rows[0].frequency, "days");
-        let currentDate = moment();
-        let remainingTime = moment.duration(nextDate.diff(currentDate)).format("dd:hh:mm");
+        let remainingTime;
+        let progress;
 
-        //Calculate the progress in percent new / old - 1
-        let newValue = rows[rows.length - 1].value;
-        let oldValue = rows[rows.length - 2]?.value || rows[rows.length - 1].value;
-        let progress = (newValue - oldValue) / oldValue * 100;
+        //Checks if there are any values
+        if (rows[0].value_id) {
+            //Calculate the remaining time
+            let lastDate = moment.unix(rows[rows.length - 1].value_date);
+            let nextDate = lastDate.add(rows[0].frequency, "days");
+            let currentDate = moment();
+            remainingTime = moment.duration(nextDate.diff(currentDate)).format("dd:hh:mm");
 
+            //Calculate the progress in percent new / old - 1
+            let newValue = rows[rows.length - 1].value;
+            let oldValue = rows[rows.length - 2]?.value || rows[rows.length - 1].value;
+            progress = (newValue - oldValue) / oldValue * 100;
+        }
 
         const entryInfo = {
+            id: rows[0].id,
             title: rows[0].title,
             description: rows[0].description,
             frequency: rows[0].frequency,
             target_value: rows[0].target_value,
-            date: rows[0].date,
+            entry_date: rows[0].entry_date,
             remaining_time: remainingTime,
             values_number: rows.length,
             progress: Math.round(progress * 100) / 100
         };
+
+        //Removes data from the array, because it has no values
+        if (!rows[0].value_id) {
+            rows = [];
+        }
 
         res.send({...entryInfo, data: rows});
     });
@@ -182,10 +216,10 @@ router.post("/:entry_id", (req, res) => {
     let sql = `
         INSERT
         OR IGNORE
-        INTO custom_values(entry_id, value, date)
+        INTO custom_values(entry_id, value, value_date)
         VALUES(?, ?, ?)`;
 
-    db.run(sql, [entry_id, value, new Date()], (err) => {
+    db.run(sql, [entry_id, value, moment().unix()], (err) => {
         if (err) {
             console.log(err);
             return res.sendStatus(400);
