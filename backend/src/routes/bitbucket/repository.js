@@ -38,23 +38,23 @@ router.get("/:workspace/:repo_slug", async (req, res) => {
 
         var last_update_formatted = moment(data.updated_on).format("L");
         var lastUpdate = moment(data.updated_on).format("Do MMMM YYYY, h:mm:ss");
-        var last_update_fromnow = moment(lastUpdate, "Do MMMM YYYY, h:mm:ss").fromNow();
+        var last_update_fromnow = moment(lastUpdate, "Do MMMM YYYY, h:mm:ss").fromNow(); 
         var created_on_formatted = moment(data.created_on).format("L");
         var avatarLink=data.links.avatar.href;
 
-        var branches =await getBranchData(workspace, repo_slug);
-        var last_commits= await getCommitInfo(workspace, repo_slug);
+        var branches =await getBranchData(workspace, repo_slug);    //returns branches and number of branches
+        var last_commits= await getCommitInfo(workspace, repo_slug); //returns last 30 commits
         //var lines_info=await getLinesInfo(workspace, repo_slug);
-        var weekly_commits=await getWeeklyCommits(workspace, repo_slug);
+        var weekly_commits=await getWeeklyCommits(workspace, repo_slug); //returns commits of last 7 days
 
 
         resultObject = {
             owner_name: data.owner.display_name,
             is_private: data.is_private,
             created_on: created_on_formatted,
-            last_updated_formatted: last_update_formatted,
-            last_update_fromnow: last_update_fromnow,
-            avatar_link: avatarLink,
+            last_updated_formatted: last_update_formatted, //formatted Date p.e. 15.04.2021
+            last_update_fromnow: last_update_fromnow,      //time from now p.e. 8 minutes ago
+            avatar_link: avatarLink,                       //avatar of repository
             branch_number: branches.branch_number,
             branches: branches.branches,
             last_commits: last_commits,
@@ -120,8 +120,8 @@ router.post("/", async (req, res) => {
 //Update a specific repository
 router.put("/:workspace/:repo_slug", (req, res) => {
     const {workspace, repo_slug} = req.params;
-    const {new_workspace, new_repo_slug} = req.body;
-    //TODO make this better, if possible
+    const {new_workspace, new_repo_slug, name, description} = req.body;
+
     //Create update statement, only update if a value is given
     let values = [];
     let sql = "UPDATE repositories SET ";
@@ -133,10 +133,22 @@ router.put("/:workspace/:repo_slug", (req, res) => {
         sql += "repo_slug = ?, ";
         values.push(new_repo_slug);
     }
-
+    if (name) {
+        sql += "name = ?, ";
+        values.push(name);
+    }
+    if (description) {
+        sql += "description = ?, ";
+        values.push(description);
+    }
     sql += "WHERE workspace = ? AND repo_slug = ?;";
     values.push(workspace);
     values.push(repo_slug);
+
+    //Invalid SQL syntax
+    if (values.length >= 2) {
+        return res.sendStatus(400);
+    }
 
     //Regex to remove the last comma in this string:
     //https://stackoverflow.com/questions/5497318/replace-last-occurrence-of-character-in-string/
@@ -190,7 +202,7 @@ async function getCommitInfo(workspace, repo_slug){
         console.log("ERROR:", error, status, message);
         return -1;
     }
-};
+}
     
 
 //Reduces the commit data you get from the Bitbucket api
@@ -287,7 +299,7 @@ async function getWeeklyCommits(workspace, repo_slug){
         console.log("ERROR:", error, status, message);
         return status;
     }
-};
+}
 
 //returns all commits in a Repository
 router.get("/:workspace/:repo_slug/allcommits", async (req, res) => {
@@ -329,7 +341,6 @@ async function getLinesInfo(workspace, repo_slug){
     let totaladded = 0;
     let totalremoved = 0;
     let result;
-    let totaladded_totalremoved_arr;
 
     try {
         while (true) {
@@ -362,7 +373,6 @@ async function getLinesInfo(workspace, repo_slug){
             ++page;
 
             if (commitData.commit_number < 100) {
-                totaladded_totalremoved_arr = [totaladded, totalremoved];
                 returnObj={
                     lines_added: totaladded,
                     lines_removed: totalremoved,
@@ -396,5 +406,108 @@ async function diffstatCheck(workspace, reposlug, spec) {
         return (lines_added_lines_removed_arr);
     }
 }
+
+//returns the amount of commits in the last 5 weeks
+router.get("/repo/:workspace/:repo_slug/commitslastweeks", async (req, res) => {
+    let pagelen = 100
+    let page = 1
+    let commitMap = new Map()
+    let i = 0;
+    commitMap.set("vor einer Woche", 0)
+    commitMap.set("vor zwei Wochen", 0)
+    commitMap.set("vor drei Wochen", 0)
+    commitMap.set("vor vier Wochen", 0)
+    commitMap.set("vor fünf Wochen", 0)
+
+    var letschteWochedate = new Date()
+    letschteWochedate.setDate(letschteWochedate.getDate() - 7)
+    letschteWochedate = Date.parse(letschteWochedate)
+
+    var zweiWochendate = new Date()
+    zweiWochendate.setDate(zweiWochendate.getDate() - 14)
+    zweiWochendate = Date.parse(zweiWochendate)
+
+    var dreiWochendate = new Date()
+    dreiWochendate.setDate(dreiWochendate.getDate() - 21);
+    dreiWochendate = Date.parse(dreiWochendate)
+
+    var vierWochendate = new Date();
+    vierWochendate.setDate(vierWochendate.getDate() - 28)
+    vierWochendate = Date.parse(vierWochendate)
+
+    var fuenfWochendate = new Date()
+    fuenfWochendate.setDate(fuenfWochendate.getDate() - 35)
+    fuenfWochendate = Date.parse(fuenfWochendate)
+
+    try{
+        while(true){
+            const {data} = await bitbucket
+                .repositories
+                .listCommits({workspace: req.params.workspace, repo_slug: req.params.repo_slug, page: page, pagelen: pagelen, revision: ""});
+            let commitData = reduceCommitData(data);
+            
+            while(i < commitData.commit_number){
+                commitDate = Date.parse(commitData.commits[i].date)
+
+            if1: if(fuenfWochendate < commitDate){
+                    if(vierWochendate < commitDate){
+                        if(dreiWochendate < commitDate){
+                            if(zweiWochendate < commitDate){
+                                if(letschteWochedate < commitDate){
+                                    let counter = commitMap.get("vor einer Woche")
+                                    ++counter;
+                                    commitMap.set("vor einer Woche", counter)
+                                    console.log("Commit eine woche her")
+                                    ++i
+                                    break if1
+                                }
+                                let counter = commitMap.get("vor zwei Wochen")
+                                ++counter;
+                                commitMap.set("vor zwei Wochen", counter)
+                                console.log("Commit zwei wochen her")
+                                ++i
+                                break if1
+                            }
+                            let counter = commitMap.get("vor drei Wochen")
+                            ++counter;
+                            commitMap.set("vor drei Wochen", counter)
+                            console.log("Commit drei wochen her")
+                            ++i
+                            break if1
+                        }
+                        let counter = commitMap.get("vor vier Wochen")
+                        ++counter;
+                        commitMap.set("vor vier Wochen", counter)
+                        console.log("Commit vier wochen her")
+                        ++i
+                        break if1
+                    }
+                    let counter = commitMap.get("vor fünf Wochen")
+                    ++counter;
+                    commitMap.set("vor fünf Wochen", counter)
+                    console.log("Commit fünf wochen her")
+                    ++i
+                } else {
+                    ++i
+                    console.log("länger her")
+                    return res.send(JSON.stringify([...commitMap]));
+                }
+                
+            }
+            i = 0;
+            ++page
+            console.log(page)
+            if(commitData.commit_number < 100){
+                return res.send(JSON.stringify([...commitMap]));
+            }   
+            console.log((JSON.stringify([...commitMap])))
+        }
+        
+    } catch (err) {
+        const {error, status, message} = err;
+        console.log("ERROR:", error, status, message);
+        res.sendStatus(status);
+    }
+});
 
 module.exports = router;
