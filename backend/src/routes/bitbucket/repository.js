@@ -410,7 +410,7 @@ async function diffstatCheck(workspace, reposlug, spec) {
 }
 
 //returns the amount of commits in the last 5 weeks
-router.get("/repo/:workspace/:repo_slug/commitslastweeks", async (req, res) => {
+async function getCommitsLastWeeks(workspace, repo_slug){
     let pagelen = 100
     let page = 1
     let commitMap = new Map()
@@ -445,7 +445,7 @@ router.get("/repo/:workspace/:repo_slug/commitslastweeks", async (req, res) => {
         while(true){
             const {data} = await bitbucket
                 .repositories
-                .listCommits({workspace: req.params.workspace, repo_slug: req.params.repo_slug, page: page, pagelen: pagelen, revision: ""});
+                .listCommits({workspace: workspace, repo_slug: repo_slug, page: page, pagelen: pagelen, revision: ""});
             let commitData = reduceCommitData(data);
             
             while(i < commitData.commit_number){
@@ -510,7 +510,7 @@ router.get("/repo/:workspace/:repo_slug/commitslastweeks", async (req, res) => {
         console.log("ERROR:", error, status, message);
         res.sendStatus(status);
     }
-});
+};
 
 //returns total number of commits in a repository
 async function getTotalCommitNumber(workspace, repo_slug){
