@@ -122,8 +122,8 @@ router.post("/", async (req, res) => {
 //Update a specific repository
 router.put("/:workspace/:repo_slug", (req, res) => {
     const {workspace, repo_slug} = req.params;
-    const {new_workspace, new_repo_slug} = req.body;
-    //TODO make this better, if possible
+    const {new_workspace, new_repo_slug, name, description} = req.body;
+
     //Create update statement, only update if a value is given
     let values = [];
     let sql = "UPDATE repositories SET ";
@@ -135,10 +135,22 @@ router.put("/:workspace/:repo_slug", (req, res) => {
         sql += "repo_slug = ?, ";
         values.push(new_repo_slug);
     }
-
+    if (name) {
+        sql += "name = ?, ";
+        values.push(name);
+    }
+    if (description) {
+        sql += "description = ?, ";
+        values.push(description);
+    }
     sql += "WHERE workspace = ? AND repo_slug = ?;";
     values.push(workspace);
     values.push(repo_slug);
+
+    //Invalid SQL syntax
+    if (values.length >= 2) {
+        return res.sendStatus(400);
+    }
 
     //Regex to remove the last comma in this string:
     //https://stackoverflow.com/questions/5497318/replace-last-occurrence-of-character-in-string/
@@ -192,7 +204,7 @@ async function getCommitInfo(workspace, repo_slug){
         console.log("ERROR:", error, status, message);
         return -1;
     }
-};
+}
     
 
 //Reduces the commit data you get from the Bitbucket api
@@ -289,7 +301,7 @@ async function getWeeklyCommits(workspace, repo_slug){
         console.log("ERROR:", error, status, message);
         return status;
     }
-};
+}
 
 //returns all commits in a Repository
 router.get("/:workspace/:repo_slug/allcommits", async (req, res) => {
