@@ -12,7 +12,7 @@ export default function RepositoryContainer({ name, description, workspace, repo
     const history = useHistory();
 
     useEffect(() => {
-        axios.get("http://localhost:4000/api/repository/" + workspace + "/" + repo_slug +"/").then((resp) => {
+        axios.get("http://localhost:4000/api/repository/" + workspace + "/" + repo_slug +"/menu").then((resp) => {
             setOwner(resp.data.owner_name)
             setEdit(resp.data.last_update_fromnow)
         });

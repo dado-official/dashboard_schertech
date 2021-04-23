@@ -20,7 +20,7 @@ export default function LatestCommits({param}) {
                 <FaHistory color="white" />
                 <h6 className="text-white font-medium">Latest commits</h6>
             </div>
-            <div>
+            <div className=" overflow-auto">
             {state != null ? 
                 state.map((element) => (
                       <Commit
