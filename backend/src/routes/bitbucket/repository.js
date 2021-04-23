@@ -71,8 +71,8 @@ router.get("/:workspace/:repo_slug", async (req, res) => {
         var branches =await getBranchData(workspace, repo_slug);
         var last_commits= await getCommitInfo(workspace, repo_slug);
         //var lines_info=await getLinesInfo(workspace, repo_slug);
-        var weekly_commits=await getWeeklyCommits(workspace, repo_slug);
-        let commits_last_weeks = await getCommitsLastWeeks(workspace, repo_slug);
+       // var weekly_commits=await getWeeklyCommits(workspace, repo_slug);
+        //let commits_last_weeks = await getCommitsLastWeeks(workspace, repo_slug);
         let total_commit_number = await getTotalCommitNumber(workspace, repo_slug);
 
         resultObject = {
@@ -254,7 +254,7 @@ function reduceCommitData(data) {
     };
 }
 
-//returns informations about the branch(not working)
+//returns informations about the branches
 async function getBranchData(workspace, repo_slug) {
 
     const {data} = await bitbucket
@@ -467,8 +467,9 @@ router.get("/:workspace/:repo_slug/chart1", async (req, res) =>{
                 .listCommits({workspace: req.params.workspace, repo_slug: req.params.repo_slug, page: page, pagelen: pagelen, revision: ""});
             let commitData = reduceCommitData(data);
             
-            while(i < commitData.commit_number){
+            while(i < commitData.commit_number-1){
             commitDate = Date.parse(commitData.commits[i].date)
+            console.log(commitData)
             if1: if(fuenfWochendate < commitDate){
                     if(vierWochendate < commitDate){
                         if(dreiWochendate < commitDate){
@@ -504,6 +505,7 @@ router.get("/:workspace/:repo_slug/chart1", async (req, res) =>{
                     ++i
                 } else {
                     ++i
+                    console.log("i gea do eini obwohl i nit soll")
                     return res.send(commits_last_weeks)
                 }
             }
