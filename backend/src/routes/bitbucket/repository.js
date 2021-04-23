@@ -38,23 +38,23 @@ router.get("/:workspace/:repo_slug", async (req, res) => {
 
         var last_update_formatted = moment(data.updated_on).format("L");
         var lastUpdate = moment(data.updated_on).format("Do MMMM YYYY, h:mm:ss");
-        var last_update_fromnow = moment(lastUpdate, "Do MMMM YYYY, h:mm:ss").fromNow();
+        var last_update_fromnow = moment(lastUpdate, "Do MMMM YYYY, h:mm:ss").fromNow(); 
         var created_on_formatted = moment(data.created_on).format("L");
         var avatarLink=data.links.avatar.href;
 
-        var branches =await getBranchData(workspace, repo_slug);
-        var last_commits= await getCommitInfo(workspace, repo_slug);
+        var branches =await getBranchData(workspace, repo_slug);    //returns branches and number of branches
+        var last_commits= await getCommitInfo(workspace, repo_slug); //returns last 30 commits
         //var lines_info=await getLinesInfo(workspace, repo_slug);
-        var weekly_commits=await getWeeklyCommits(workspace, repo_slug);
+        var weekly_commits=await getWeeklyCommits(workspace, repo_slug); //returns commits of last 7 days
 
 
         resultObject = {
             owner_name: data.owner.display_name,
             is_private: data.is_private,
             created_on: created_on_formatted,
-            last_updated_formatted: last_update_formatted,
-            last_update_fromnow: last_update_fromnow,
-            avatar_link: avatarLink,
+            last_updated_formatted: last_update_formatted, //formatted Date p.e. 15.04.2021
+            last_update_fromnow: last_update_fromnow,      //time from now p.e. 8 minutes ago
+            avatar_link: avatarLink,                       //avatar of repository
             branch_number: branches.branch_number,
             branches: branches.branches,
             last_commits: last_commits,
@@ -329,7 +329,6 @@ async function getLinesInfo(workspace, repo_slug){
     let totaladded = 0;
     let totalremoved = 0;
     let result;
-    let totaladded_totalremoved_arr;
 
     try {
         while (true) {
@@ -362,7 +361,6 @@ async function getLinesInfo(workspace, repo_slug){
             ++page;
 
             if (commitData.commit_number < 100) {
-                totaladded_totalremoved_arr = [totaladded, totalremoved];
                 returnObj={
                     lines_added: totaladded,
                     lines_removed: totalremoved,
