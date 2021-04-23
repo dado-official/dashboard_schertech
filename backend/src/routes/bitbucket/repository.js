@@ -46,7 +46,8 @@ router.get("/:workspace/:repo_slug", async (req, res) => {
         var last_commits= await getCommitInfo(workspace, repo_slug);
         //var lines_info=await getLinesInfo(workspace, repo_slug);
         var weekly_commits=await getWeeklyCommits(workspace, repo_slug);
-
+        let commits_last_weeks = await getCommitsLastWeeks(workspace, repo_slug);
+        let total_commit_number = await getTotalCommitNumber(workspace, repo_slug);
 
         resultObject = {
             owner_name: data.owner.display_name,
@@ -60,9 +61,9 @@ router.get("/:workspace/:repo_slug", async (req, res) => {
             last_commits: last_commits,
             //lines_added: lines_info.lines_added,
             //lines_removed: lines_info.lines_removed,
-            //total_commit_number: lines_info.commit_number,
-            weekly_commits: weekly_commits
-
+            total_commit_number: total_commit_number,
+            weekly_commits: weekly_commits,
+            commits_last_weeks: commits_last_weeks
         };
 
         res.send(resultObject); 
@@ -184,7 +185,6 @@ router.delete("/:workspace/:repo_slug", async (req, res) => {
     });
 });
 
-
 //Returns information about the commits
 async function getCommitInfo(workspace, repo_slug){
     try {
@@ -204,7 +204,6 @@ async function getCommitInfo(workspace, repo_slug){
     }
 }
     
-
 //Reduces the commit data you get from the Bitbucket api
 function reduceCommitData(data) {
     let commits = [];
@@ -231,6 +230,7 @@ function reduceCommitData(data) {
     };
 }
 
+//returns informations about the branch(not working)
 async function getBranchData(workspace, repo_slug) {
 
     const {data} = await bitbucket
@@ -269,7 +269,7 @@ async function getWeeklyCommits(workspace, repo_slug){
         let commits = [];
 
         var date = new Date();                      //get date from a week ago to check if commit was within last week
-        date.setDate(date.getDate() - 7);
+        date.setDate(date.getDate() - 14);
 
         let commitMap = new Map();
 
@@ -300,7 +300,7 @@ async function getWeeklyCommits(workspace, repo_slug){
     } catch (err) {
         const {error, status, message} = err;
         console.log("ERROR:", error, status, message);
-        return status;
+        return null;
     }
 }
 
@@ -387,7 +387,7 @@ async function getLinesInfo(workspace, repo_slug){
     } catch (err) {
         const {error, status, message} = err;
         console.log("ERROR:", error, status, message);
-        return status;
+        return null;
     }
 };
 
@@ -411,7 +411,7 @@ async function diffstatCheck(workspace, reposlug, spec) {
 }
 
 //returns the amount of commits in the last 5 weeks
-router.get("/repo/:workspace/:repo_slug/commitslastweeks", async (req, res) => {
+async function getCommitsLastWeeks(workspace, repo_slug){
     let pagelen = 100
     let page = 1
     let commitMap = new Map()
@@ -446,7 +446,7 @@ router.get("/repo/:workspace/:repo_slug/commitslastweeks", async (req, res) => {
         while(true){
             const {data} = await bitbucket
                 .repositories
-                .listCommits({workspace: req.params.workspace, repo_slug: req.params.repo_slug, page: page, pagelen: pagelen, revision: ""});
+                .listCommits({workspace: workspace, repo_slug: repo_slug, page: page, pagelen: pagelen, revision: ""});
             let commitData = reduceCommitData(data);
             
             while(i < commitData.commit_number){
@@ -460,57 +460,73 @@ router.get("/repo/:workspace/:repo_slug/commitslastweeks", async (req, res) => {
                                     let counter = commitMap.get("vor einer Woche")
                                     ++counter;
                                     commitMap.set("vor einer Woche", counter)
-                                    console.log("Commit eine woche her")
                                     ++i
                                     break if1
                                 }
                                 let counter = commitMap.get("vor zwei Wochen")
                                 ++counter;
                                 commitMap.set("vor zwei Wochen", counter)
-                                console.log("Commit zwei wochen her")
                                 ++i
                                 break if1
                             }
                             let counter = commitMap.get("vor drei Wochen")
                             ++counter;
                             commitMap.set("vor drei Wochen", counter)
-                            console.log("Commit drei wochen her")
                             ++i
                             break if1
                         }
                         let counter = commitMap.get("vor vier Wochen")
                         ++counter;
                         commitMap.set("vor vier Wochen", counter)
-                        console.log("Commit vier wochen her")
                         ++i
                         break if1
                     }
                     let counter = commitMap.get("vor fünf Wochen")
                     ++counter;
                     commitMap.set("vor fünf Wochen", counter)
-                    console.log("Commit fünf wochen her")
                     ++i
                 } else {
                     ++i
-                    console.log("länger her")
-                    return res.send(JSON.stringify([...commitMap]));
+                    return (JSON.stringify([...commitMap]));
                 }
-                
             }
             i = 0;
             ++page
-            console.log(page)
             if(commitData.commit_number < 100){
-                return res.send(JSON.stringify([...commitMap]));
+                return (JSON.stringify([...commitMap]));
             }   
-            console.log((JSON.stringify([...commitMap])))
         }
-        
     } catch (err) {
         const {error, status, message} = err;
         console.log("ERROR:", error, status, message);
-        res.sendStatus(status);
+        return(status);
     }
-});
+};
 
+//returns total number of commits in a repository
+async function getTotalCommitNumber(workspace, repo_slug){
+    let pagelen = 100;
+    let page = 1
+    let anzahl = 0
+        try {
+            while(true){
+                const {data} = await bitbucket
+                    .repositories
+                    .listCommits({workspace: workspace, repo_slug: repo_slug, page: page, pagelen: pagelen, revision: ""});
+
+                let commitData = reduceCommitData(data);
+                //Add link to the Bitbucket repository
+                commitData["link"] = `https://bitbucket.org/${workspace}/${repo_slug}/commits/`;
+                anzahl = anzahl + commitData.commit_number
+                ++page
+                if(commitData.commit_number < 100){
+                    return ({commit_number: anzahl});
+                }   
+            }
+        } catch (err) {
+            const {error, status, message} = err;
+            console.log("ERROR:", error, status, message);
+            return null;
+        }    
+};
 module.exports = router;
