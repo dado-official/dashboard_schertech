@@ -1,8 +1,10 @@
 const router = require("express").Router();
 const axios = require("axios").default;
-const db = require("@database/db");
 const moment = require("moment");
-const momentDurationFormatSetup = require("moment-duration-format");
+require("moment-duration-format");
+
+const db = require("@database/db");
+const main = require("../app");
 
 
 //Returns a list of all the custom entries
@@ -31,7 +33,7 @@ router.get("/", (req, res) => {
         let entries = [];
         for (const i in entryIDs) {
             const id = entryIDs[i];
-            const res = await axios.get(`http://localhost:4000/api/custom/${id}`);  //Todo change to environment var
+            const res = await axios.get(`http://localhost:${main.port}/api/custom/${id}`);
 
             entries.push({
                 id: id,
@@ -74,12 +76,11 @@ router.put("/:id", (req, res) => {
     const {id} = req.params;
     const {title, description, frequency, target_value} = req.body;
 
-    //TODO make this better, if possible
     //Create update statement, only update if a value is given
     let values = [];
     let sql = "UPDATE custom_entries SET ";
     if (title) {
-        sql += "title = ?7, ";
+        sql += "title = ?, ";
         values.push(title);
     }
     if (description) {
@@ -96,6 +97,11 @@ router.put("/:id", (req, res) => {
     }
     sql += "WHERE id = ?;";
     values.push(id);
+
+    //Invalid SQL syntax
+    if (values.length >= 1) {
+        return res.sendStatus(400);
+    }
 
     //Regex to remove the last comma in this string:
     //https://stackoverflow.com/questions/5497318/replace-last-occurrence-of-character-in-string/
@@ -136,8 +142,8 @@ router.get("/:entry_id", (req, res) => {
     let sql = `
         SELECT *
         FROM custom_entries
-                 LEFT JOIN custom_values
-                           ON custom_values.entry_id = custom_entries.id
+        LEFT JOIN custom_values
+        ON custom_values.entry_id = custom_entries.id
         WHERE custom_entries.id = ?
         ORDER BY value_id`;
 
