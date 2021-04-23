@@ -26,6 +26,7 @@ export default function AllServers({ setUrl, props}) {
                         description={element.description}
                         workspace={element.workspace}
                         repo_slug={element.repo_slug}
+                        id={element.id}
                     />
                 )):<br/>}
                 <AddButton title="repository" />

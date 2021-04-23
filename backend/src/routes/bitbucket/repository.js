@@ -76,7 +76,7 @@ router.get("/:id", (req, res) => {
     let sql = `
         SELECT *
         FROM repositories
-        WHERE = ?`;
+        WHERE id = ?`;
 
     db.get(sql, [id], (err, row) => {
         if (err) {

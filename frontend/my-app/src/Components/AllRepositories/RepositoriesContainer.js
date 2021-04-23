@@ -4,7 +4,7 @@ import axios from 'axios'
 import { useHistory } from "react-router-dom";
 
 
-export default function RepositoryContainer({ name, description, workspace, repo_slug, props }) {
+export default function RepositoryContainer({ name, description, workspace, repo_slug, id }) {
     const [hover, setHover] = useState(false);
     const [owner, setOwner] = useState("");
     const [lastEdit, setEdit] = useState("");
@@ -38,7 +38,7 @@ export default function RepositoryContainer({ name, description, workspace, repo
             className="bg-primary hover:bg-backgroundHover tranition ease-in-out cursor-pointer duration-300 rounded-0.938 py-3 px-4 w-full"
             onMouseEnter={() => setHover(true)}
             onMouseLeave={() => setHover(false)}
-            onClick={() => history.push("/repository/" + name)}
+            onClick={() => history.push("/repository/" + id)}
         >
             <div className="flex justify-between">
                 <h6 className="text-white ">{name}</h6>

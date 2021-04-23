@@ -16,10 +16,17 @@ export default function Repository({ setUrl, props }) {
     const { id } = useParams();
 
     useEffect(() => {
-        setName(id)
+        
         setUrl("Repository");
-        axios.get("http://localhost:4000/api/repository/" + props.workspace + "/" + props.reposlug +"/").then((resp) => {
+        axios.get("http://localhost:4000/api/repository/" + id +"/").then((resp) => {
             setIsPrivate(resp.data.is_private)
+            setName(resp.data.name)
+            console.log(resp.data)
+
+            axios.get("http://localhost:4000/api/repository/" + resp.data.workspace + "/" + resp.data.repo_slug +"/").then((resp) => {
+                setIsPrivate(resp.data.is_private)
+                setName(resp.data.name)
+            });
         });
     }, []);
 
