@@ -1,7 +1,6 @@
 const router = require("express").Router();
 const axios = require("axios").default;
 const moment = require("moment");
-require("moment-duration-format");
 
 const db = require("@database/db");
 const main = require("../app");
@@ -166,8 +165,7 @@ router.get("/:entry_id", (req, res) => {
             //Calculate the remaining time
             let lastDate = moment.unix(rows[rows.length - 1].value_date);
             let nextDate = lastDate.add(rows[0].frequency, "days");
-            let currentDate = moment();
-            remainingTime = moment.duration(nextDate.diff(currentDate)).format("dd:hh:mm");
+            remainingTime = moment(nextDate, "dd:hh:mm").fromNow()
 
             //Calculate the progress in percent new / old - 1
             let newValue = rows[rows.length - 1].value;
