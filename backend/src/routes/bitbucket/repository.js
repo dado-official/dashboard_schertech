@@ -1,8 +1,9 @@
 const router = require("express").Router();
 const bitbucket = require("./bitbucket");
-const db = require("@database/db");
 const moment = require("moment");
 moment.locale("de");
+
+const db = require("@database/db");
 
 
 //Returns a list of all the repositories
@@ -29,40 +30,40 @@ router.get("/", async (req, res) => {
 //Returns information about a specific repository
 router.get("/:workspace/:repo_slug", async (req, res) => {
     const {workspace, repo_slug} = req.params;
+    let resultObject;
     try {
 
         const {data} = await bitbucket
             .repositories
             .get({workspace: workspace, repo_slug: repo_slug});
 
-        var last_update_formatted = moment(data.updated_on).format("L");
-        var lastUpdate = moment(data.updated_on).format("Do MMMM YYYY, h:mm:ss");
-        var last_update_fromnow = moment(lastUpdate, "Do MMMM YYYY, h:mm:ss").fromNow();
-        var created_on_formatted = moment(data.created_on).format("L");
-        var avatarLink=data.links.avatar.href;
+        const lastUpdateFormatted = moment(data.updated_on).format("L");
+        const lastUpdate = moment(data.updated_on).format("Do MMMM YYYY, h:mm:ss");
+        const lastUpdateFromNow = moment(lastUpdate, "Do MMMM YYYY, h:mm:ss").fromNow();
+        const createdOnFormatted = moment(data.created_on).format("L");
+        const avatarLink = data.links.avatar.href;
 
-        var branches =await getBranchData(workspace, repo_slug);
-        var last_commits= await getCommitInfo(workspace, repo_slug);
-        var lines_info=await getLinesInfo(workspace, repo_slug);
+        const branches = await getBranchData(workspace, repo_slug);
+        const lastCommits = await getCommitInfo(workspace, repo_slug);
+        const linesInfo = await getLinesInfo(workspace, repo_slug);
 
 
         resultObject = {
             owner_name: data.owner.display_name,
             is_private: data.is_private,
-            created_on: created_on_formatted,
-            last_updated_formatted: last_update_formatted,
-            last_update_fromnow: last_update_fromnow,
+            created_on: createdOnFormatted,
+            last_updated_formatted: lastUpdateFormatted,
+            last_update_fromnow: lastUpdateFromNow,
             avatar_link: avatarLink,
             branch_number: branches.branch_number,
             branches: branches.branches,
-            last_commits: last_commits,
-            lines_added: lines_info.lines_added,
-            lines_removed: lines_info.lines_removed,
-            total_commit_number: lines_info.commit_number
-
+            last_commits: lastCommits,
+            lines_added: linesInfo.lines_added,
+            lines_removed: linesInfo.lines_removed,
+            total_commit_number: linesInfo.commit_number
         };
 
-        res.send(resultObject); 
+        res.send(resultObject);
     } catch (err) {
         const {error, status, message} = err;
         console.log("ERROR:", error, status, message);
@@ -118,7 +119,7 @@ router.post("/", async (req, res) => {
 router.put("/:workspace/:repo_slug", (req, res) => {
     const {workspace, repo_slug} = req.params;
     const {new_workspace, new_repo_slug} = req.body;
-    //TODO make this better, if possible
+
     //Create update statement, only update if a value is given
     let values = [];
     let sql = "UPDATE repositories SET ";
@@ -170,75 +171,6 @@ router.delete("/:workspace/:repo_slug", async (req, res) => {
 });
 
 
-//Returns information about the commits
-async function getCommitInfo(workspace, repo_slug){
-    try {
-        const {data} = await bitbucket
-            .repositories
-            .listCommits({workspace: workspace, repo_slug: repo_slug, revision: ""});
-
-        let commitData = reduceCommitData(data);
-        //Add link to the Bitbucket repository
-        commitData["link"] = `https://bitbucket.org/${workspace}/${repo_slug}/commits/`;
-
-        return commitData;
-    } catch (err) {
-        const {error, status, message} = err;
-        console.log("ERROR:", error, status, message);
-        return -1;
-    }
-};
-    
-
-//Reduces the commit data you get from the Bitbucket api
-function reduceCommitData(data) {
-    let commits = [];
-
-    data.values.forEach((commit) => {
-        let reducedCommit = {
-            id: commit.hash.substring(0, 7),
-            hash: commit.hash,
-            message: commit.message,
-            author_name: commit.author?.user?.display_name || "",
-            author_raw: commit.author.raw,
-            date: commit.date
-        };
-
-        commits.push(reducedCommit);
-    });
-
-    return {
-        commit_number: commits.length,
-        commits: commits,
-    };
-}
-
-async function getBranchData(workspace, repo_slug) {
-
-    const {data} = await bitbucket
-            .repositories
-            .listRefs({workspace: workspace, repo_slug: repo_slug});
-
-    let branches = [];
-
-    data.values.forEach((branch) => {
-        let reducedBranch = {
-            name: branch.name,
-            author: branch.target.author?.user?.display_name || "",
-            //next: branch.next
-
-        };
-        branches.push(reducedBranch);
-    });
-
-    branchesObj={
-        branch_number: branches.length,
-        branches: branches,
-    };
-
-    return branchesObj;
-}
-
 // Specific information
 
 //Returns who and how often a commit was made in a repository
@@ -250,7 +182,7 @@ router.get("/:workspace/:repo_slug/weeklycommits", async (req, res) => {
 
         let commits = [];
 
-        var date = new Date();                      //get date from a week ago to check if commit was within last week
+        let date = new Date();                      //get date from a week ago to check if commit was within last week
         date.setDate(date.getDate() - 7);
 
         let commitMap = new Map();
@@ -265,7 +197,7 @@ router.get("/:workspace/:repo_slug/weeklycommits", async (req, res) => {
             let commitDate = Date.parse(commit.date);
 
             if (dateCheck < commitDate) {                                                     //check if commit was within last week and adding it to map
-                if (commitMap.get(commit.author?.user?.display_name) != undefined) {         //change value of commits issued or add user to the commitmap
+                if (commitMap.get(commit.author?.user?.display_name) !== undefined) {         //change value of commits issued or add user to the commitmap
                     let counter = commitMap.get(commit.author?.user?.display_name);
                     ++counter;
                     commitMap.set(commit.author?.user?.display_name, counter);
@@ -318,8 +250,78 @@ router.get("/:workspace/:repo_slug/allcommits", async (req, res) => {
     }
 });
 
+
+//Functions
+
+//Returns information about the commits
+async function getCommitInfo(workspace, repo_slug) {
+    try {
+        const {data} = await bitbucket
+            .repositories
+            .listCommits({workspace: workspace, repo_slug: repo_slug, revision: ""});
+
+        let commitData = reduceCommitData(data);
+        //Add link to the Bitbucket repository
+        commitData["link"] = `https://bitbucket.org/${workspace}/${repo_slug}/commits/`;
+
+        return commitData;
+    } catch (err) {
+        const {error, status, message} = err;
+        console.log("ERROR:", error, status, message);
+        return -1;
+    }
+}
+
+
+//Reduces the commit data you get from the Bitbucket api
+function reduceCommitData(data) {
+    let commits = [];
+
+    data.values.forEach((commit) => {
+        let reducedCommit = {
+            id: commit.hash.substring(0, 7),
+            hash: commit.hash,
+            message: commit.message,
+            author_name: commit.author?.user?.display_name || "",
+            author_raw: commit.author.raw,
+            date: commit.date
+        };
+
+        commits.push(reducedCommit);
+    });
+
+    return {
+        commit_number: commits.length,
+        commits: commits,
+    };
+}
+
+async function getBranchData(workspace, repo_slug) {
+
+    const {data} = await bitbucket
+        .repositories
+        .listRefs({workspace: workspace, repo_slug: repo_slug});
+
+    let branches = [];
+
+    data.values.forEach((branch) => {
+        let reducedBranch = {
+            name: branch.name,
+            author: branch.target.author?.user?.display_name || "",
+            //next: branch.next
+
+        };
+        branches.push(reducedBranch);
+    });
+
+    return {
+        branch_number: branches.length,
+        branches: branches,
+    };
+}
+
 //returns all lines added and removed in a repository
-async function getLinesInfo(workspace, repo_slug){
+async function getLinesInfo(workspace, repo_slug) {
     const pagelen = 100;
     let page = 1;
     let anzahl = 0;
@@ -331,6 +333,7 @@ async function getLinesInfo(workspace, repo_slug){
     let result;
     let totaladded_totalremoved_arr;
 
+    let returnObj;
     try {
         while (true) {
             const {data} = await bitbucket
@@ -342,15 +345,15 @@ async function getLinesInfo(workspace, repo_slug){
             commitData["link"] = `https://bitbucket.org/${workspace}/${repo_slug}/commits/`;
 
             while (i < commitData.commit_number) {
-                if (commitData == undefined) {
+                if (commitData === undefined) {
                     ++i;
                 } else {
                     currentcommit = commitData.commits[i].hash;
                     nextcommit = commitData.commits[++i].hash;
-                    result = await diffstatCheck(workspace, repo_slug, currentcommit + ".." + nextcommit);
+                    result = await diffStatCheck(workspace, repo_slug, currentcommit + ".." + nextcommit);
                 }
 
-                if (result != undefined) {
+                if (result !== undefined) {
                     totaladded = totaladded + result[0];
                     totalremoved = totalremoved + result[1];
                     ++i;
@@ -364,11 +367,11 @@ async function getLinesInfo(workspace, repo_slug){
 
             if (commitData.commit_number < 100) {
                 totaladded_totalremoved_arr = [totaladded, totalremoved];
-                returnObj={
+                returnObj = {
                     lines_added: totaladded,
                     lines_removed: totalremoved,
                     commit_number: anzahl,
-                }
+                };
                 return returnObj;
             }
         }
@@ -377,16 +380,16 @@ async function getLinesInfo(workspace, repo_slug){
         console.log("ERROR:", error, status, message);
         return status;
     }
-};
+}
 
-async function diffstatCheck(workspace, reposlug, spec) {
+async function diffStatCheck(workspace, repo_slug, spec) {
     let lines_added_lines_removed_arr;
     let all_lines_added = 0;
     let all_lines_removed = 0;
     try {
         const {data} = await bitbucket
             .repositories
-            .listDiffStats({workspace: workspace, repo_slug: reposlug, spec: spec});
+            .listDiffStats({workspace: workspace, repo_slug: repo_slug, spec: spec});
         data.values.forEach(value => {
             all_lines_added = all_lines_added + value.lines_added;
             all_lines_removed = all_lines_removed + value.lines_removed;
@@ -397,5 +400,6 @@ async function diffstatCheck(workspace, reposlug, spec) {
         return (lines_added_lines_removed_arr);
     }
 }
+
 
 module.exports = router;
