@@ -10,7 +10,8 @@ import { useParams } from "react-router-dom";
 
 export default function Repository({ setUrl, props }) {
   const [name, setName] = useState("Repositoryname");
-  const [owner, setOwner] = useState("Repo Owner");
+  const [data, setData] = useState([]);
+  const [dataOfCommits, setDataOfCommits] = useState([]);
   const [isPrivate, setIsPrivate] = useState(false);
 
   const { id } = useParams();
@@ -34,7 +35,8 @@ export default function Repository({ setUrl, props }) {
           )
           .then((resp) => {
             setIsPrivate(resp.data.is_private);
-            setName(resp.data.name);
+            setData(resp.data);
+            setDataOfCommits(resp.data.last_commits)
           });
       });
   }, []);
@@ -44,7 +46,7 @@ export default function Repository({ setUrl, props }) {
       <div className="flex justify-between">
         <div className="flex gap-4">
           <img
-            src="https://d301sr5gafysq2.cloudfront.net/99622dff891f/img/repo-avatars/default.png"
+            src={data.avatar_link}
             alt="Repo photo"
             className="h-20 w-20 rounded-0.938"
           />
@@ -68,22 +70,19 @@ export default function Repository({ setUrl, props }) {
       </div>
       <div className="flex w-full">
         <div className="grid grid-flow-rows grid-cols-4 gap-8 mt-8 w-full">
-          <LatestCommits />
+          <LatestCommits 
+            last_commits={dataOfCommits} 
+            number_of_commits={dataOfCommits.commit_number}
+          />
           <div className="flex flex-col gap-8 col-span-2">
             <MostCommitsChart />
             <CommitsPerWeekChart />
           </div>
           <Insights
-            members="42"
-            contributors="21"
-            admins="2"
-            owner="seppele"
-            linesofcode="22.6K"
-            files="73"
-            commits="93"
-            additions="70.3K"
-            deletions="7.7K"
-            branches="2"
+            created_on={data.created_on}
+            last_updated_date={data.last_updated_formatted}
+            owner={data.owner_name}
+            branches={data.branch_number}
           />
         </div>
       </div>
