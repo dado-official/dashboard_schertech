@@ -34,6 +34,7 @@ router.get("/:workspace/:repo_slug", async (req, res) => {
         const {data} = await bitbucket
             .repositories
             .get({workspace: workspace, repo_slug: repo_slug});
+        moment.locale("de");
 
         var last_update_formatted = moment(data.updated_on).format("L");
         var lastUpdate = moment(data.updated_on).format("Do MMMM YYYY, h:mm:ss");
@@ -43,7 +44,8 @@ router.get("/:workspace/:repo_slug", async (req, res) => {
 
         var branches =await getBranchData(workspace, repo_slug);
         var last_commits= await getCommitInfo(workspace, repo_slug);
-        var lines_info=await getLinesInfo(workspace, repo_slug);
+        //var lines_info=await getLinesInfo(workspace, repo_slug);
+        var weekly_commits=await getWeeklyCommits(workspace, repo_slug);
 
 
         resultObject = {
@@ -56,9 +58,10 @@ router.get("/:workspace/:repo_slug", async (req, res) => {
             branch_number: branches.branch_number,
             branches: branches.branches,
             last_commits: last_commits,
-            lines_added: lines_info.lines_added,
-            lines_removed: lines_info.lines_removed,
-            total_commit_number: lines_info.commit_number
+            //lines_added: lines_info.lines_added,
+            //lines_removed: lines_info.lines_removed,
+            //total_commit_number: lines_info.commit_number,
+            weekly_commits: weekly_commits
 
         };
 
@@ -242,11 +245,11 @@ async function getBranchData(workspace, repo_slug) {
 // Specific information
 
 //Returns who and how often a commit was made in a repository
-router.get("/:workspace/:repo_slug/weeklycommits", async (req, res) => {
+async function getWeeklyCommits(workspace, repo_slug){
     try {
         const {data} = await bitbucket
             .repositories
-            .listCommits({workspace: req.params.workspace, repo_slug: req.params.repo_slug, revision: ""});
+            .listCommits({workspace: workspace, repo_slug: repo_slug, revision: ""});
 
         let commits = [];
 
@@ -275,19 +278,16 @@ router.get("/:workspace/:repo_slug/weeklycommits", async (req, res) => {
             }
             commits.push(commitMap);
         });
+        commitMap=JSON.stringify([...commitMap])
 
-        res.send({
-            commit_number: commits.length,
-            commits: commits,
-            commitMap: JSON.stringify([...commitMap])
-        });
+        return commitMap;
 
     } catch (err) {
         const {error, status, message} = err;
         console.log("ERROR:", error, status, message);
-        res.sendStatus(status);
+        return status;
     }
-});
+};
 
 //returns all commits in a Repository
 router.get("/:workspace/:repo_slug/allcommits", async (req, res) => {
@@ -341,7 +341,7 @@ async function getLinesInfo(workspace, repo_slug){
             //Add link to the Bitbucket repository
             commitData["link"] = `https://bitbucket.org/${workspace}/${repo_slug}/commits/`;
 
-            while (i < commitData.commit_number) {
+            while (i < commitData.commit_number-1) {
                 if (commitData == undefined) {
                     ++i;
                 } else {
@@ -353,7 +353,6 @@ async function getLinesInfo(workspace, repo_slug){
                 if (result != undefined) {
                     totaladded = totaladded + result[0];
                     totalremoved = totalremoved + result[1];
-                    ++i;
                 }
 
             }
