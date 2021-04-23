@@ -329,7 +329,6 @@ async function getLinesInfo(workspace, repo_slug){
     let totaladded = 0;
     let totalremoved = 0;
     let result;
-    let totaladded_totalremoved_arr;
 
     try {
         while (true) {
@@ -341,7 +340,7 @@ async function getLinesInfo(workspace, repo_slug){
             //Add link to the Bitbucket repository
             commitData["link"] = `https://bitbucket.org/${workspace}/${repo_slug}/commits/`;
 
-            while (i < commitData.commit_number) {
+            while (i < commitData.commit_number-1) {
                 if (commitData == undefined) {
                     ++i;
                 } else {
@@ -363,7 +362,6 @@ async function getLinesInfo(workspace, repo_slug){
             ++page;
 
             if (commitData.commit_number < 100) {
-                totaladded_totalremoved_arr = [totaladded, totalremoved];
                 returnObj={
                     lines_added: totaladded,
                     lines_removed: totalremoved,
@@ -397,5 +395,108 @@ async function diffstatCheck(workspace, reposlug, spec) {
         return (lines_added_lines_removed_arr);
     }
 }
+
+//returns the amount of commits in the last 5 weeks
+router.get("/repo/:workspace/:repo_slug/commitslastweeks", async (req, res) => {
+    let pagelen = 100
+    let page = 1
+    let commitMap = new Map()
+    let i = 0;
+    commitMap.set("vor einer Woche", 0)
+    commitMap.set("vor zwei Wochen", 0)
+    commitMap.set("vor drei Wochen", 0)
+    commitMap.set("vor vier Wochen", 0)
+    commitMap.set("vor fünf Wochen", 0)
+
+    var letschteWochedate = new Date()
+    letschteWochedate.setDate(letschteWochedate.getDate() - 7)
+    letschteWochedate = Date.parse(letschteWochedate)
+
+    var zweiWochendate = new Date()
+    zweiWochendate.setDate(zweiWochendate.getDate() - 14)
+    zweiWochendate = Date.parse(zweiWochendate)
+
+    var dreiWochendate = new Date()
+    dreiWochendate.setDate(dreiWochendate.getDate() - 21);
+    dreiWochendate = Date.parse(dreiWochendate)
+
+    var vierWochendate = new Date();
+    vierWochendate.setDate(vierWochendate.getDate() - 28)
+    vierWochendate = Date.parse(vierWochendate)
+
+    var fuenfWochendate = new Date()
+    fuenfWochendate.setDate(fuenfWochendate.getDate() - 35)
+    fuenfWochendate = Date.parse(fuenfWochendate)
+
+    try{
+        while(true){
+            const {data} = await bitbucket
+                .repositories
+                .listCommits({workspace: req.params.workspace, repo_slug: req.params.repo_slug, page: page, pagelen: pagelen, revision: ""});
+            let commitData = reduceCommitData(data);
+            
+            while(i < commitData.commit_number){
+                commitDate = Date.parse(commitData.commits[i].date)
+
+            if1: if(fuenfWochendate < commitDate){
+                    if(vierWochendate < commitDate){
+                        if(dreiWochendate < commitDate){
+                            if(zweiWochendate < commitDate){
+                                if(letschteWochedate < commitDate){
+                                    let counter = commitMap.get("vor einer Woche")
+                                    ++counter;
+                                    commitMap.set("vor einer Woche", counter)
+                                    console.log("Commit eine woche her")
+                                    ++i
+                                    break if1
+                                }
+                                let counter = commitMap.get("vor zwei Wochen")
+                                ++counter;
+                                commitMap.set("vor zwei Wochen", counter)
+                                console.log("Commit zwei wochen her")
+                                ++i
+                                break if1
+                            }
+                            let counter = commitMap.get("vor drei Wochen")
+                            ++counter;
+                            commitMap.set("vor drei Wochen", counter)
+                            console.log("Commit drei wochen her")
+                            ++i
+                            break if1
+                        }
+                        let counter = commitMap.get("vor vier Wochen")
+                        ++counter;
+                        commitMap.set("vor vier Wochen", counter)
+                        console.log("Commit vier wochen her")
+                        ++i
+                        break if1
+                    }
+                    let counter = commitMap.get("vor fünf Wochen")
+                    ++counter;
+                    commitMap.set("vor fünf Wochen", counter)
+                    console.log("Commit fünf wochen her")
+                    ++i
+                } else {
+                    ++i
+                    console.log("länger her")
+                    return res.send(JSON.stringify([...commitMap]));
+                }
+                
+            }
+            i = 0;
+            ++page
+            console.log(page)
+            if(commitData.commit_number < 100){
+                return res.send(JSON.stringify([...commitMap]));
+            }   
+            console.log((JSON.stringify([...commitMap])))
+        }
+        
+    } catch (err) {
+        const {error, status, message} = err;
+        console.log("ERROR:", error, status, message);
+        res.sendStatus(status);
+    }
+});
 
 module.exports = router;
