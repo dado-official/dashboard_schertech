@@ -6,26 +6,37 @@ import LatestCommits from "./LatestCommits";
 import MostCommitsChart from "./MostCommitsChart";
 import CommitsPerWeekChart from "./CommitsPerWeekChart";
 import axios from "axios";
+import { useParams } from "react-router-dom";
 
 export default function Repository({ setUrl, props }) {
     const [name, setName] = useState("Repositoryname");
     const [owner, setOwner] = useState("Repo Owner");
     const [isPrivate, setIsPrivate] = useState(false);
 
+    const { id } = useParams();
+
     useEffect(() => {
-        //setName(props.name)
         setUrl("Repository");
-        /* axios
-            .get(
-                "http://localhost:4000/api/repository/" +
-                    props.workspace +
-                    "/" +
-                    props.reposlug +
-                    "/"
-            )
+        axios
+            .get("http://localhost:4000/api/repository/" + id + "/")
             .then((resp) => {
                 setIsPrivate(resp.data.is_private);
-            });*/
+                setName(resp.data.name);
+                console.log(resp.data);
+
+                axios
+                    .get(
+                        "http://localhost:4000/api/repository/" +
+                            resp.data.workspace +
+                            "/" +
+                            resp.data.repo_slug +
+                            "/"
+                    )
+                    .then((resp) => {
+                        setIsPrivate(resp.data.is_private);
+                        setName(resp.data.name);
+                    });
+            });
     }, []);
 
     return (

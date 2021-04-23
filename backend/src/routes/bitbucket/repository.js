@@ -34,16 +34,18 @@ router.get("/:workspace/:repo_slug", async (req, res) => {
         const {data} = await bitbucket
             .repositories
             .get({workspace: workspace, repo_slug: repo_slug});
-        //branch anzahl mit link ganz am Ende size
+        moment.locale("de");
 
         var last_update_formatted = moment(data.updated_on).format("L");
         var lastUpdate = moment(data.updated_on).format("Do MMMM YYYY, h:mm:ss");
         var last_update_fromnow = moment(lastUpdate, "Do MMMM YYYY, h:mm:ss").fromNow();
-
         var created_on_formatted = moment(data.created_on).format("L");
         var avatarLink=data.links.avatar.href;
 
-        var branches =getBranchData(workspace, repo_slug);
+        var branches =await getBranchData(workspace, repo_slug);
+        var last_commits= await getCommitInfo(workspace, repo_slug);
+        //var lines_info=await getLinesInfo(workspace, repo_slug);
+        var weekly_commits=await getWeeklyCommits(workspace, repo_slug);
 
 
         resultObject = {
@@ -55,10 +57,13 @@ router.get("/:workspace/:repo_slug", async (req, res) => {
             avatar_link: avatarLink,
             branch_number: branches.branch_number,
             branches: branches.branches,
+            last_commits: last_commits,
+            //lines_added: lines_info.lines_added,
+            //lines_removed: lines_info.lines_removed,
+            //total_commit_number: lines_info.commit_number,
+            weekly_commits: weekly_commits
 
         };
-
-        
 
         res.send(resultObject); 
     } catch (err) {
@@ -68,26 +73,30 @@ router.get("/:workspace/:repo_slug", async (req, res) => {
     }
 });
 
+//Get data from the repository
+router.get("/:id", (req, res) => {
+    const {id} = req.params;
+    let sql = `
+        SELECT *
+        FROM repositories
+        WHERE id = ?`;
 
-/* router.get("/:workspace/:repo_slug/test", async (req, res) => {
-    const {workspace, repo_slug} = req.params;
-    try {
+    db.get(sql, [id], (err, row) => {
+        if (err) {
+            console.log(err);
+            return res.sendStatus(400);
+        }
 
-        const {data} = await bitbucket
-            .repositories
-            .listRefs({workspace: workspace, repo_slug: repo_slug});
+        if (!row) {
+            console.log("Couldn't find any data");
+            return res.sendStatus(400);
+        }
 
-        let branchData = reduceBranchData(data);
-        //Add link to the Bitbucket repository
-        branchData["link"] = `https://bitbucket.org/${workspace}/${repo_slug}/branches/`;
+        res.send(row);
+    });
 
-        res.send(branchData);
-    } catch (err) {
-        const {error, status, message} = err;
-        console.log("ERROR:", error, status, message);
-        res.sendStatus(status);
-    }
-}); */
+});
+
 
 //Adds a new repository
 router.post("/", async (req, res) => {
@@ -165,8 +174,7 @@ router.delete("/:workspace/:repo_slug", async (req, res) => {
 
 
 //Returns information about the commits
-router.get("/:workspace/:repo_slug/commits", async (req, res) => {
-    const {workspace, repo_slug} = req.params;
+async function getCommitInfo(workspace, repo_slug){
     try {
         const {data} = await bitbucket
             .repositories
@@ -176,13 +184,14 @@ router.get("/:workspace/:repo_slug/commits", async (req, res) => {
         //Add link to the Bitbucket repository
         commitData["link"] = `https://bitbucket.org/${workspace}/${repo_slug}/commits/`;
 
-        res.send(commitData);
+        return commitData;
     } catch (err) {
         const {error, status, message} = err;
         console.log("ERROR:", error, status, message);
-        res.sendStatus(status);
+        return -1;
     }
-});
+};
+    
 
 //Reduces the commit data you get from the Bitbucket api
 function reduceCommitData(data) {
@@ -230,18 +239,17 @@ async function getBranchData(workspace, repo_slug) {
         branches: branches,
     };
 
-
     return branchesObj;
 }
 
 // Specific information
 
 //Returns who and how often a commit was made in a repository
-router.get("/:workspace/:repo_slug/weeklycommits", async (req, res) => {
+async function getWeeklyCommits(workspace, repo_slug){
     try {
         const {data} = await bitbucket
             .repositories
-            .listCommits({workspace: req.params.workspace, repo_slug: req.params.repo_slug, revision: ""});
+            .listCommits({workspace: workspace, repo_slug: repo_slug, revision: ""});
 
         let commits = [];
 
@@ -260,7 +268,7 @@ router.get("/:workspace/:repo_slug/weeklycommits", async (req, res) => {
             let commitDate = Date.parse(commit.date);
 
             if (dateCheck < commitDate) {                                                     //check if commit was within last week and adding it to map
-                if (commitMap.get(commit.author?.user?.display_name) !== undefined) {         //change value of commits issued or add user to the commitmap
+                if (commitMap.get(commit.author?.user?.display_name) != undefined) {         //change value of commits issued or add user to the commitmap
                     let counter = commitMap.get(commit.author?.user?.display_name);
                     ++counter;
                     commitMap.set(commit.author?.user?.display_name, counter);
@@ -268,21 +276,18 @@ router.get("/:workspace/:repo_slug/weeklycommits", async (req, res) => {
                     commitMap.set(commit.author?.user?.display_name, 1);
                 }
             }
-            commits.push(reducedCommit);
+            commits.push(commitMap);
         });
+        commitMap=JSON.stringify([...commitMap])
 
-        res.send({
-            commit_number: commits.length,
-            commits: commits,
-            commitMap: JSON.stringify([...commitMap])
-        });
+        return commitMap;
 
     } catch (err) {
         const {error, status, message} = err;
         console.log("ERROR:", error, status, message);
-        res.sendStatus(status);
+        return status;
     }
-});
+};
 
 //returns all commits in a Repository
 router.get("/:workspace/:repo_slug/allcommits", async (req, res) => {
@@ -314,65 +319,64 @@ router.get("/:workspace/:repo_slug/allcommits", async (req, res) => {
 });
 
 //returns all lines added and removed in a repository
-router.get("/:workspace/:repo_slug/lineschanged", async (req, res) => {
-        const {workspace, repo_slug} = req.params;
-        const pagelen = 100;
-        let page = 1;
-        let anzahl = 0;
-        let currentcommit;
-        let nextcommit;
-        let i = 0;
-        let totaladded = 0;
-        let totalremoved = 0;
-        let result;
-        let totaladded_totalremoved_arr;
+async function getLinesInfo(workspace, repo_slug){
+    const pagelen = 100;
+    let page = 1;
+    let anzahl = 0;
+    let currentcommit;
+    let nextcommit;
+    let i = 0;
+    let totaladded = 0;
+    let totalremoved = 0;
+    let result;
+    let totaladded_totalremoved_arr;
 
-        try {
-            while (true) {
-                const {data} = await bitbucket
-                    .repositories
-                    .listCommits({workspace: workspace, repo_slug: repo_slug, page: page, pagelen: pagelen, revision: ""});
+    try {
+        while (true) {
+            const {data} = await bitbucket
+                .repositories
+                .listCommits({workspace: workspace, repo_slug: repo_slug, page: page, pagelen: pagelen, revision: ""});
 
-                let commitData = reduceCommitData(data);
-                //Add link to the Bitbucket repository
-                commitData["link"] = `https://bitbucket.org/${workspace}/${repo_slug}/commits/`;
+            let commitData = reduceCommitData(data);
+            //Add link to the Bitbucket repository
+            commitData["link"] = `https://bitbucket.org/${workspace}/${repo_slug}/commits/`;
 
-                while (i < commitData.commit_number) {
-                    if (commitData == undefined) {
-                        ++i;
-                    } else {
-                        currentcommit = commitData.commits[i].hash;
-                        nextcommit = commitData.commits[++i].hash;
-                        result = await diffstatCheck(workspace, repo_slug, currentcommit + ".." + nextcommit);
-                    }
-
-                    if (result == undefined) {
-                        ++i;
-                    } else {
-                        totaladded = totaladded + result[0];
-                        totalremoved = totalremoved + result[1];
-                        ++i;
-                    }
-
+            while (i < commitData.commit_number-1) {
+                if (commitData == undefined) {
+                    ++i;
+                } else {
+                    currentcommit = commitData.commits[i].hash;
+                    nextcommit = commitData.commits[++i].hash;
+                    result = await diffstatCheck(workspace, repo_slug, currentcommit + ".." + nextcommit);
                 }
-                i = 0;
 
-                anzahl = anzahl + commitData.commit_number;
-                ++page;
-
-                if (commitData.commit_number < 100) {
-                    totaladded_totalremoved_arr = [totaladded, totalremoved];
-                    console.log("Sepp:" + totaladded, totalremoved);
-                    return res.send(totaladded_totalremoved_arr);
+                if (result != undefined) {
+                    totaladded = totaladded + result[0];
+                    totalremoved = totalremoved + result[1];
                 }
+
             }
-        } catch (err) {
-            const {error, status, message} = err;
-            console.log("ERROR:", error, status, message);
-            res.sendStatus(status);
+            i = 0;
+
+            anzahl = anzahl + commitData.commit_number;
+            ++page;
+
+            if (commitData.commit_number < 100) {
+                totaladded_totalremoved_arr = [totaladded, totalremoved];
+                returnObj={
+                    lines_added: totaladded,
+                    lines_removed: totalremoved,
+                    commit_number: anzahl,
+                }
+                return returnObj;
+            }
         }
+    } catch (err) {
+        const {error, status, message} = err;
+        console.log("ERROR:", error, status, message);
+        return status;
     }
-);
+};
 
 async function diffstatCheck(workspace, reposlug, spec) {
     let lines_added_lines_removed_arr;
