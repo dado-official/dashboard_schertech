@@ -1,8 +1,10 @@
 const router = require("express").Router();
 const bitbucket = require("./bitbucket");
-const db = require("@database/db");
 const moment = require("moment");
-moment.locale("de");
+moment.locale("de");            //TODO change to en-gb
+
+const db = require("@database/db");
+const functions = require("./repositoryFunctions")
 
 
 //Returns a list of all the repositories
@@ -231,7 +233,7 @@ async function getCommitInfo(workspace, repo_slug){
 //Reduces the commit data you get from the Bitbucket api
 function reduceCommitData(data) {
     let commits = [];
-    moment.locale("en-GB");
+    moment.locale("en-GB");     //TODO remove???
 
     data.values.forEach((commit) => {
         var commitDate = moment(commit.date).format("Do MMMM YYYY, h:mm:ss");
