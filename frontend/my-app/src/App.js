@@ -15,6 +15,9 @@ import Navbar from "./Components/Navbar/Navbar";
 function App() {
     const [url, setUrl] = useState();
     const [openSidebar, setOpenSidebar] = useState(false);
+    const [name, setName] = useState();
+    const [workspace, setWorkspace] = useState();
+    const [reposlug, setReposlug] = useState();
     return (
         <Router>
             <Sidebar
@@ -32,10 +35,19 @@ function App() {
                     <AllRepositories setUrl={setUrl} />
                 </Route>
                 <Route path={"/repository/add"}>
-                    <AddRepository />
+                    <AddRepository 
+                        setName={setName}
+                        setWorkspace={setWorkspace}
+                        setReposlug={setReposlug}
+                    />
                 </Route>
                 <Route path="/repository/:id">
-                    <Repository setUrl={setUrl} />
+                    <Repository 
+                        setUrl={setUrl}
+                        name={name}
+                        workspace={workspace}
+                        reposlug={reposlug}
+                     />
                 </Route>
                 <Route path={"/server/add"}>
                     <AddServer />

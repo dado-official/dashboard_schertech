@@ -34,7 +34,6 @@ router.get("/:workspace/:repo_slug", async (req, res) => {
         const {data} = await bitbucket
             .repositories
             .get({workspace: workspace, repo_slug: repo_slug});
-        //data.links.avatar.href Repository Avatar
         //branch anzahl mit link ganz am Ende size
 
         var last_update_formatted = moment(data.updated_on).format("L");
@@ -42,6 +41,9 @@ router.get("/:workspace/:repo_slug", async (req, res) => {
         var last_update_fromnow = moment(lastUpdate, "Do MMMM YYYY, h:mm:ss").fromNow();
 
         var created_on_formatted = moment(data.created_on).format("L");
+        var avatarLink=data.links.avatar.href;
+
+        var branches =getBranchData(workspace, repo_slug);
 
 
         resultObject = {
@@ -50,8 +52,13 @@ router.get("/:workspace/:repo_slug", async (req, res) => {
             created_on: created_on_formatted,
             last_updated_formatted: last_update_formatted,
             last_update_fromnow: last_update_fromnow,
+            avatar_link: avatarLink,
+            branch_number: branches.branch_number,
+            branches: branches.branches,
 
         };
+
+        
 
         res.send(resultObject); 
     } catch (err) {
@@ -61,7 +68,8 @@ router.get("/:workspace/:repo_slug", async (req, res) => {
     }
 });
 
-router.get("/:workspace/:repo_slug/test", async (req, res) => {
+
+/* router.get("/:workspace/:repo_slug/test", async (req, res) => {
     const {workspace, repo_slug} = req.params;
     try {
 
@@ -79,7 +87,7 @@ router.get("/:workspace/:repo_slug/test", async (req, res) => {
         console.log("ERROR:", error, status, message);
         res.sendStatus(status);
     }
-});
+}); */
 
 //Adds a new repository
 router.post("/", async (req, res) => {
@@ -199,7 +207,12 @@ function reduceCommitData(data) {
     };
 }
 
-function reduceBranchData(data) {
+async function getBranchData(workspace, repo_slug) {
+
+    const {data} = await bitbucket
+            .repositories
+            .listRefs({workspace: workspace, repo_slug: repo_slug});
+
     let branches = [];
 
     data.values.forEach((branch) => {
@@ -212,11 +225,13 @@ function reduceBranchData(data) {
         branches.push(reducedBranch);
     });
 
-
-    return {
+    branchesObj={
         branch_number: branches.length,
         branches: branches,
     };
+
+
+    return branchesObj;
 }
 
 // Specific information

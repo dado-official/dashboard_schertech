@@ -3,7 +3,7 @@ import RepositoriesContaier from "./RepositoriesContainer";
 import AddButton from "../Shared/AddButton";
 import axios from 'axios'
 
-export default function AllServers({ setUrl }) {
+export default function AllServers({ setUrl, props}) {
     const [data, setData] = useState([]);
 
     useEffect(() => {
@@ -26,6 +26,9 @@ export default function AllServers({ setUrl }) {
                         description={element.description}
                         workspace={element.workspace}
                         repo_slug={element.repo_slug}
+                        setName={props.setName}
+                        setWorkspace={props.setWorkspace}
+                        setReposlug={props.setReposlug}
                     />
                 )):<br/>}
                 <AddButton title="repository" />

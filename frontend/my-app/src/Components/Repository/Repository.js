@@ -5,14 +5,19 @@ import Insights from "./Insights";
 import LatestCommits from "./LatestCommits";
 import MostCommitsChart from "./MostCommitsChart";
 import CommitsPerWeekChart from "./CommitsPerWeekChart";
+import axios from "axios";
 
-export default function Repository({ setUrl }) {
+export default function Repository({ setUrl, props }) {
     const [name, setName] = useState("Repositoryname");
     const [owner, setOwner] = useState("Repo Owner");
     const [isPrivate, setIsPrivate] = useState(false);
 
     useEffect(() => {
+        setName(props.name)
         setUrl("Repository");
+        axios.get("http://localhost:4000/api/repository/" + props.workspace + "/" + props.reposlug +"/").then((resp) => {
+            setIsPrivate(resp.data.is_private)
+        });
     }, []);
 
     return (
