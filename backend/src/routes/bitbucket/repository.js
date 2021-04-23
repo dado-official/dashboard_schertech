@@ -62,14 +62,36 @@ router.get("/:workspace/:repo_slug", async (req, res) => {
 
         };
 
-        
-
         res.send(resultObject); 
     } catch (err) {
         const {error, status, message} = err;
         console.log("ERROR:", error, status, message);
         res.sendStatus(status);
     }
+});
+
+//Get data from the repository
+router.get("/:id", (req, res) => {
+    const {id} = req.params;
+    let sql = `
+        SELECT *
+        FROM repositories
+        WHERE = ?`;
+
+    db.get(sql, [id], (err, row) => {
+        if (err) {
+            console.log(err);
+            return res.sendStatus(400);
+        }
+
+        if (!row) {
+            console.log("Couldn't find any data");
+            return res.sendStatus(400);
+        }
+
+        res.send(row);
+    });
+
 });
 
 
