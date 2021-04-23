@@ -1,8 +1,10 @@
 const router = require("express").Router();
 const bitbucket = require("./bitbucket");
-const db = require("@database/db");
 const moment = require("moment");
-moment.locale("de");
+moment.locale("de");            //TODO change to en-gb
+
+const db = require("@database/db");
+const functions = require("./repositoryFunctions")
 
 
 //Returns a list of all the repositories
@@ -26,6 +28,30 @@ router.get("/", async (req, res) => {
     });
 });
 
+router.get("/:workspace/:repo_slug/menu", async (req, res) => {
+    const {workspace, repo_slug} = req.params;
+    try {
+
+        const {data} = await bitbucket
+            .repositories
+            .get({workspace: workspace, repo_slug: repo_slug});
+        moment.locale("en-GB");
+
+        var lastUpdate = moment(data.updated_on).format("Do MMMM YYYY, h:mm:ss");
+        var last_update_fromnow = moment(lastUpdate, "Do MMMM YYYY, h:mm:ss").fromNow();
+
+        resultObject = {
+            owner_name: data.owner.display_name,
+            last_update_fromnow: last_update_fromnow,
+        }
+        res.send(resultObject); 
+    } catch (err) {
+        const {error, status, message} = err;
+        console.log("ERROR:", error, status, message);
+        res.sendStatus(status);
+    }
+});
+
 //Returns information about a specific repository
 router.get("/:workspace/:repo_slug", async (req, res) => {
     const {workspace, repo_slug} = req.params;
@@ -34,7 +60,7 @@ router.get("/:workspace/:repo_slug", async (req, res) => {
         const {data} = await bitbucket
             .repositories
             .get({workspace: workspace, repo_slug: repo_slug});
-        moment.locale("de");
+        moment.locale("en-GB");
 
         var last_update_formatted = moment(data.updated_on).format("L");
         var lastUpdate = moment(data.updated_on).format("Do MMMM YYYY, h:mm:ss");
@@ -198,22 +224,25 @@ async function getCommitInfo(workspace, repo_slug){
     } catch (err) {
         const {error, status, message} = err;
         console.log("ERROR:", error, status, message);
-        return -1;
+        return null;
     }
 }
     
 //Reduces the commit data you get from the Bitbucket api
 function reduceCommitData(data) {
     let commits = [];
+    moment.locale("en-GB");     //TODO remove???
 
     data.values.forEach((commit) => {
+        var commitDate = moment(commit.date).format("Do MMMM YYYY, h:mm:ss");
+        var last_change = moment(commitDate, "Do MMMM YYYY, h:mm:ss").fromNow();
         let reducedCommit = {
             id: commit.hash.substring(0, 7),
             hash: commit.hash,
             message: commit.message,
             author_name: commit.author?.user?.display_name || "",
             author_raw: commit.author.raw,
-            date: commit.date
+            date: last_change
         };
 
         commits.push(reducedCommit);
