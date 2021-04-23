@@ -37,6 +37,7 @@ export default function Repository({ setUrl, props }) {
             setIsPrivate(resp.data.is_private);
             setData(resp.data);
             setDataOfCommits(resp.data.last_commits)
+            console.log(dataOfCommits)
           });
       });
   }, []);
@@ -64,15 +65,14 @@ export default function Repository({ setUrl, props }) {
             </div>
           </div>
         </div>
-        <button className="bg-commitBlue hover:bg-commitBlueHover transition ease-in-out duration-300 px-4 py-2 text-white rounded-0.938 h-minContent">
+        <a href={dataOfCommits.link} className="bg-commitBlue hover:bg-commitBlueHover transition ease-in-out duration-300 px-4 py-2 text-white rounded-0.938 h-minContent">
           Go to Repository
-        </button>
+        </a>
       </div>
       <div className="flex w-full">
         <div className="grid grid-flow-rows grid-cols-4 gap-8 mt-8 w-full">
           <LatestCommits 
-            last_commits={dataOfCommits} 
-            number_of_commits={dataOfCommits.commit_number}
+            param={dataOfCommits.commits} 
           />
           <div className="flex flex-col gap-8 col-span-2">
             <MostCommitsChart />
