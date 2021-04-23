@@ -15,3 +15,5 @@ app.use("/api", routes);
 app.listen(port, () => {
     console.log(`App listening at http://localhost:${port}`);
 });
+
+exports.port = port;

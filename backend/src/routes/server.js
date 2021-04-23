@@ -1,6 +1,8 @@
 const router = require("express").Router();
-const db = require("@database/db");
 const mysql = require("mysql");
+
+const db = require("@database/db");
+
 
 //Returns a list of all the servers
 router.get("/", async (req, res) => {
@@ -25,14 +27,14 @@ router.get("/", async (req, res) => {
 
 //Checks if database of server is reachable
 router.get("/:hostname", async (req, res) => {
-    const { hostname } = req.params;
+    const {hostname} = req.params;
     let sql = `
         SELECT *
         FROM servers
         WHERE hostname = ?`;
 
     db.get(sql, [hostname], async (err, row) => {
-        //gets username and password from local database
+        //Get username and password from local database
         if (err) {
             console.log(err);
             return res.sendStatus(400);
@@ -43,34 +45,24 @@ router.get("/:hostname", async (req, res) => {
             return res.sendStatus(400);
         }
 
-        const { db_username, db_password, db_port } = row;
-        console.log(
-            `Username: ${db_username} Password: ${db_password} Port: ${db_port}`
-        );
+        const {db_username, db_password, db_port} = row;
 
         const connection = await mysql.createConnection({
             //create connection to db
             host: hostname,
             user: db_username,
             password: db_password,
+            port: db_port
         });
 
+        //Check if the database is online
         connection.ping((err) => {
-            //check if db is online
-            try {
-                if (err) {
-                    throw new Error("Database not reachable");
-                } else {
-                    console.log("Pingable!");
-                    res.send({ reachable: true });
-                }
-            } catch (e) {
-                console.log(e.message);
-                res.send({ reachable: false });
-            } finally {
-                connection.end();
-            }
+            let reachable = !err;
+
+            res.send({reachable: reachable});
         });
+
+        connection.end();
     });
 });
 
@@ -85,8 +77,7 @@ router.post("/", async (req, res) => {
         location,
         description,
     } = req.body;
-    console.log(db_port);
-    console.log(req.body);
+
     let sql = `
         INSERT
         OR IGNORE 
@@ -106,7 +97,7 @@ router.post("/", async (req, res) => {
 
 //Update a specific sever
 router.put("/:hostname", (req, res) => {
-    const { hostname } = req.params;
+    const {hostname} = req.params;
     const {
         new_hostname,
         server_name,
@@ -117,7 +108,6 @@ router.put("/:hostname", (req, res) => {
         description,
     } = req.body;
 
-    //TODO make this better, if possible
     //Create update statement, only update if a value is given
     let values = [];
     let sql = "UPDATE servers SET ";
@@ -152,6 +142,11 @@ router.put("/:hostname", (req, res) => {
     sql += "WHERE hostname = ?;";
     values.push(hostname);
 
+    //Invalid SQL syntax
+    if (values.length >= 1) {
+        return res.sendStatus(400);
+    }
+
     //Regex to remove the last comma in this string:
     //https://stackoverflow.com/questions/5497318/replace-last-occurrence-of-character-in-string/
     sql = sql.replace(/,([^,]*)$/, "$1");
@@ -168,7 +163,7 @@ router.put("/:hostname", (req, res) => {
 
 //Deletes a specific server
 router.delete("/:hostname", async (req, res) => {
-    const { hostname } = req.params;
+    const {hostname} = req.params;
     let sql = `
         DELETE
         FROM servers
@@ -183,5 +178,6 @@ router.delete("/:hostname", async (req, res) => {
         res.sendStatus(200);
     });
 });
+
 
 module.exports = router;
