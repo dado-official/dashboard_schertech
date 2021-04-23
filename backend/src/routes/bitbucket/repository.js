@@ -200,7 +200,7 @@ async function getCommitInfo(workspace, repo_slug){
     } catch (err) {
         const {error, status, message} = err;
         console.log("ERROR:", error, status, message);
-        return -1;
+        return null;
     }
 }
     
@@ -208,15 +208,18 @@ async function getCommitInfo(workspace, repo_slug){
 //Reduces the commit data you get from the Bitbucket api
 function reduceCommitData(data) {
     let commits = [];
+    moment.locale("en-GB");
 
     data.values.forEach((commit) => {
+        var commitDate = moment(commit.date).format("Do MMMM YYYY, h:mm:ss");
+        var last_change = moment(commitDate, "Do MMMM YYYY, h:mm:ss").fromNow();
         let reducedCommit = {
             id: commit.hash.substring(0, 7),
             hash: commit.hash,
             message: commit.message,
             author_name: commit.author?.user?.display_name || "",
             author_raw: commit.author.raw,
-            date: commit.date
+            date: last_change
         };
 
         commits.push(reducedCommit);
