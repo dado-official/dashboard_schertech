@@ -12,9 +12,9 @@ export default function Warning({
                 isOpen ? "fixed" : "hidden"
             }`}
         >
-            <p className="text-white mb-4">
-                Would you like to add this value to the chart even though you
-                should wait {waitTime}?
+            <p className="text-white mb-4 text-center">
+                According to your frequency your next entry would be in{" "}
+                {waitTime}. Would you still like to add the Data?
             </p>
             <div className="flex gap-4">
                 <button

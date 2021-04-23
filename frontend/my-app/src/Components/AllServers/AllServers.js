@@ -45,23 +45,22 @@ export default function AllServers({ setUrl }) {
                     </h2>
                     <p className=" text-unclicked">All the current servers</p>
                 </div>
-                <button
-                    onClick={() => setIsPopover((prev) => !prev)}
-                    className="py-2 px-6 bg-onlineGreen focus:outline-none outline-none rounded-0.625 font-medium text-black"
-                    ref={addServerRef}
-                >
-                    <div className=" flex items-center gap-2">
-                        Add Server
-                        <FaAngleDown color="black" size="18" />
-                    </div>
-                </button>
-                <div
-                    ref={addServerRef}
-                    className={`bg-input rounded-0.938 w-26 p-12 z-10 absolute right-0 top-14 border-onlineGreen border-4 ${
-                        isPopover ? "" : "hidden"
-                    }`}
-                >
-                    <AddServer setIsPopover={setIsPopover} />
+                <div ref={addServerRef}>
+                    <button
+                        onClick={() => {
+                            setIsPopover((prev) => !prev);
+                        }}
+                        className="py-2 px-6 bg-onlineGreen focus:outline-none outline-none rounded-0.625 font-medium text-black"
+                    >
+                        <div className=" flex items-center gap-2">
+                            Add Server
+                            <FaAngleDown color="black" size="18" />
+                        </div>
+                    </button>
+                    <AddServer
+                        setIsPopover={setIsPopover}
+                        isPopover={isPopover}
+                    />
                 </div>
             </div>
             <div className="grid grid-flow-row gap-8 mt-4 responsiveGrid">

@@ -1,13 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { IoMdAdd } from "react-icons/io";
 import Warning from "./Warning";
 
-export default function AddData({ setData, setLabels, labels, id }) {
+export default function AddData({
+    setData,
+    setLabels,
+    labels,
+    id,
+    remainingTime,
+}) {
     const [input, setInput] = useState("");
     const [error, setError] = useState("");
     const [openWarning, setOpenWarning] = useState(false);
     const [canAdd, setCanAdd] = useState(false);
+
+    useEffect(() => {
+        setCanAdd(
+            remainingTime === undefined ? true : remainingTime.includes("ago")
+        );
+    }, [remainingTime]);
 
     function addDataHandler() {
         if (input !== "" && isNumeric(input)) {
@@ -61,6 +73,7 @@ export default function AddData({ setData, setLabels, labels, id }) {
                 isOpen={openWarning}
                 setIsOpen={setOpenWarning}
                 addHandler={addData}
+                waitTime={remainingTime}
             />
             <div className="flex items-center gap-2">
                 <IoMdAdd color="white" size="18" />

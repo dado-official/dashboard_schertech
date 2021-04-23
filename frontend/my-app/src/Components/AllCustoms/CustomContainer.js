@@ -19,11 +19,10 @@ export default function CustomContainer(props) {
         <Link
             to={`custom/${props.id}`}
             className={`bg-primary hover:bg-backgroundHover tranition ease-in-out cursor-pointer duration-300 rounded-0.938 py-3 px-4 w-full border-l-4 ${
-                props.remainingdays === 0 ||
                 props.remainingdays === undefined ||
-                props.remainingdays === null
-                    ? " border-offlineRed"
-                    : " border-onlineGreen"
+                props.remainingdays.includes("ago")
+                    ? " border-onlineGreen"
+                    : " border-offlineRed"
             }`}
             onMouseEnter={() => setHover(true)}
             onMouseLeave={() => setHover(false)}
@@ -42,9 +41,11 @@ export default function CustomContainer(props) {
                         Time left:{" "}
                         <span
                             className={`${
-                                props.remainingdays !== 0
-                                    ? "text-onlineGreen"
-                                    : " text-offlineRed"
+                                props.remainingdays !== undefined &&
+                                props.remainingdays !== null &&
+                                !props.remainingdays.includes("ago")
+                                    ? "text-offlineRed"
+                                    : " text-onlineGreen"
                             }`}
                         >
                             {props.remainingdays}

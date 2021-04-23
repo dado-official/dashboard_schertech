@@ -3,13 +3,31 @@ import CustomContainer from "./CustomContainer";
 import AddButton from "../Shared/AddButton";
 import { FaAngleDown } from "react-icons/fa";
 import axios from "axios";
+import AddCustom from "./AddCustom";
 
 export default function AllCustom({ setUrl }) {
     const [data, setData] = useState([]);
-    const [del, setDel] = useState(false);
+    const [update, setUpdate] = useState(false);
     const [isPopover, setIsPopover] = useState(false);
 
-    const addServerRef = useRef();
+    const addCustomRef = useRef();
+
+    useEffect(() => {
+        let handler = (e) => {
+            if (
+                addCustomRef.current &&
+                !addCustomRef.current.contains(e.target)
+            ) {
+                setIsPopover(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handler);
+
+        return () => {
+            document.removeEventListener("mousedown", handler);
+        };
+    });
 
     useEffect(() => {
         setUrl("Custom");
@@ -19,7 +37,7 @@ export default function AllCustom({ setUrl }) {
                 setData(res.data);
             }
         });
-    }, [del]);
+    }, [update]);
 
     return (
         <div className="main">
@@ -30,16 +48,22 @@ export default function AllCustom({ setUrl }) {
                     </h2>
                     <p className=" text-unclicked">All the current customs</p>
                 </div>
-                <button
-                    ref={addServerRef}
-                    onClick={() => setIsPopover((prev) => !prev)}
-                    className="py-2 px-6 bg-onlineGreen focus:outline-none outline-none rounded-0.625 font-medium text-black"
-                >
-                    <div className=" flex items-center gap-2">
-                        Add Custom
-                        <FaAngleDown color="black" size="18" />
-                    </div>
-                </button>
+                <div ref={addCustomRef}>
+                    <button
+                        onClick={() => setIsPopover((prev) => !prev)}
+                        className="py-2 px-6 bg-onlineGreen focus:outline-none outline-none rounded-0.625 font-medium text-black"
+                    >
+                        <div className=" flex items-center gap-2">
+                            Add Custom
+                            <FaAngleDown color="black" size="18" />
+                        </div>
+                    </button>
+                    <AddCustom
+                        setIsPopover={setIsPopover}
+                        isPopover={isPopover}
+                        setUpdate={setUpdate}
+                    />
+                </div>
             </div>
             <div className="grid grid-flow-row gap-8 mt-4 responsiveGrid">
                 {data.map((element) => (
@@ -47,7 +71,7 @@ export default function AllCustom({ setUrl }) {
                         key={element.id}
                         name={element.title}
                         description={element.description}
-                        setDel={setDel}
+                        setDel={setUpdate}
                         id={element.id}
                         chart={element.progress}
                         remainingdays={element.remaining_time}

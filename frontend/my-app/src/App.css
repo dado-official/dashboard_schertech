@@ -224,3 +224,8 @@ textarea:focus {
     padding-right: 0.5rem;
     padding-left: 0.5rem;
 }
+
+input[type="range"] {
+    background: #4caf50;
+    cursor: pointer;
+}

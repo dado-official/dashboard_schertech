@@ -4,7 +4,7 @@ import TextArea from "../Shared/TextArea";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 
-const AddServer = ({ setIsPopover }) => {
+const AddServer = ({ setIsPopover, isPopover }) => {
     const [serverName, setServerName] = useState("");
     const [location, setLocation] = useState("");
     const [ipAddress, setIpAddress] = useState("");
@@ -57,7 +57,11 @@ const AddServer = ({ setIsPopover }) => {
     }
 
     return (
-        <div>
+        <div
+            className={`bg-input rounded-0.938 w-26 p-12 z-10 absolute right-0 top-14 border-onlineGreen border-4 ${
+                isPopover ? "" : "hidden"
+            }`}
+        >
             <p className="text-white mb-5 text-xl">Add Server</p>
 
             <div className="flex gap-4">
