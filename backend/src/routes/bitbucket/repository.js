@@ -46,6 +46,8 @@ router.get("/:workspace/:repo_slug", async (req, res) => {
         var last_commits= await getCommitInfo(workspace, repo_slug);
         //var lines_info=await getLinesInfo(workspace, repo_slug);
         var weekly_commits=await getWeeklyCommits(workspace, repo_slug);
+        let commits_last_weeks = await getCommitsLastWeeks(workspace, repo_slug);
+        let total_commit_number = await getTotalCommitNumber(workspace, repo_slug);
 
 
         resultObject = {
@@ -60,9 +62,9 @@ router.get("/:workspace/:repo_slug", async (req, res) => {
             last_commits: last_commits,
             //lines_added: lines_info.lines_added,
             //lines_removed: lines_info.lines_removed,
-            //total_commit_number: lines_info.commit_number,
-            weekly_commits: weekly_commits
-
+            total_commit_number: total_commit_number,
+            weekly_commits: weekly_commits,
+            commits_last_weeks: commits_last_weeks
         };
 
         res.send(resultObject); 
@@ -498,4 +500,32 @@ router.get("/repo/:workspace/:repo_slug/commitslastweeks", async (req, res) => {
     }
 });
 
+//returns total number of commits in a repository
+async function getTotalCommitNumber(workspace, repo_slug){
+    let pagelen = 100;
+    let page = 1
+    let anzahl = 0
+    
+        try {
+            while(true){
+                const {data} = await bitbucket
+                    .repositories
+                    .listCommits({workspace: workspace, repo_slug: repo_slug, page: page, pagelen: pagelen, revision: ""});
+
+                let commitData = reduceCommitData(data);
+                //Add link to the Bitbucket repository
+                commitData["link"] = `https://bitbucket.org/${workspace}/${repo_slug}/commits/`;
+                anzahl = anzahl + commitData.commit_number
+                ++page
+                console.log(commitData)
+                if(commitData.commit_number < 100){
+                    return ({commit_number: anzahl});
+                }   
+            }
+        } catch (err) {
+            const {error, status, message} = err;
+            console.log("ERROR:", error, status, message);
+            res.sendStatus(status);
+        }    
+};
 module.exports = router;
