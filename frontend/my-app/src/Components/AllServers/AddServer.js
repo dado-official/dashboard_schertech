@@ -4,14 +4,14 @@ import TextArea from "../Shared/TextArea";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 
-const AddServer = ({ isPopover, setIsPopover }) => {
+const AddServer = ({ setIsPopover }) => {
     const [serverName, setServerName] = useState("");
     const [location, setLocation] = useState("");
     const [ipAddress, setIpAddress] = useState("");
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [desciption, setDescription] = useState("");
-    const [port, setPort] = useState("80");
+    const [port, setPort] = useState("3006");
     const [error, setError] = useState("");
 
     const history = useHistory();
@@ -29,8 +29,6 @@ const AddServer = ({ isPopover, setIsPopover }) => {
             setError("Enter a hostname");
         } else if (username === "" || username === " ") {
             setError("Enter an username");
-        } else if (password === "" || password === " ") {
-            setError("Enter a password");
         } else if (port === "" || port === " ") {
             setError("Enter a port");
         } else if (!isNumeric(port)) {
@@ -59,11 +57,7 @@ const AddServer = ({ isPopover, setIsPopover }) => {
     }
 
     return (
-        <div
-            className={`bg-input rounded-0.938 w-26 p-12 z-10 absolute right-0 top-14 border-onlineGreen border-4 ${
-                isPopover ? "" : "hidden"
-            }`}
-        >
+        <div>
             <p className="text-white mb-5 text-xl">Add Server</p>
 
             <div className="flex gap-4">

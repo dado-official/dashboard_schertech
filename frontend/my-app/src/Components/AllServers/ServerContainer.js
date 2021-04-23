@@ -14,9 +14,30 @@ export default function ServerContainer({ name, description, setDel }) {
     }
 
     useEffect(() => {
-        axios.get(`http://localhost:4000/api/server/${name}`).then((res) => {
-            setOnline(res.data.reachable);
-        });
+        let unmounted = false;
+        let source = axios.CancelToken.source();
+        axios
+            .get(`http://localhost:4000/api/server/${name}`, {
+                cancelToken: source.token,
+            })
+            .then((a) => {
+                if (!unmounted) {
+                    setOnline(a.data.reachable);
+                }
+            })
+            .catch(function (e) {
+                if (!unmounted) {
+                    if (axios.isCancel(e)) {
+                        console.log(`request cancelled:${e.message}`);
+                    } else {
+                        console.log("another error happened:" + e.message);
+                    }
+                }
+            });
+        return function () {
+            unmounted = true;
+            source.cancel("Cancelling in cleanup");
+        };
     }, []);
 
     return (

@@ -11,6 +11,7 @@ export default function Repository({ setUrl }) {
     const [labels, setLabels] = useState([]);
     const [wishValue, setWishValue] = useState();
     const [apiData, setApiData] = useState({});
+    const [progress, setProgress] = useState(0);
 
     const { id } = useParams();
 
@@ -23,9 +24,10 @@ export default function Repository({ setUrl }) {
                 setApiData(res.data);
                 console.log(parseFloat(res.data.target_value));
                 setWishValue(parseFloat(res.data.target_value));
+                setProgress(res.data.progress);
                 res.data.data.map((element) => {
-                    let unix = parseFloat(element.date);
-                    const dateObject = new Date(unix);
+                    let unix = element.entry_date;
+                    const dateObject = new Date(unix * 1000);
 
                     let dd = String(dateObject.getDate()).padStart(2, "0");
                     let mm = String(dateObject.getMonth() + 1).padStart(2, "0"); //January is 0!
@@ -41,9 +43,26 @@ export default function Repository({ setUrl }) {
         });
     }, []);
 
+    useEffect(() => {
+        if (data !== []) {
+            axios.get(`http://localhost:4000/api/custom/${id}`).then((res) => {
+                if (res.data.data !== undefined) {
+                    setProgress(res.data.progress);
+                }
+            });
+        }
+    }, [data]);
+
     return (
         <div className="main pb-8">
-            <h6 className="text-2xl text-white font-medium">{apiData.title}</h6>
+            <div className="relative flex justify-between items-baseline">
+                <h6 className="text-2xl text-white font-medium">
+                    {apiData.title}
+                </h6>
+                <button className="py-2 px-6 bg-onlineGreen focus:outline-none outline-none rounded-0.625 font-medium text-black">
+                    Edit Inputs
+                </button>
+            </div>
             <div className="grid grid-flow-rows grid-cols-4 gap-8 mt-8 responsiveGrid">
                 <Chart dataArray={data} labels={labels} wishValue={wishValue} />
                 <div className="flex flex-col gap-8 ">
@@ -53,7 +72,16 @@ export default function Repository({ setUrl }) {
                         labels={labels}
                         id={id}
                     />
-                    <Progress isPositive={true} percentage={34.9} />
+                    <Progress
+                        isPositive={progress >= 0 ? true : false}
+                        percentage={
+                            progress === null || progress === undefined
+                                ? 0
+                                : progress < 0
+                                ? progress * -1
+                                : progress
+                        }
+                    />
                     <About
                         frequency={`${apiData.frequency} day${
                             apiData.frequency > 1 ? "s" : ""

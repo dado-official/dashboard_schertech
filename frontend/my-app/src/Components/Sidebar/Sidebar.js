@@ -10,7 +10,7 @@ const Sidebar = ({ url, setOpenSidebar, openSidebar }) => {
     return (
         <header
             id="sidebarMainContainer"
-            className={`bg-primary z-20 fixed top-0 lg:top-auto left-0 lg:left-auto lg:rounded-0.938 h-full lg:h-maxHeight w-full lg:w-14.625 pr-1.188 pl-1.188 pt-1.688 ${
+            className={`bg-primary z-50 fixed top-0 lg:top-auto left-0 lg:left-auto lg:rounded-0.938 h-full lg:h-maxHeight w-full lg:w-14.625 pr-1.188 pl-1.188 pt-1.688 ${
                 openSidebar ? "block slidein" : "slideout"
             } lg:block`}
         >

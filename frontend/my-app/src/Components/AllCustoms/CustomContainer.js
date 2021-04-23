@@ -18,8 +18,10 @@ export default function CustomContainer(props) {
     return (
         <Link
             to={`custom/${props.id}`}
-            className={`bg-primary hover:bg-backgroundHover tranition ease-in-out cursor-pointer duration-300 rounded-0.938 py-3 px-4 w-full border-2 ${
-                props.remainingdays === 0
+            className={`bg-primary hover:bg-backgroundHover tranition ease-in-out cursor-pointer duration-300 rounded-0.938 py-3 px-4 w-full border-l-4 ${
+                props.remainingdays === 0 ||
+                props.remainingdays === undefined ||
+                props.remainingdays === null
                     ? " border-offlineRed"
                     : " border-onlineGreen"
             }`}
@@ -29,8 +31,15 @@ export default function CustomContainer(props) {
             <div className="flex justify-between">
                 <h6 className="text-white ">{props.name}</h6>
                 <div className="flex justify-between items-center">
-                    <h6 className="text-unclicked">
-                        enter Data:{" "}
+                    <h6
+                        className={`text-unclicked text-sm ${
+                            props.remainingdays === undefined ||
+                            props.remainingdays === null
+                                ? "hidden"
+                                : ""
+                        }`}
+                    >
+                        Time left:{" "}
                         <span
                             className={`${
                                 props.remainingdays !== 0
@@ -38,9 +47,7 @@ export default function CustomContainer(props) {
                                     : " text-offlineRed"
                             }`}
                         >
-                            {props.remainingdays === 0
-                                ? "today"
-                                : "in " + props.remainingdays + " days"}
+                            {props.remainingdays}
                         </span>
                     </h6>
                 </div>
@@ -48,7 +55,7 @@ export default function CustomContainer(props) {
             <p className="text-unclicked text-sm mt-2">{props.description}</p>
 
             <div className="flex mt-4 justify-between">
-                <div className=" bg-hover rounded-0.938  flex items-center justify-center p-2">
+                <div className=" bg-hover rounded-0.938 font-medium flex items-center justify-center py-2 px-4">
                     <p
                         className={`${
                             props.chart >= 0
@@ -56,8 +63,12 @@ export default function CustomContainer(props) {
                                 : "text-offlineRed"
                         }`}
                     >
-                        {props.chart >= 0 ? "+" : ""}
-                        {props.chart}%
+                        {props.chart === null
+                            ? "0"
+                            : props.chart >= 0
+                            ? "+ "
+                            : ""}
+                        {props.chart} %
                     </p>
                 </div>
                 <h6

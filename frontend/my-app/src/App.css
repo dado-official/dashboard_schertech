@@ -216,7 +216,7 @@ body {
     padding-bottom: 0.75rem;
 }
 
-input:focus,
+input:focus:not(.simple),
 textarea:focus {
     border-width: 0.25rem;
     padding-top: 0.25rem;
