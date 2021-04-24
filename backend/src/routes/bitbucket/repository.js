@@ -242,7 +242,8 @@ function reduceCommitData(data) {
             message: commit.message,
             author_name: commit.author?.user?.display_name || "",
             author_raw: commit.author.raw,
-            date: last_change
+            date: commit.date,
+            last_change: last_change
         };
 
         commits.push(reducedCommit);
@@ -469,7 +470,6 @@ router.get("/:workspace/:repo_slug/chart1", async (req, res) =>{
             
             while(i < commitData.commit_number-1){
             commitDate = Date.parse(commitData.commits[i].date)
-            console.log(commitData)
             if1: if(fuenfWochendate < commitDate){
                     if(vierWochendate < commitDate){
                         if(dreiWochendate < commitDate){
@@ -505,7 +505,6 @@ router.get("/:workspace/:repo_slug/chart1", async (req, res) =>{
                     ++i
                 } else {
                     ++i
-                    console.log("i gea do eini obwohl i nit soll")
                     return res.send(commits_last_weeks)
                 }
             }
