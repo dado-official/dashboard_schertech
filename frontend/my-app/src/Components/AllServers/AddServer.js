@@ -23,13 +23,13 @@ const AddServer = ({ setIsPopover, isPopover }) => {
         console.log("username: ", username);
         console.log("password: ", password);
         console.log("Description: ", desciption);
-        if (serverName === "" || serverName === " ") {
+        if (!/\S/.test(serverName)) {
             setError("Enter a server name");
-        } else if (ipAddress === "" || ipAddress === " ") {
+        } else if (!/\S/.test(ipAddress)) {
             setError("Enter a hostname");
-        } else if (username === "" || username === " ") {
+        } else if (!/\S/.test(username)) {
             setError("Enter an username");
-        } else if (port === "" || port === " ") {
+        } else if (!/\S/.test(port)) {
             setError("Enter a port");
         } else if (!isNumeric(port)) {
             setError("Port needs to be a number");
@@ -58,7 +58,7 @@ const AddServer = ({ setIsPopover, isPopover }) => {
 
     return (
         <div
-            className={`bg-input rounded-0.938 w-26 p-12 z-10 absolute right-0 top-14 border-onlineGreen border-4 ${
+            className={`bg-input rounded-0.938 w-26 p-8 z-10 absolute right-0 top-14 border-onlineGreen border-4 ${
                 isPopover ? "" : "hidden"
             }`}
         >

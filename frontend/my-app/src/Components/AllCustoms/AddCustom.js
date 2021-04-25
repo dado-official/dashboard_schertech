@@ -19,13 +19,13 @@ const AddCustom = ({ setIsPopover, isPopover, setUpdate }) => {
     }
 
     function subm() {
-        if (customName === "" || customName === " ") {
+        if (!/\S/.test(customName)) {
             setError("Enter a custom name");
-        } else if (wishValue === "" || wishValue === " ") {
+        } else if (!/\S/.test(wishValue)) {
             setError("Enter a wishvalue");
         } else if (!isNumeric(wishValue)) {
             setError("Wishvalue should be a number");
-        } else if (interval === "" || interval === " ") {
+        } else if (!isNumeric(interval)) {
             setError("Enter a frequency");
         } else if (!isNumeric(interval)) {
             setError("Fruequency should be a number");
@@ -51,7 +51,7 @@ const AddCustom = ({ setIsPopover, isPopover, setUpdate }) => {
 
     return (
         <div
-            className={`bg-input rounded-0.938 w-26 p-12 z-10 absolute right-0 top-14 border-onlineGreen border-4 ${
+            className={`bg-input rounded-0.938 w-26 p-8 z-10 absolute right-0 top-14 border-onlineGreen border-4 ${
                 isPopover ? "" : "hidden"
             }`}
         >

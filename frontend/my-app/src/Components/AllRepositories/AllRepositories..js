@@ -7,6 +7,7 @@ import AddRepository from "./AddRepository";
 export default function AllServers({ setUrl, props }) {
     const [data, setData] = useState([]);
     const [isPopover, setIsPopover] = useState(false);
+    const [update, setUpdate] = useState(false);
 
     const addServerRef = useRef();
 
@@ -32,7 +33,7 @@ export default function AllServers({ setUrl, props }) {
         axios.get("http://localhost:4000/api/repository").then((res) => {
             setData(res.data);
         });
-    }, []);
+    }, [update]);
 
     return (
         <div className="main">
@@ -53,13 +54,14 @@ export default function AllServers({ setUrl, props }) {
                         className="py-2 px-6 bg-onlineGreen focus:outline-none outline-none rounded-0.625 font-medium text-black"
                     >
                         <div className=" flex items-center gap-2">
-                            Add Server
+                            Add Repository
                             <FaAngleDown color="black" size="18" />
                         </div>
                     </button>
                     <AddRepository
                         setIsPopover={setIsPopover}
                         isPopover={isPopover}
+                        setUpdate={setUpdate}
                     />
                 </div>
             </div>

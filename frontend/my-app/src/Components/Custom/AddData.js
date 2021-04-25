@@ -22,7 +22,7 @@ export default function AddData({
     }, [remainingTime]);
 
     function addDataHandler() {
-        if (input !== "" && isNumeric(input)) {
+        if (/\S/.test(input) && isNumeric(input)) {
             if (canAdd) {
                 addData();
             } else {
@@ -38,7 +38,7 @@ export default function AddData({
         let mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
         let yyyy = today.getFullYear();
 
-        today = mm + "/" + dd + "/" + yyyy;
+        today = dd + "/" + mm + "/" + yyyy;
         setLabels((prev) => [...prev, today]);
 
         setInput("");

@@ -5,6 +5,7 @@ import Progress from "./Progress";
 import About from "./About";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import Edit from "./Edit";
 
 export default function Repository({ setUrl }) {
     const [data, setData] = useState([]);
@@ -13,6 +14,9 @@ export default function Repository({ setUrl }) {
     const [apiData, setApiData] = useState({});
     const [progress, setProgress] = useState(0);
     const [remainingTime, setRemainingTime] = useState("");
+    const [showEdit, setShowEdit] = useState(false);
+    const [dataId, setDataId] = useState([]);
+    const [update, setUpdate] = useState(false);
 
     const { id } = useParams();
 
@@ -27,23 +31,28 @@ export default function Repository({ setUrl }) {
                 console.log(parseFloat(res.data.target_value));
                 setWishValue(parseFloat(res.data.target_value));
                 setProgress(res.data.progress);
+                let dataArray = [];
+                let dataIdArray = [];
+                let labelsArray = [];
                 res.data.data.map((element) => {
-                    let unix = element.entry_date;
+                    let unix = element.value_date;
                     const dateObject = new Date(unix * 1000);
 
                     let dd = String(dateObject.getDate()).padStart(2, "0");
                     let mm = String(dateObject.getMonth() + 1).padStart(2, "0"); //January is 0!
                     let yyyy = dateObject.getFullYear();
 
-                    let today = mm + "/" + dd + "/" + yyyy;
-                    setLabels((prev) => [...prev, today]);
-                    setData((prev) => [...prev, parseFloat(element.value)]);
-
-                    console.log(today);
+                    let today = dd + "/" + mm + "/" + yyyy;
+                    dataArray.push(parseFloat(element.value));
+                    labelsArray.push(today);
+                    dataIdArray.push(element.value_id);
                 });
+                setLabels(labelsArray);
+                setDataId(dataIdArray);
+                setData(dataArray);
             }
         });
-    }, []);
+    }, [update]);
 
     useEffect(() => {
         if (data !== []) {
@@ -65,11 +74,24 @@ export default function Repository({ setUrl }) {
                     </h6>
                     <p className=" text-unclicked">{apiData.description}</p>
                 </div>
-                <button className="py-2 px-6 bg-onlineGreen focus:outline-none outline-none rounded-0.625 font-medium text-black">
-                    Edit Inputs
+                <button
+                    onClick={() => setShowEdit((prev) => !prev)}
+                    className="py-2 px-6 bg-onlineGreen focus:outline-none outline-none rounded-0.625 font-medium text-black"
+                >
+                    {!showEdit ? "Edit data" : "Exit"}
                 </button>
             </div>
-            <div className="grid grid-flow-rows grid-cols-4 gap-8 mt-6 responsiveGrid">
+            <div className="relative grid grid-flow-rows grid-cols-4 gap-8 mt-6 responsiveGrid">
+                <Edit
+                    show={showEdit}
+                    data={data}
+                    labels={labels}
+                    dataId={dataId}
+                    entryId={id}
+                    setUpdate={setUpdate}
+                    setValue={setData}
+                    setDate={setLabels}
+                />
                 <Chart dataArray={data} labels={labels} wishValue={wishValue} />
                 <div className="flex flex-col gap-8 ">
                     <AddData
@@ -78,6 +100,7 @@ export default function Repository({ setUrl }) {
                         labels={labels}
                         id={id}
                         remainingTime={remainingTime}
+                        setUpdate={setUpdate}
                     />
                     <Progress
                         isPositive={progress >= 0 ? true : false}

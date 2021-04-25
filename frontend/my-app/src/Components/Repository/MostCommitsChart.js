@@ -56,7 +56,7 @@ export default function MostCommitsChart() {
                             {
                                 label: "Commits",
                                 data: [1, 2, 3, 4, 8, 0],
-                                backgroundColor: "#3963CD",
+                                backgroundColor: "#81c784",
                                 borderSkipped: false,
                             },
                         ],

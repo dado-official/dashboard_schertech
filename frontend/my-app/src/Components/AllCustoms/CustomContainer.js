@@ -18,7 +18,7 @@ export default function CustomContainer(props) {
     return (
         <Link
             to={`custom/${props.id}`}
-            className={`bg-primary hover:bg-backgroundHover tranition ease-in-out cursor-pointer duration-300 rounded-0.938 py-3 px-4 w-full border-l-4 ${
+            className={`bg-primary hover:bg-backgroundHover tranition ease-in-out cursor-pointer duration-300 rounded-0.938 flex flex-col justify-between py-3 px-4 w-full border-l-4 ${
                 props.remainingdays === undefined ||
                 props.remainingdays.includes("ago")
                     ? " border-onlineGreen"
@@ -37,9 +37,25 @@ export default function CustomContainer(props) {
                                 ? "hidden"
                                 : ""
                         }`}
+                    ></h6>
+                </div>
+            </div>
+
+            <p className="text-unclicked text-sm mt-2 h-10 overflow-auto">
+                {props.description}
+            </p>
+
+            <div className="flex mt-4 justify-between">
+                <div className="flex gap-4 text-sm">
+                    <div
+                        className={`bg-hover rounded-0.938 font-medium flex items-center justify-center py-2 px-4 ${
+                            props.remainingdays === undefined ||
+                            props.remainingdays === null
+                                ? "hidden"
+                                : ""
+                        }`}
                     >
-                        Time left:{" "}
-                        <span
+                        <p
                             className={`${
                                 props.remainingdays !== undefined &&
                                 props.remainingdays !== null &&
@@ -49,28 +65,24 @@ export default function CustomContainer(props) {
                             }`}
                         >
                             {props.remainingdays}
-                        </span>
-                    </h6>
-                </div>
-            </div>
-            <p className="text-unclicked text-sm mt-2">{props.description}</p>
-
-            <div className="flex mt-4 justify-between">
-                <div className=" bg-hover rounded-0.938 font-medium flex items-center justify-center py-2 px-4">
-                    <p
-                        className={`${
-                            props.chart >= 0
-                                ? "text-onlineGreen"
-                                : "text-offlineRed"
-                        }`}
-                    >
-                        {props.chart === null
-                            ? "0"
-                            : props.chart >= 0
-                            ? "+ "
-                            : ""}
-                        {props.chart} %
-                    </p>
+                        </p>
+                    </div>
+                    <div className=" bg-hover rounded-0.938 font-medium flex items-center justify-center py-2 px-4">
+                        <p
+                            className={`${
+                                props.chart >= 0
+                                    ? "text-onlineGreen"
+                                    : "text-offlineRed"
+                            }`}
+                        >
+                            {props.chart === null
+                                ? "0"
+                                : props.chart >= 0
+                                ? "+ "
+                                : ""}
+                            {props.chart} %
+                        </p>
+                    </div>
                 </div>
                 <h6
                     className={`text-unclicked hover:text-white font-semi text-2xl transition eae-in-out duration-300 cursor-pointer ${
