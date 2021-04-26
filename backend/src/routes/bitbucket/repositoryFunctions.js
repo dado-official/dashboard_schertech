@@ -10,7 +10,8 @@ const getCommitInfo = async (workspace, repo_slug) => {
             .repositories
             .listCommits({workspace: workspace, repo_slug: repo_slug, revision: ""});
 
-        let commitData = reduceCommitData(data);
+        const commitData = reduceCommitData(data);
+
         //Add link to the Bitbucket repository
         commitData["link"] = `https://bitbucket.org/${workspace}/${repo_slug}/commits/`;
 
@@ -27,16 +28,16 @@ const reduceCommitData = async (data) => {
     let commits = [];
 
     data.values.forEach((commit) => {
-        var commitDate = moment(commit.date).format("Do MMMM YYYY, h:mm:ss");
-        var last_change = moment(commitDate, "Do MMMM YYYY, h:mm:ss").fromNow();
-        let reducedCommit = {
+        const commitDate = moment(commit.date).format("Do MMMM YYYY, h:mm:ss");
+        const lastChange = moment(commitDate, "Do MMMM YYYY, h:mm:ss").fromNow();
+        const reducedCommit = {
             id: commit.hash.substring(0, 7),
             hash: commit.hash,
             message: commit.message,
             author_name: commit.author?.user?.display_name || "",
             author_raw: commit.author.raw,
             date: commit.date,
-            last_change: last_change
+            last_change: lastChange
         };
 
         commits.push(reducedCommit);
@@ -54,7 +55,7 @@ const getBranchData = async (workspace, repo_slug) => {
         .repositories
         .listRefs({workspace: workspace, repo_slug: repo_slug});
 
-    let branches = [];
+    const branches = [];
 
     data.values.forEach((branch) => {
         let reducedBranch = {
@@ -66,12 +67,10 @@ const getBranchData = async (workspace, repo_slug) => {
         branches.push(reducedBranch);
     });
 
-    branchesObj = {
+    return {
         branch_number: branches.length,
         branches: branches,
     };
-
-    return branchesObj;
 };
 
 //Returns the number of lines added/removed
@@ -86,26 +85,28 @@ const getLinesInfo = async (workspace, repo_slug) => {
     let totalremoved = 0;
     let result;
 
+    let returnObj;
+
     try {
         while (true) {
             const {data} = await bitbucket
                 .repositories
-                .listCommits({workspace: workspace, repo_slug: repo_slug, page: page, pagelen: pagelen, revision: ""});
+                .listCommits({
+                    workspace: workspace,
+                    repo_slug: repo_slug,
+                    page: page.toString(),
+                    pagelen: pagelen,
+                    revision: ""
+                });
 
             let commitData = reduceCommitData(data);
-            //Add link to the Bitbucket repository
-            commitData["link"] = `https://bitbucket.org/${workspace}/${repo_slug}/commits/`;
 
             while (i < commitData.commit_number - 1) {
-                if (commitData == undefined) {
-                    ++i;
-                } else {
-                    currentcommit = commitData.commits[i].hash;
-                    nextcommit = commitData.commits[++i].hash;
-                    result = await diffstatCheck(workspace, repo_slug, currentcommit + ".." + nextcommit);
-                }
+                currentcommit = commitData.commits[i].hash;
+                nextcommit = commitData.commits[++i].hash;
+                result = await diffStatCheck(workspace, repo_slug, currentcommit + ".." + nextcommit);
 
-                if (result != undefined) {
+                if (result !== undefined) {
                     totaladded = totaladded + result[0];
                     totalremoved = totalremoved + result[1];
                 }
@@ -121,9 +122,11 @@ const getLinesInfo = async (workspace, repo_slug) => {
                     lines_removed: totalremoved,
                     commit_number: anzahl,
                 };
+
                 return returnObj;
             }
         }
+
     } catch (err) {
         const {error, status, message} = err;
         console.log("ERROR:", error, status, message);
@@ -155,20 +158,20 @@ const diffStatCheck = async (workspace, repo_slug, spec) => {
 const getTotalCommitNumber = async (workspace, repo_slug) => {
     let pagelen = 100;
     let page = 1;
-    let anzahl = 0;
+    let quantity = 0;
     try {
         while (true) {
             const {data} = await bitbucket
                 .repositories
-                .listCommits({workspace: workspace, repo_slug: repo_slug, page: page, pagelen: pagelen, revision: ""});
+                .listCommits({workspace: workspace, repo_slug: repo_slug, page: page.toString(), pagelen: pagelen, revision: ""});
 
             let commitData = reduceCommitData(data);
             //Add link to the Bitbucket repository
             commitData["link"] = `https://bitbucket.org/${workspace}/${repo_slug}/commits/`;
-            anzahl = anzahl + commitData.commit_number;
+            quantity = quantity + commitData.commit_number;
             ++page;
             if (commitData.commit_number < 100) {
-                return ({commit_number: anzahl});
+                return ({commit_number: quantity});
             }
         }
     } catch (err) {
