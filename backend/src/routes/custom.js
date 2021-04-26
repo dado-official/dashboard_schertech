@@ -135,7 +135,6 @@ router.delete("/:id", (req, res) => {
     });
 });
 
-
 //Returns all the values from a specific entry and other information
 router.get("/:entry_id", (req, res) => {
     const {entry_id} = req.params;
@@ -253,7 +252,6 @@ router.put("/:entry_id/:value_id", (req, res) => {
 
     res.sendStatus(200);
 });
-
 
 //Deletes a specific value from a specific entry
 router.delete("/:entry_id/:value_id", (req, res) => {
