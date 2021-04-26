@@ -10,9 +10,9 @@ const main = require("../app");
 //Returns a list of all the custom entries
 router.get("/", (req, res) => {
     let sql = `
-        SELECT DISTINCT id
+        SELECT DISTINCT entry_id
         FROM custom_entries
-        ORDER BY id`;
+        ORDER BY entry_id`;
 
     db.all(sql, async (err, rows) => {
         if (err) {
@@ -95,7 +95,7 @@ router.put("/:id", (req, res) => {
         sql += "target_value = ?, ";
         values.push(target_value);
     }
-    sql += "WHERE id = ?;";
+    sql += "WHERE entry_id = ?;";
     values.push(id);
 
     //Invalid SQL syntax
@@ -123,7 +123,7 @@ router.delete("/:id", (req, res) => {
     let sql = `
         DELETE
         FROM custom_entries
-        WHERE id = ? `;
+        WHERE entry_id = ? `;
 
     db.run(sql, [id], (err) => {
         if (err) {
@@ -142,8 +142,8 @@ router.get("/:entry_id", (req, res) => {
         SELECT *
         FROM custom_entries
         LEFT JOIN custom_values
-        ON custom_values.entry_id = custom_entries.id
-        WHERE custom_entries.id = ?
+        ON custom_values.entry_id = custom_entries.entry_id
+        WHERE custom_entries.entry_id = ?
         ORDER BY value_id`;
 
     db.all(sql, [entry_id], (err, rows) => {
