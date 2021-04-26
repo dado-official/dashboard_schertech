@@ -53,7 +53,7 @@ export default function About({
             <div className="flex flex-row pt-0.938 text-sm">
                 <p className="text-unclicked">Wish Value: </p>
                 <input
-                    className="focus:outline-none pl-2 bg-transparent w-1/2"
+                    className="focus:outline-none pl-2 bg-transparent w-1/2 simple"
                     value={input}
                     onChange={inputHandler}
                 />

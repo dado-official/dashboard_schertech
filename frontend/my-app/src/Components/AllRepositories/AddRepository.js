@@ -1,56 +1,71 @@
-import React, { useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import Input from "../Shared/Input";
 import TextArea from "../Shared/TextArea";
-import axios from 'axios';
-import { Link, useHistory } from "react-router-dom";
+import axios from "axios";
 
-
-const AddRepository = () => {
+const AddRepository = ({ setIsPopover, isPopover, setUpdate }) => {
     const [reponame, setReponame] = useState("");
     const [workspace, setWorkspace] = useState("");
     const [reposlug, setReposlug] = useState("");
     const [description, setDescription] = useState("");
-    const history = useHistory();
+    const [error, setError] = useState("");
 
     function subm() {
+        if (!/\S/.test(reponame)) {
+            setError("Enter a Repository name");
+        } else if (!/\S/.test(workspace)) {
+            setError("Enter a workspace");
+        } else if (!/\S/.test(reposlug)) {
+            setError("Enter a reposlug");
+        } else {
+            let data = {
+                workspace: workspace,
+                repo_slug: reposlug,
+                name: reponame,
+                description: description,
+            };
 
-        let data = {
-            workspace: workspace,
-            repo_slug: reposlug,
-            name: reponame,
-            description: description
+            axios
+                .post("http://localhost:4000/api/repository", data)
+                .then((res) => {
+                    setIsPopover(false);
+                    setUpdate((prev) => !prev);
+                });
         }
-
-        axios.post("http://localhost:4000/api/repository", data).then((res) => { 
-            history.push("/repository")
-        });
     }
 
     return (
-        <div className="main h-full flex flex-wrap content-center">
-            <div className=" bg-primary rounded-0.938 w-22.625  m-auto p-1.875 pt-2.75 ">
-                <p className=" text-center text-white mb-2.813">
-                    Add Repository
-                </p>
-                <p className=" text-white text-xs ">Repository Name</p>
-                <Input state={reponame} setState={setReponame}></Input>
-                <p className=" text-white text-xs ">Workspace</p>
-                <Input state={workspace} setState={setWorkspace}></Input>
-                <p className=" text-white text-xs ">Repo slug</p>
-                <Input state={reposlug} setState={setReposlug}></Input>
-                <p className=" text-white text-xs ">Description</p>
-                <TextArea
-                    state={description}
-                    setState={setDescription}
-                ></TextArea>
-                <button
-                    
-                    onClick={subm}
-                    className="focus:outline-none rounded-0.625 w-full py-2 px-2 text-center text-white bg-commitBlue mb-2.75"
-                >
-                    Add Repository
-                </button>
+        <div
+            className={`bg-input rounded-0.938 w-26 p-8 z-10 absolute right-0 top-14 border-onlineGreen border-4 ${
+                isPopover ? "" : "hidden"
+            }`}
+        >
+            <p className="text-white mb-5 text-xl">Add Repository</p>
+            <div className="flex gap-4">
+                <div className="w-full">
+                    <p className=" text-white text-sm">Repository Name</p>
+                    <Input state={reponame} setState={setReponame}></Input>
+                </div>
+                <div className="w-full">
+                    <p className=" text-white text-sm">Workspace</p>
+                    <Input state={workspace} setState={setWorkspace}></Input>
+                </div>
             </div>
+
+            <p className=" text-white text-sm">Repo slug</p>
+            <Input state={reposlug} setState={setReposlug}></Input>
+
+            <p className=" text-white text-sm">Description</p>
+            <TextArea state={description} setState={setDescription}></TextArea>
+
+            <p className="text-offlineRed mb-5">{error}</p>
+
+            <button
+                onClick={subm}
+                className="focus:outline-none bg-onlineGreen rounded-0.625 py-2 px-8 text-center text-black font-medium"
+            >
+                Add Repository
+            </button>
         </div>
     );
 };

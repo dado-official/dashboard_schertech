@@ -8,7 +8,6 @@ export default function Sidebarelement(props) {
         <Link
             to={`/${props.title.toLowerCase()}`}
             onMouseEnter={() => setcolor("#81c784")}
-            ü
             onMouseLeave={() => setcolor("#94A3BC")}
             onClick={() => {
                 props.setOpenSidebar(false);

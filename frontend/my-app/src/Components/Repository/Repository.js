@@ -16,18 +16,27 @@ export default function Repository({ setUrl, props }) {
     const { id } = useParams();
 
     useEffect(() => {
-        
         setUrl("Repository");
-        axios.get("http://localhost:4000/api/repository/" + id +"/").then((resp) => {
-            setIsPrivate(resp.data.is_private)
-            setName(resp.data.name)
-            console.log(resp.data)
+        axios
+            .get("http://localhost:4000/api/repository/" + id + "/")
+            .then((resp) => {
+                setIsPrivate(resp.data.is_private);
+                setName(resp.data.name);
+                console.log(resp.data);
 
-            axios.get("http://localhost:4000/api/repository/" + resp.data.workspace + "/" + resp.data.repo_slug +"/").then((resp) => {
-                setIsPrivate(resp.data.is_private)
-                setName(resp.data.name)
+                axios
+                    .get(
+                        "http://localhost:4000/api/repository/" +
+                            resp.data.workspace +
+                            "/" +
+                            resp.data.repo_slug +
+                            "/"
+                    )
+                    .then((resp) => {
+                        setIsPrivate(resp.data.is_private);
+                        setName(resp.data.name);
+                    });
             });
-        });
     }, []);
 
     return (
@@ -55,7 +64,7 @@ export default function Repository({ setUrl, props }) {
                         </div>
                     </div>
                 </div>
-                <button className="bg-commitBlue hover:bg-commitBlueHover transition ease-in-out duration-300 px-4 py-2 text-white rounded-0.938 h-minContent">
+                <button className="bg-onlineGreen transition ease-in-out duration-300 px-6 py-2 font-medium rounded-0.938 h-minContent">
                     Go to Repository
                 </button>
             </div>

@@ -96,7 +96,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: #ff4b77;
+    background-color: #81c784;
     -webkit-animation: sk-foldCubeAngle 2.4s infinite linear both;
     animation: sk-foldCubeAngle 2.4s infinite linear both;
     -webkit-transform-origin: 100% 100%;
@@ -216,11 +216,30 @@ body {
     padding-bottom: 0.75rem;
 }
 
-input:focus,
+input:focus:not(.simple),
 textarea:focus {
     border-width: 0.25rem;
     padding-top: 0.25rem;
     padding-bottom: 0.25rem;
     padding-right: 0.5rem;
     padding-left: 0.5rem;
+}
+
+input[type="range"] {
+    background: #4caf50;
+    cursor: pointer;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+td {
+    padding: 1rem;
+}
+
+tbody {
+    height: 20rem;
+    overflow-y: auto;
+    overflow-x: hidden;
 }

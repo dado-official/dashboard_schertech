@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import ServerContainer from "../AllServers/ServerContainer";
-import AddButton from "../Shared/AddButton";
 import axios from "axios";
 import AddServer from "./AddServer";
 import { FaAngleDown } from "react-icons/fa";
@@ -9,6 +8,25 @@ export default function AllServers({ setUrl }) {
     const [data, setData] = useState([]);
     const [del, setDel] = useState(false);
     const [isPopover, setIsPopover] = useState(false);
+
+    const addServerRef = useRef();
+
+    useEffect(() => {
+        let handler = (e) => {
+            if (
+                addServerRef.current &&
+                !addServerRef.current.contains(e.target)
+            ) {
+                setIsPopover(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handler);
+
+        return () => {
+            document.removeEventListener("mousedown", handler);
+        };
+    });
 
     useEffect(() => {
         setUrl("Server");
@@ -27,16 +45,23 @@ export default function AllServers({ setUrl }) {
                     </h2>
                     <p className=" text-unclicked">All the current servers</p>
                 </div>
-                <button
-                    onClick={() => setIsPopover((prev) => !prev)}
-                    className="py-2 px-6 bg-onlineGreen rounded-0.625 font-medium text-black"
-                >
-                    <div className="focus:outline-none flex items-center gap-2">
-                        Add Server
-                        <FaAngleDown color="black" size="18" />
-                    </div>
-                </button>
-                <AddServer isPopover={isPopover} setIsPopover={setIsPopover} />
+                <div ref={addServerRef}>
+                    <button
+                        onClick={() => {
+                            setIsPopover((prev) => !prev);
+                        }}
+                        className="py-2 px-6 bg-onlineGreen focus:outline-none outline-none rounded-0.625 font-medium text-black"
+                    >
+                        <div className=" flex items-center gap-2">
+                            Add Server
+                            <FaAngleDown color="black" size="18" />
+                        </div>
+                    </button>
+                    <AddServer
+                        setIsPopover={setIsPopover}
+                        isPopover={isPopover}
+                    />
+                </div>
             </div>
             <div className="grid grid-flow-row gap-8 mt-4 responsiveGrid">
                 {data.length > 0
@@ -48,11 +73,6 @@ export default function AllServers({ setUrl }) {
                           />
                       ))
                     : null}
-                <ServerContainer
-                    name={"Hallo"}
-                    setDel={setDel}
-                    description={"Moin i bins"}
-                />
             </div>
         </div>
     );
