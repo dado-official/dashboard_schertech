@@ -156,6 +156,7 @@ router.get("/:workspace/:repo_slug", async (req, res) => {
         const createdOnFormatted = moment(data.created_on).format("L");
         const avatarLink = data.links.avatar.href;
 
+        //TODO change to promise.all
         const branches = await functions.getBranchData(workspace, repo_slug);       //Returns branches and number of branches
         const last_commits = await functions.getCommitInfo(workspace, repo_slug);   //Returns last 30 commits
         const total_commit_number = await functions.getTotalCommitNumber(workspace, repo_slug);
@@ -388,7 +389,7 @@ router.get("/:workspace/:repo_slug/lastcommits", async (req, res) => {
             .repositories
             .listCommits({workspace: workspace, repo_slug: repo_slug, revision: ""});
         let commitData = functions.reduceCommitData(data);
-        lastcommits = (await commitData).commits;
+        lastcommits = commitData.commits;
         res.send(lastcommits);
     } catch (err) {
         const {error, status, message} = err;
