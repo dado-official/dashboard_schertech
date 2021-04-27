@@ -1,13 +1,25 @@
 import React, { useState, useEffect } from "react";
 import { AiOutlineBarChart } from "react-icons/ai";
 import { Bar } from "react-chartjs-2";
+import axios from "axios";
 
-export default function CommitsPerWeekChart() {
+export default function CommitsPerWeekChart({workspaceReposlug}) {
     const [loaded, setLoaded] = useState(false);
+    const [data, setData] = useState([])
 
     useEffect(() => {
-        setTimeout(() => setLoaded(true), 3000);
-    }, []);
+        if(workspaceReposlug !== undefined){
+            console.log(`http://localhost:4000/api/repository/${workspaceReposlug.workspace}/${workspaceReposlug.repoSlug}/chart1`)    
+            axios.get(`http://localhost:4000/api/repository/${workspaceReposlug.workspace}/${workspaceReposlug.repoSlug}/chart1`).then((res) => {
+            
+            setData(res.data)
+            setLoaded(true)
+            })  
+        }
+    }, [workspaceReposlug]);
+
+
+
 
     return (
         <div className="bg-primary tranition ease-in-out w-full rounded-0.938 px-6 py-4 h-minContent">
@@ -46,43 +58,18 @@ export default function CommitsPerWeekChart() {
                     }}
                     data={{
                         labels: [
-                            "Red",
-                            "Blue",
-                            "Yellow",
-                            "Green",
-                            "Purple",
-                            "Orange",
+                            "this week",
+                            "last week",
+                            "two weeks ago",
+                            "three weeks ago",
+                            "four weeks ago"
                         ],
                         datasets: [
                             {
-                                label: "benni2",
-                                data: [67.8, 9, 2],
-                                backgroundColor: "#D6E9C6", // green
-                            },
-                            {
-                                label: "Friedemann",
-                                data: [20.7],
-                                backgroundColor: "#FAEBCC", // yellow
-                            },
-                            {
-                                label: "Mutrecht",
-                                data: [11.4],
-                                backgroundColor: "#EBCCD1", // red
-                            },
-                            {
-                                label: "hirte",
-                                data: [0, 2],
-                                backgroundColor: "blue",
-                            },
-                            {
-                                label: "benni",
-                                data: [0, 2],
-                                backgroundColor: "red",
-                            },
-                            {
-                                label: "huh",
-                                data: [0, 8],
-                                backgroundColor: "orange",
+                                label: "Commits",
+                                data: data,
+                                backgroundColor: "#81c784",
+                                borderSkipped: false,
                             },
                         ],
                     }}

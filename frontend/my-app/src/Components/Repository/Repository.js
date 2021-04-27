@@ -13,6 +13,8 @@ export default function Repository({ setUrl, props }) {
   const [data, setData] = useState([]);
   const [dataOfCommits, setDataOfCommits] = useState([]);
   const [isPrivate, setIsPrivate] = useState(false);
+  const [workspaceReposlug, setWorkspaceReposlug] = useState()
+
 
   const { id } = useParams();
 
@@ -21,10 +23,11 @@ export default function Repository({ setUrl, props }) {
         axios
             .get("http://localhost:4000/api/repository/" + id + "/")
             .then((resp) => {
+                console.log(resp)
                 setIsPrivate(resp.data.is_private);
                 setName(resp.data.name);
                 console.log(resp.data);
-
+                setWorkspaceReposlug({workspace:resp.data.workspace, repoSlug: resp.data.repo_slug})
                 axios
                     .get(
                         "http://localhost:4000/api/repository/" +
@@ -34,8 +37,8 @@ export default function Repository({ setUrl, props }) {
                             "/"
                     )
                     .then((resp) => {
+                        setData(resp.data)
                         setIsPrivate(resp.data.is_private);
-                        setName(resp.data.name);
                     });
             });
     }, []);
@@ -65,33 +68,27 @@ export default function Repository({ setUrl, props }) {
                         </div>
                     </div>
                 </div>
-                <button className="bg-onlineGreen transition ease-in-out duration-300 px-6 py-2 font-medium rounded-0.938 h-minContent">
-                    Go to Repository
-                </button>
+                <a href={dataOfCommits.link} className="bg-commitBlue hover:bg-commitBlueHover transition ease-in-out duration-300 px-4 py-2 text-white rounded-0.938 h-minContent">
+                  Go to Repository
+                </a>
+              </div>
+              <div className="flex w-full">
+                <div className="grid grid-flow-rows grid-cols-4 gap-8 mt-8 w-full">
+                  <LatestCommits 
+                    param={dataOfCommits.commits} 
+                />
+                <div className="flex flex-col gap-8 col-span-2">
+                  <MostCommitsChart />
+                  <CommitsPerWeekChart workspaceReposlug={workspaceReposlug} />
+                </div>
+                <Insights
+                  created_on={data.created_on}
+                  last_updated_date={data.last_updated_formatted}
+                  owner={data.owner_name}
+                  branches={data.branch_number}
+                />
+              </div>
             </div>
           </div>
-        </div>
-        <a href={dataOfCommits.link} className="bg-commitBlue hover:bg-commitBlueHover transition ease-in-out duration-300 px-4 py-2 text-white rounded-0.938 h-minContent">
-          Go to Repository
-        </a>
-      </div>
-      <div className="flex w-full">
-        <div className="grid grid-flow-rows grid-cols-4 gap-8 mt-8 w-full">
-          <LatestCommits 
-            param={dataOfCommits.commits} 
-          />
-          <div className="flex flex-col gap-8 col-span-2">
-            <MostCommitsChart />
-            <CommitsPerWeekChart />
-          </div>
-          <Insights
-            created_on={data.created_on}
-            last_updated_date={data.last_updated_formatted}
-            owner={data.owner_name}
-            branches={data.branch_number}
-          />
-        </div>
-      </div>
-    </div>
-  );
+    );
 }
