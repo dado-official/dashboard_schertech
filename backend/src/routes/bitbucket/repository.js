@@ -388,7 +388,8 @@ router.get("/:workspace/:repo_slug/lastcommits", async (req, res) => {
             .repositories
             .listCommits({workspace: workspace, repo_slug: repo_slug, revision:""});
         let commitData = functions.reduceCommitData(data);
-        res.send(commitData);      
+        console.log((await commitData).commits)
+        res.send((await commitData).commits);      
     } catch (err) {
         const {error, status, message} = err;
         console.log("ERROR:", error, status, message);
