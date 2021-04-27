@@ -343,7 +343,7 @@ router.get("/:workspace/:repo_slug/chart2", async (req, res) => {
         console.log("ERROR:", error, status, message);
         res.sendStatus(err);
     }
-});
+}); 
 
 //Returns all commits in a Repository
 router.get("/:workspace/:repo_slug/allcommits", async (req, res) => {
@@ -379,5 +379,21 @@ router.get("/:workspace/:repo_slug/allcommits", async (req, res) => {
     }
 });
 
+//returns the last 30 commits for latest commits in forntend
+router.get("/:workspace/:repo_slug/lastcommits", async (req, res) => {
+    const {workspace, repo_slug} = req.params;
+    
+    try {
+        const {data} = await bitbucket
+            .repositories
+            .listCommits({workspace: workspace, repo_slug: repo_slug, revision:""});
+        let commitData = functions.reduceCommitData(data);
+        res.send(commitData);      
+    } catch (err) {
+        const {error, status, message} = err;
+        console.log("ERROR:", error, status, message);
+        res.sendStatus(status);
+    }
+});
 
 module.exports = router;
