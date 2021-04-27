@@ -2,15 +2,27 @@ import React, { useState, useEffect } from "react";
 import { AiOutlineBarChart } from "react-icons/ai";
 import { Bar } from "react-chartjs-2";
 import { defaults } from "react-chartjs-2";
+import axios from 'axios'
+
 defaults.global.defaultFontFamily = "Montserrat";
 defaults.global.defaultFontColor = "#94A3BC";
 
-export default function MostCommitsChart() {
+export default function MostCommitsChart({workspaceReposlug}) {
     const [loaded, setLoaded] = useState(false);
+    const [data, setData] = useState([])
 
     useEffect(() => {
-        setTimeout(() => setLoaded(true), 3000);
-    }, []);
+        if(workspaceReposlug !== undefined){
+            console.log(`http://localhost:4000/api/repository/${workspaceReposlug.workspace}/${workspaceReposlug.repoSlug}/chart2`)    
+            axios.get(`http://localhost:4000/api/repository/${workspaceReposlug.workspace}/${workspaceReposlug.repoSlug}/chart2`).then((res) => {
+                console.log(res.data)
+                setData(res.data)
+                setLoaded(true)
+            })  
+        }
+    }, [workspaceReposlug]);
+
+
 
     return (
         <div className="bg-primary flex flex-col w-full rounded-0.938 px-6 py-4 duration-500 ease-in transition-all">
@@ -44,18 +56,11 @@ export default function MostCommitsChart() {
                         },
                     }}
                     data={{
-                        labels: [
-                            "Red",
-                            "Blue",
-                            "Yellow",
-                            "Green",
-                            "Purple",
-                            "Orange",
-                        ],
+                        labels: data.user,
                         datasets: [
                             {
                                 label: "Commits",
-                                data: [1, 2, 3, 4, 8, 0],
+                                data: data.commitanzahl,
                                 backgroundColor: "#81c784",
                                 borderSkipped: false,
                             },

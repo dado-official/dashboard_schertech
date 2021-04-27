@@ -23,7 +23,7 @@ export default function LatestCommits({param}) {
             <div className=" overflow-auto">
             {state != null ? 
                 state.map((element) => (
-                      <Commit
+                    <Commit
                         message={element.message}
                         username={element.author_name}
                         date={element.date}

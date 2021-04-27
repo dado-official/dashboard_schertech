@@ -78,7 +78,7 @@ export default function Repository({ setUrl, props }) {
                     param={dataOfCommits.commits} 
                 />
                 <div className="flex flex-col gap-8 col-span-2">
-                  <MostCommitsChart />
+                  <MostCommitsChart workspaceReposlug={workspaceReposlug} />
                   <CommitsPerWeekChart workspaceReposlug={workspaceReposlug} />
                 </div>
                 <Insights
