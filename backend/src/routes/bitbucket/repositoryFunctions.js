@@ -37,9 +37,9 @@ const reduceCommitData = async (data) => {
             author_name: commit.author?.user?.display_name || "",
             author_raw: commit.author.raw,
             date: commit.date,
-            last_change: lastChange
+            last_change: lastChange,
+            author_icon: commit.author?.user?.links.avatar.href
         };
-
         commits.push(reducedCommit);
     });
 
