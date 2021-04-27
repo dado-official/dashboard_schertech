@@ -15,10 +15,10 @@ export default function Chart({ wishValue, dataArray, labels }) {
         gradient.addColorStop(1, "rgb(52, 52, 52, 0.1)");
         setData([
             {
-                label: "Commits",
+                label: "Value",
                 data: dataArray,
                 borderSkipped: false,
-                borderColor: "#3963CD",
+                borderColor: "#81c784",
                 backgroundColor: gradient,
             },
             {
@@ -28,7 +28,7 @@ export default function Chart({ wishValue, dataArray, labels }) {
                 borderCapStyle: "butt",
                 borderDash: [15, 15],
                 hoverRadius: 0,
-                borderColor: "rgb(45, 253, 153, 0.9)",
+                borderColor: "#64b5f6",
                 fill: false,
             },
         ]);

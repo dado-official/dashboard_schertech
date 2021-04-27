@@ -16,52 +16,58 @@ export default function Repository({ setUrl, props }) {
 
   const { id } = useParams();
 
-  useEffect(() => {
-    setUrl("Repository");
-    axios
-      .get("http://localhost:4000/api/repository/" + id + "/")
-      .then((resp) => {
-        setIsPrivate(resp.data.is_private);
-        setName(resp.data.name);
-        console.log(resp.data);
-
+    useEffect(() => {
+        setUrl("Repository");
         axios
-          .get(
-            "http://localhost:4000/api/repository/" +
-              resp.data.workspace +
-              "/" +
-              resp.data.repo_slug +
-              "/"
-          )
-          .then((resp) => {
-            setIsPrivate(resp.data.is_private);
-            setData(resp.data);
-            setDataOfCommits(resp.data.last_commits)
-            console.log(dataOfCommits)
-          });
-      });
-  }, []);
+            .get("http://localhost:4000/api/repository/" + id + "/")
+            .then((resp) => {
+                setIsPrivate(resp.data.is_private);
+                setName(resp.data.name);
+                console.log(resp.data);
 
-  return (
-    <div className="main pb-8">
-      <div className="flex justify-between">
-        <div className="flex gap-4">
-          <img
-            src={data.avatar_link}
-            alt="Repo photo"
-            className="h-20 w-20 rounded-0.938"
-          />
-          <div>
-            <h2 className={`text-white text-2xl font-medium`}>{name}</h2>
-            <div className="flex items-center gap-1">
-              {isPrivate ? (
-                <BiLockAlt color="#94A3BC" size="14" />
-              ) : (
-                <BiLockOpenAlt color="#94A3BC" />
-              )}
-              <p className=" text-unclicked text-sm">
-                {isPrivate ? "Private" : "Public"}
-              </p>
+                axios
+                    .get(
+                        "http://localhost:4000/api/repository/" +
+                            resp.data.workspace +
+                            "/" +
+                            resp.data.repo_slug +
+                            "/"
+                    )
+                    .then((resp) => {
+                        setIsPrivate(resp.data.is_private);
+                        setName(resp.data.name);
+                    });
+            });
+    }, []);
+
+    return (
+        <div className="main pb-8">
+            <div className="flex justify-between">
+                <div className="flex gap-4">
+                    <img
+                        src="https://d301sr5gafysq2.cloudfront.net/99622dff891f/img/repo-avatars/default.png"
+                        alt="Repo photo"
+                        className="h-20 w-20 rounded-0.938"
+                    />
+                    <div>
+                        <h2 className={`text-white text-2xl font-medium`}>
+                            {name}
+                        </h2>
+                        <div className="flex items-center gap-1">
+                            {isPrivate ? (
+                                <BiLockAlt color="#94A3BC" size="14" />
+                            ) : (
+                                <BiLockOpenAlt color="#94A3BC" />
+                            )}
+                            <p className=" text-unclicked text-sm">
+                                {isPrivate ? "Private" : "Public"}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <button className="bg-onlineGreen transition ease-in-out duration-300 px-6 py-2 font-medium rounded-0.938 h-minContent">
+                    Go to Repository
+                </button>
             </div>
           </div>
         </div>
