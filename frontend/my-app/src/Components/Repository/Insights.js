@@ -9,44 +9,20 @@ export default function Insights(props) {
                 <p className="pl-2 font-medium">Insights</p>
             </div>
             <div className="flex flex-row pt-0.938 text-sm">
-                <p className="text-unclicked">Members: </p>
-                <p className=" pl-2 ">{props.members}</p>
-            </div>
-            <div className="flex flex-row pt-0.938 text-sm">
-                <p className="text-unclicked">Contributors: </p>
-                <p className=" pl-2  ">{props.contributors}</p>
-            </div>
-            <div className="flex flex-row pt-0.938 text-sm">
-                <p className="text-unclicked">Admins: </p>
-                <p className=" pl-2  ">{props.admins}</p>
-            </div>
-            <div className="flex flex-row pt-0.938 text-sm">
                 <p className="text-unclicked">Owner: </p>
                 <p className=" pl-2  ">{props.owner}</p>
             </div>
             <div className="flex flex-row pt-0.938 text-sm">
-                <p className="text-unclicked">Lines of Code: </p>
-                <p className=" pl-2 text-onlineGreen">{props.linesofcode}</p>
-            </div>
-            <div className="flex flex-row pt-0.938 text-sm">
-                <p className="text-unclicked">Files: </p>
-                <p className=" pl-2  ">{props.files}</p>
-            </div>
-            <div className="flex flex-row pt-0.938 text-sm">
-                <p className="text-unclicked">Commits: </p>
-                <p className=" pl-2  ">{props.commits}</p>
-            </div>
-            <div className="flex flex-row pt-0.938 text-sm">
-                <p className="text-unclicked">Additions: </p>
-                <p className=" pl-2 text-onlineGreen">{props.additions}</p>
-            </div>
-            <div className="flex flex-row pt-0.938 text-sm">
-                <p className="text-unclicked">Deletions: </p>
-                <p className=" pl-2 text-offlineRed">{props.deletions}</p>
-            </div>
-            <div className="flex flex-row pt-0.938 text-sm">
                 <p className="text-unclicked">Branches:</p>
                 <p className="  pl-2 ">{props.branches}</p>
+            </div>
+            <div className="flex flex-row pt-0.938 text-sm">
+                <p className="text-unclicked">Created on:</p>
+                <p className="  pl-2 ">{props.created_on}</p>
+            </div>
+            <div className="flex flex-row pt-0.938 text-sm">
+                <p className="text-unclicked">Last update:</p>
+                <p className="  pl-2 ">{props.last_updated_date}</p>
             </div>
         </div>
     );
