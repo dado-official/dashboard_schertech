@@ -171,6 +171,7 @@ router.get("/:workspace/:repo_slug", async (req, res) => {
             branch_number: branches.branch_number,
             branches: branches.branches,
             total_commit_number: total_commit_number,
+            link: `https://bitbucket.org/${workspace}/${repo_slug}/commits/`
             //last_commits: last_commits,
         };
 
