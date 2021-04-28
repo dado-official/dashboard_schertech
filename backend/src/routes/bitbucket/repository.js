@@ -1,8 +1,6 @@
 const router = require("express").Router();
 const bitbucket = require("./bitbucket");
 const moment = require("moment");
-const en_GB = require("moment/locale/en-gb");
-moment.defineLocale("en_GB", en_GB);
 
 const db = require("@database/db");
 const functions = require("./repositoryFunctions");
@@ -144,7 +142,7 @@ router.get("/:id", (req, res) => {
 
 //Returns all information about a specific repository
 router.get("/:workspace/:repo_slug", async (req, res) => {
-    moment.updateLocale("en-gb", en_GB);
+    moment.locale("en-gb");
     const {workspace, repo_slug} = req.params;
 
     try {
@@ -185,7 +183,7 @@ router.get("/:workspace/:repo_slug", async (req, res) => {
 
 //Returns minor information about the repository
 router.get("/:workspace/:repo_slug/menu", async (req, res) => {
-    moment.updateLocale("en-GB", en_GB);
+    moment.locale("en-GB");
     const {workspace, repo_slug} = req.params;
 
     try {
