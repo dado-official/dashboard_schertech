@@ -60,6 +60,7 @@ export default function AllServers({ setUrl }) {
                     <AddServer
                         setIsPopover={setIsPopover}
                         isPopover={isPopover}
+                        setUpdate={setDel}
                     />
                 </div>
             </div>

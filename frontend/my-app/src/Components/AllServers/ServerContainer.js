@@ -42,23 +42,29 @@ export default function ServerContainer({ name, description, setDel }) {
 
     return (
         <div
-            className={`hover:bg-backgroundHover relative bg-primary py-3 px-5 pb-4 flex flex-col justify-between transition ease-in-out cursor-pointer duration-300 w-full rounded-0.938`}
+            className={`hover:bg-backgroundHover relative bg-primary py-3 px-4 pb-4 flex flex-col justify-between cursor-pointer w-full rounded-0.938`}
             onMouseEnter={() => setHover(true)}
             onMouseLeave={() => setHover(false)}
         >
-            <div className="loader">
+            {online === undefined ? (
+                <div class="loader rounded-t-0.938">
+                    <div class="loader__element"></div>
+                </div>
+            ) : (
                 <div
-                    className={`absolute left-0 top-0 rounded-t-0.938 ${
+                    className={`absolute left-0 top-0 rounded-t-0.938 w-full h-1 ${
                         online === undefined
-                            ? "loader_line"
+                            ? "bg-white"
                             : online
                             ? "bg-onlineGreen"
                             : "bg-offlineRed"
                     }`}
                 ></div>
-            </div>
+            )}
             <h6 className="font-medium text-white">{name}</h6>
-            <p className="text-unclicked text-sm mt-2">{description}</p>
+            <p className="text-unclicked text-sm mt-2 h-5 overflow-auto">
+                {description}
+            </p>
             <div className="flex mt-4 justify-between">
                 <Locaction location="Brixen, Italy" />
                 <h6

@@ -415,13 +415,12 @@ router.get("/:workspace/:repo_slug/lastcommits", async (req, res) => {
 //Check performance of each function in repositoryFunctions
 router.get("/:workspace/:repo_slug/performance", async (req, res) => {
     const {workspace, repo_slug} = req.params;
-    let temp, t0, t1;
+    let t0, t1;
 
     t0 = new Date();
-    temp = await functions.getCommitInfo(workspace, repo_slug);
+    await functions.getCommitInfo(workspace, repo_slug);
     t1 = new Date();
     let getCommitInfo1 = t1 - t0;
-    console.log(1);
 
     t0 = new Date();
     try {
@@ -432,37 +431,32 @@ router.get("/:workspace/:repo_slug/performance", async (req, res) => {
                 repo_slug: repo_slug,
                 revision: ""
             });
-        temp = await functions.reduceCommitData(data);
+        await functions.reduceCommitData(data);
     } catch (err) {
         console.log(err);
     }
     t1 = new Date();
     let reduceCommitData1 = t1 - t0;
-    console.log(2);
 
     t0 = new Date();
-    temp = await functions.getBranchData(workspace, repo_slug);
+    await functions.getBranchData(workspace, repo_slug);
     t1 = new Date();
     let getBranchData1 = t1 - t0;
-    console.log(3);
 
     t0 = new Date();
-    temp = await functions.getLinesInfo(workspace, repo_slug);
+    await functions.getLinesInfo(workspace, repo_slug);
     t1 = new Date();
     let getLinesInfo1 = t1 - t0;
-    console.log(4);
 
     t0 = new Date();
-    temp = await functions.diffStatCheck(workspace, repo_slug, "7f5b8cb");
+    await functions.diffStatCheck(workspace, repo_slug, "7f5b8cb");
     t1 = new Date();
     let diffStatCheck1 = t1 - t0;
-    console.log(5);
 
     t0 = new Date();
-    temp = await functions.getTotalCommitNumber(workspace, repo_slug);
+    await functions.getTotalCommitNumber(workspace, repo_slug);
     t1 = new Date();
     let getTotalCommitNumber1 = t1 - t0;
-    console.log(6);
 
     res.send({
         getCommitInfo: getCommitInfo1,
