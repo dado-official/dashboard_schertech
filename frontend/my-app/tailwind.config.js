@@ -7,7 +7,7 @@ module.exports = {
                 primary: "#1f1f1f",
                 unclicked: "#94A3BC",
                 background: "#161616",
-                backgroundHover: "#212121",
+                backgroundHover: "#252525",
                 hover: "#343434",
                 onlineGreen: "#81c784",
                 offlineRed: "#f06292",
