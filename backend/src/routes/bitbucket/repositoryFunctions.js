@@ -1,7 +1,7 @@
 const bitbucket = require("./bitbucket");
 const moment = require("moment");
-moment.locale("en-GB");
-
+const en_GB = require("moment/locale/en-gb");
+moment.defineLocale("en_GB", en_GB);
 
 //Returns information about the commits
 const getCommitInfo = async (workspace, repo_slug) => {
@@ -25,6 +25,7 @@ const getCommitInfo = async (workspace, repo_slug) => {
 
 //Reduces the commit data you get from the Bitbucket api
 const reduceCommitData = (data) => {
+    moment.updateLocale("en-GB", en_GB);
     let commits = [];
 
     data.values.forEach((commit) => {

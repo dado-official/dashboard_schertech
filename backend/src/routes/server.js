@@ -42,7 +42,7 @@ router.get("/:hostname", async (req, res) => {
 
         if (!row) {
             console.log("Couldn't find any data");
-            return res.sendStatus(400);
+            return res.sendStatus(204);
         }
 
         const {db_username, db_password, db_port} = row;

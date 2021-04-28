@@ -1,7 +1,8 @@
 const router = require("express").Router();
 const axios = require("axios").default;
 const moment = require("moment");
-moment.locale("en");
+const en_GB = require("moment/locale/en-gb");
+moment.defineLocale("en_GB", en_GB);
 
 const db = require("@database/db");
 const main = require("../app");
@@ -17,12 +18,12 @@ router.get("/", (req, res) => {
     db.all(sql, async (err, rows) => {
         if (err) {
             console.log(err);
-            return res.send(400);
+            return res.sendStatus(400);
         }
 
         if (rows.length === 0) {
             console.log("Result is empty");
-            return res.send(204);
+            return res.sendStatus(204);
         }
 
         let entryIDs = [];
@@ -54,6 +55,7 @@ router.get("/", (req, res) => {
 
 //Adds a new entry
 router.post("/", (req, res) => {
+    moment.updateLocale("en_GB", en_GB);
     const {title, description, frequency, target_value} = req.body;
     let sql = `
         INSERT
@@ -137,6 +139,7 @@ router.delete("/:id", (req, res) => {
 
 //Returns all the values from a specific entry and other information
 router.get("/:entry_id", (req, res) => {
+    moment.updateLocale("en_GB", en_GB);
     const {entry_id} = req.params;
     let sql = `
         SELECT *
@@ -215,6 +218,7 @@ router.get("/:entry_id/:value_id", (req, res) => {
 
 //Adds a new value to a specific entry
 router.post("/:entry_id", (req, res) => {
+    moment.updateLocale("en_GB", en_GB);
     const {entry_id} = req.params;
     const {value} = req.body;
     let sql = `
