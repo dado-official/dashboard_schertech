@@ -276,7 +276,6 @@ tbody {
     align-items: center;
     align-content: center;
     justify-content: flex-start;
-    z-index: 100000;
 }
 
 .loader__element {
@@ -297,5 +296,20 @@ tbody {
 @keyframes getWidth {
     100% {
         width: 100%;
+    }
+}
+
+.enter {
+    animation: slideshowin 0.5s ease-in;
+    animation-fill-mode: backwards;
+}
+
+@keyframes slideshowin {
+    from {
+        opacity: 0%;
+    }
+
+    to {
+        opacity: 100%;
     }
 }

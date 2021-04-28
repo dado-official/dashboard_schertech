@@ -67,13 +67,14 @@ export default function AllServers({ setUrl, props }) {
             </div>
             <div className="grid grid-flow-row responsiveGrid gap-8 mt-4">
                 {data != []
-                    ? data.map((element) => (
+                    ? data.map((element, index) => (
                           <RepositoriesContaier
                               name={element.name}
                               description={element.description}
                               workspace={element.workspace}
                               repo_slug={element.repo_slug}
                               id={element.id}
+                              index={index}
                               setDel={setUpdate}
                           />
                       ))

@@ -8,6 +8,7 @@ export default function ServerContainer({
     setDel,
     location,
     servername,
+    index,
 }) {
     const [hover, setHover] = useState(false);
     const [online, setOnline] = useState();
@@ -48,9 +49,12 @@ export default function ServerContainer({
 
     return (
         <div
-            className={`hover:bg-backgroundHover relative bg-primary py-3 px-4 pb-4 flex flex-col justify-between cursor-pointer w-full rounded-0.938`}
+            className={`hover:bg-backgroundHover enter relative bg-primary py-3 px-4 pb-4 flex flex-col justify-between cursor-pointer w-full rounded-0.938`}
             onMouseEnter={() => setHover(true)}
             onMouseLeave={() => setHover(false)}
+            style={{
+                animationDelay: `${0.2 * index}s`,
+            }}
         >
             {online === undefined ? (
                 <div className="loader rounded-t-0.938">

@@ -18,9 +18,12 @@ export default function CustomContainer(props) {
     return (
         <Link
             to={`custom/${props.id}`}
-            className={`bg-primary hover:bg-backgroundHover relative cursor-pointer rounded-0.938 flex flex-col justify-between p-4 w-full `}
+            className={`bg-primary enter hover:bg-backgroundHover relative cursor-pointer rounded-0.938 flex flex-col justify-between p-4 w-full `}
             onMouseEnter={() => setHover(true)}
             onMouseLeave={() => setHover(false)}
+            style={{
+                animationDelay: `${0.2 * props.index}s`,
+            }}
         >
             <div
                 className={`bg-blue w-full h-1 absolute left-0 top-0 rounded-t-0.938 ${
