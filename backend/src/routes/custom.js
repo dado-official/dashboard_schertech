@@ -27,7 +27,7 @@ router.get("/", (req, res) => {
 
         let entryIDs = [];
         rows.forEach((row) => {
-            entryIDs.push(row.id);
+            entryIDs.push(row.entry_id);
         });
 
         let entries = [];
