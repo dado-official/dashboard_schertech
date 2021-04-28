@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Commit from "./Commit";
 import axios from "axios";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 
 export default function RepositoryContainer({ name, description, workspace, repo_slug, id, setDel }) {
@@ -35,18 +35,12 @@ export default function RepositoryContainer({ name, description, workspace, repo
         });
     }
 
-    function click() {
-        //props.setName(name)
-        //props.setWorkspace(workspace)
-        //props.setReposlug(repo_slug)
-    }
-
     return (
-        <div
+        <Link
             className="bg-primary hover:bg-backgroundHover cursor-pointer rounded-0.938 py-3 px-4 w-full"
             onMouseEnter={() => setHover(true)}
             onMouseLeave={() => setHover(false)}
-            onClick={() => history.push("/repository/" + id)}
+            to={"/repository/" + id}
         >
             <div className="flex justify-between">
                 <h6 className="text-white ">{name}</h6>
@@ -66,6 +60,6 @@ export default function RepositoryContainer({ name, description, workspace, repo
                     x
                 </h6>
             </div>
-        </div>
+        </Link>
     );
 }

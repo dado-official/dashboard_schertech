@@ -28,7 +28,7 @@ export default function MostCommitsChart({workspaceReposlug}) {
         <div className="bg-primary flex flex-col w-full rounded-0.938 px-6 py-4 duration-500 ease-in transition-all">
             <div className="flex items-center gap-2 mb-4">
                 <AiOutlineBarChart color="white" size="18" />
-                <h6 className="text-white font-medium">Most commits Chart</h6>
+                <h6 className="text-white font-medium">Most commits last week Chart</h6>
             </div>
             <div className="relative">
                 <Bar
