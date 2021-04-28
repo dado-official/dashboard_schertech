@@ -2,17 +2,25 @@ import React, {useEffect, useState} from "react";
 import { FaHistory } from "react-icons/fa";
 import Commit from "./Commit";
 import { defaults } from "react-chartjs-2";
+import axios from 'axios'
+
 defaults.global.defaultFontFamily = "Montserrat";
 defaults.global.defaultFontColor = "#94A3BC";
 
-export default function LatestCommits({param}) {
+export default function LatestCommits({workspaceReposlug}) {
     const [state, setstate] = useState([])
-
+    const [loaded, setLoaded] = useState(false);
 
     useEffect(() => {
-        console.log(param)
-        setstate(param)
-    }, [param])
+        if(workspaceReposlug !== undefined){
+            console.log(`http://localhost:4000/api/repository/${workspaceReposlug.workspace}/${workspaceReposlug.repoSlug}/lastcommits`)    
+            axios.get(`http://localhost:4000/api/repository/${workspaceReposlug.workspace}/${workspaceReposlug.repoSlug}/lastcommits`).then((res) => {
+            
+                setstate(res.data)
+                setLoaded(true)
+            })  
+        }
+    }, [workspaceReposlug]);
 
     return (
         <div className="bg-primary w-full rounded-0.938 px-6 py-4">
@@ -24,12 +32,14 @@ export default function LatestCommits({param}) {
             {state != null ? 
                 state.map((element) => (
                     <Commit
-                        message={element.message}
-                        username={element.author_name}
-                        date={element.date}
                         commitID={element.id}
                         hash={element.hash}
-                        username_raw={element.author_raw}
+                        message={element.message}
+                        username={element.author_name}
+                        usernameRaw={element.author_raw}
+                        date={element.date}
+                        lastChange={element.last_change}
+                        userPicture={element.author_icon}
                     />
                 ))
                 : <p>loading ...</p>

@@ -74,7 +74,7 @@ export default function Repository({ setUrl, props }) {
               </div>
               <div className="flex w-full">
                 <div className="grid grid-flow-rows grid-cols-4 gap-8 mt-8 w-full">
-                  <LatestCommits 
+                  <LatestCommits workspaceReposlug={workspaceReposlug}
                     param={dataOfCommits.commits} 
                 />
                 <div className="flex flex-col gap-8 col-span-2">
