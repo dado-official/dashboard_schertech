@@ -21,6 +21,9 @@ export default function RepositoryContainer({ name, description, workspace, repo
                     "/menu"
             )
             .then((resp) => {
+                if(resp.status === 404){
+                    console.log("not foundddd: " + resp.status)
+                }
                 setOwner(resp.data.owner_name);
                 setEdit(resp.data.last_update_fromnow);
             });
