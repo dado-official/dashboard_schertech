@@ -62,7 +62,6 @@ const getBranchData = async (workspace, repo_slug) => {
             name: branch.name,
             author: branch.target.author?.user?.display_name || "",
             //next: branch.next
-
         };
         branches.push(reducedBranch);
     });
