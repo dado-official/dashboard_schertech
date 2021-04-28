@@ -48,7 +48,7 @@ export default function Repository({ setUrl, props }) {
             <div className="flex justify-between">
                 <div className="flex gap-4">
                     <img
-                        src="https://d301sr5gafysq2.cloudfront.net/99622dff891f/img/repo-avatars/default.png"
+                        src={data.avatar_link}
                         alt="Repo photo"
                         className="h-20 w-20 rounded-0.938"
                     />
@@ -68,9 +68,8 @@ export default function Repository({ setUrl, props }) {
                         </div>
                     </div>
                 </div>
-                <a href={dataOfCommits.link} className="bg-commitBlue hover:bg-commitBlueHover transition ease-in-out duration-300 px-4 py-2 text-white rounded-0.938 h-minContent">
-                  Go to Repository
-                </a>
+                <a href={dataOfCommits.link} className="py-2 px-6 bg-onlineGreen focus:outline-none outline-none rounded-0.625 font-medium text-black">
+                  Go to Repository</a>
               </div>
               <div className="flex w-full h-32 pb-8">
                 <div className="grid grid-flow-rows grid-cols-4 gap-8 mt-8 w-full h-full">

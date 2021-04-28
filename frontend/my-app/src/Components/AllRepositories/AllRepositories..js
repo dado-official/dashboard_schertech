@@ -74,6 +74,7 @@ export default function AllServers({ setUrl, props }) {
                               workspace={element.workspace}
                               repo_slug={element.repo_slug}
                               id={element.id}
+                              setDel={setUpdate}
                           />
                       ))
                     : null}

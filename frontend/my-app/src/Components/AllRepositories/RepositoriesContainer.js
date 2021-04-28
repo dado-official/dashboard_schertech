@@ -1,15 +1,10 @@
 import React, { useState, useEffect } from "react";
 import Commit from "./Commit";
 import axios from "axios";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
-export default function RepositoryContainer({
-    name,
-    description,
-    workspace,
-    repo_slug,
-    id,
-}) {
+
+export default function RepositoryContainer({ name, description, workspace, repo_slug, id, setDel }) {
     const [hover, setHover] = useState(false);
     const [owner, setOwner] = useState("");
     const [lastEdit, setEdit] = useState("");
@@ -31,34 +26,21 @@ export default function RepositoryContainer({
             });
     }, []);
 
-    function removeRepository() {
-        axios
-            .delete(
-                "http://localhost:4000/api/repository/" +
-                    workspace +
-                    "/" +
-                    repo_slug +
-                    "/"
-            )
-            .then((resp) => {
-                console.log("fabian");
-                history.push("/repositor");
-                history.push("/repository");
-            });
-    }
-
-    function click() {
-        //props.setName(name)
-        //props.setWorkspace(workspace)
-        //props.setReposlug(repo_slug)
+    function removeRepository(e){
+        e.preventDefault();
+        axios.delete("http://localhost:4000/api/repository/" + workspace + "/" + repo_slug +"/")
+        .then((resp) => {
+                console.log("delete");
+                setDel((prev) => !prev);
+        });
     }
 
     return (
-        <div
+        <Link
             className="bg-primary hover:bg-backgroundHover cursor-pointer rounded-0.938 py-3 px-4 w-full"
             onMouseEnter={() => setHover(true)}
             onMouseLeave={() => setHover(false)}
-            onClick={() => history.push("/repository/" + id)}
+            to={"/repository/" + id}
         >
             <div className="flex justify-between">
                 <h6 className="text-white ">{name}</h6>
@@ -78,6 +60,6 @@ export default function RepositoryContainer({
                     x
                 </h6>
             </div>
-        </div>
+        </Link>
     );
 }
