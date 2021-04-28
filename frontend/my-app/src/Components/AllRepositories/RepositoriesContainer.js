@@ -4,7 +4,7 @@ import axios from 'axios'
 import { useHistory } from "react-router-dom";
 
 
-export default function RepositoryContainer({ name, description, workspace, repo_slug, id }) {
+export default function RepositoryContainer({ name, description, workspace, repo_slug, id, setDel }) {
     const [hover, setHover] = useState(false);
     const [owner, setOwner] = useState("");
     const [lastEdit, setEdit] = useState("");
@@ -18,12 +18,12 @@ export default function RepositoryContainer({ name, description, workspace, repo
         });
     },[])
 
-    function removeRepository(){
+    function removeRepository(e){
+        e.preventDefault();
         axios.delete("http://localhost:4000/api/repository/" + workspace + "/" + repo_slug +"/")
         .then((resp) => {
-            console.log("fabian")
-            history.push("/repositor")
-            history.push("/repository")
+                console.log("delete");
+                setDel((prev) => !prev);
         });
     }
 
