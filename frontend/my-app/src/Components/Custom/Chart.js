@@ -35,7 +35,7 @@ export default function Chart({ wishValue, dataArray, labels }) {
     }, [dataArray, wishValue]);
 
     return (
-        <div className="bg-primary tranition ease-in-out w-full col-span-3 rounded-0.938 px-6 py-4 h-minContent pb-6">
+        <div className="bg-primary tranition ease-in-out w-full 2xl:col-span-3 rounded-0.938 px-6 py-4 h-minContent pb-6">
             <div className="flex items-center gap-2 mb-4">
                 <AiOutlineBarChart color="white" size="18" />
                 <h6 className="text-white font-medium">Custom stats Chart</h6>

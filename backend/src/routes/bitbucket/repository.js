@@ -156,6 +156,7 @@ router.get("/:workspace/:repo_slug", async (req, res) => {
         const createdOnFormatted = moment(data.created_on).format("L");
         const avatarLink = data.links.avatar.href;
 
+        //TODO change to promise.all
         const branches = await functions.getBranchData(workspace, repo_slug);       //Returns branches and number of branches
         const last_commits = await functions.getCommitInfo(workspace, repo_slug);   //Returns last 30 commits
         const total_commit_number = await functions.getTotalCommitNumber(workspace, repo_slug);
@@ -343,7 +344,7 @@ router.get("/:workspace/:repo_slug/chart2", async (req, res) => {
         console.log("ERROR:", error, status, message);
         res.sendStatus(err);
     }
-}); 
+});
 
 //Returns all commits in a Repository
 router.get("/:workspace/:repo_slug/allcommits", async (req, res) => {
@@ -379,22 +380,85 @@ router.get("/:workspace/:repo_slug/allcommits", async (req, res) => {
     }
 });
 
-//returns the last 30 commits for latest commits in forntend
+//returns the last 30 commits for latest commits in frontend
 router.get("/:workspace/:repo_slug/lastcommits", async (req, res) => {
     const {workspace, repo_slug} = req.params;
-    let lastcommits
+    let lastcommits;
     try {
         const {data} = await bitbucket
             .repositories
-            .listCommits({workspace: workspace, repo_slug: repo_slug, revision:""});
+            .listCommits({workspace: workspace, repo_slug: repo_slug, revision: ""});
         let commitData = functions.reduceCommitData(data);
-        lastcommits = (await commitData).commits
-        res.send(lastcommits);      
+        lastcommits = commitData.commits;
+        res.send(lastcommits);
     } catch (err) {
         const {error, status, message} = err;
         console.log("ERROR:", error, status, message);
         res.sendStatus(status);
     }
 });
+
+//Check performance of each function in repositoryFunctions
+router.get("/:workspace/:repo_slug/performance", async (req, res) => {
+    const {workspace, repo_slug} = req.params;
+    let temp, t0, t1;
+
+    t0 = new Date();
+    temp = await functions.getCommitInfo(workspace, repo_slug);
+    t1 = new Date();
+    let getCommitInfo1 = t1 - t0;
+    console.log(1);
+
+    t0 = new Date();
+    try {
+        const {data} = await bitbucket
+            .repositories
+            .listCommits({
+                workspace: workspace,
+                repo_slug: repo_slug,
+                revision: ""
+            });
+        temp = await functions.reduceCommitData(data);
+    } catch (err) {
+        console.log(err);
+    }
+    t1 = new Date();
+    let reduceCommitData1 = t1 - t0;
+    console.log(2);
+
+    t0 = new Date();
+    temp = await functions.getBranchData(workspace, repo_slug);
+    t1 = new Date();
+    let getBranchData1 = t1 - t0;
+    console.log(3);
+
+    t0 = new Date();
+    temp = await functions.getLinesInfo(workspace, repo_slug);
+    t1 = new Date();
+    let getLinesInfo1 = t1 - t0;
+    console.log(4);
+
+    t0 = new Date();
+    temp = await functions.diffStatCheck(workspace, repo_slug, "7f5b8cb");
+    t1 = new Date();
+    let diffStatCheck1 = t1 - t0;
+    console.log(5);
+
+    t0 = new Date();
+    temp = await functions.getTotalCommitNumber(workspace, repo_slug);
+    t1 = new Date();
+    let getTotalCommitNumber1 = t1 - t0;
+    console.log(6);
+
+    res.send({
+        getCommitInfo: getCommitInfo1,
+        reduceCommitData: reduceCommitData1,
+        getBranchData: getBranchData1,
+        getLinesInfo: getLinesInfo1,
+        diffStatCheck: diffStatCheck1,
+        getTotalCommitNumber: getTotalCommitNumber1
+    });
+});
+
 
 module.exports = router;

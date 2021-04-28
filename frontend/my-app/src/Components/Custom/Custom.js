@@ -66,7 +66,7 @@ export default function Repository({ setUrl }) {
     }, [data]);
 
     return (
-        <div className="main pb-8">
+        <div className="pb-8 main">
             <div className="relative flex justify-between items-baseline">
                 <div>
                     <h6 className="text-2xl text-white font-medium">
@@ -81,7 +81,7 @@ export default function Repository({ setUrl }) {
                     {!showEdit ? "Edit data" : "Exit"}
                 </button>
             </div>
-            <div className="relative grid grid-flow-rows grid-cols-4 gap-8 mt-6 responsiveGrid">
+            <div className="relative grid grid-flow-rows gap-8 grid-cols-4 mt-6 responsiveGridCustom">
                 <Edit
                     show={showEdit}
                     data={data}
@@ -93,7 +93,7 @@ export default function Repository({ setUrl }) {
                     setDate={setLabels}
                 />
                 <Chart dataArray={data} labels={labels} wishValue={wishValue} />
-                <div className="flex flex-col gap-8 ">
+                <div className="flex gap-8 w-full flex-col">
                     <AddData
                         setData={setData}
                         setLabels={setLabels}

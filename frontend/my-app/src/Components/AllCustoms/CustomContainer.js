@@ -18,15 +18,20 @@ export default function CustomContainer(props) {
     return (
         <Link
             to={`custom/${props.id}`}
-            className={`bg-primary hover:bg-backgroundHover tranition ease-in-out cursor-pointer duration-300 rounded-0.938 flex flex-col justify-between py-3 px-4 w-full border-l-4 ${
-                props.remainingdays === undefined ||
-                props.remainingdays.includes("ago")
-                    ? " border-onlineGreen"
-                    : " border-offlineRed"
-            }`}
+            className={`bg-primary hover:bg-backgroundHover relative cursor-pointer duration-300 rounded-0.938 flex flex-col justify-between py-3 px-4 pl-5 w-full `}
             onMouseEnter={() => setHover(true)}
             onMouseLeave={() => setHover(false)}
         >
+            <div className="loader">
+                <div
+                    className={`bg-blue h-full w-1 absolute left-0 top-0 rounded-l-0.938 ${
+                        props.remainingdays === undefined ||
+                        props.remainingdays.includes("ago")
+                            ? " bg-onlineGreen"
+                            : " bg-offlineRed"
+                    }`}
+                ></div>
+            </div>
             <div className="flex justify-between">
                 <h6 className="text-white ">{props.name}</h6>
                 <div className="flex justify-between items-center">

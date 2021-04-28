@@ -24,7 +24,7 @@ const getCommitInfo = async (workspace, repo_slug) => {
 };
 
 //Reduces the commit data you get from the Bitbucket api
-const reduceCommitData = async (data) => {
+const reduceCommitData = (data) => {
     let commits = [];
 
     data.values.forEach((commit) => {
@@ -94,7 +94,7 @@ const getLinesInfo = async (workspace, repo_slug) => {
                 .listCommits({
                     workspace: workspace,
                     repo_slug: repo_slug,
-                    page: page.toString(),
+                    page: page,
                     pagelen: pagelen,
                     revision: ""
                 });
@@ -163,7 +163,7 @@ const getTotalCommitNumber = async (workspace, repo_slug) => {
         while (true) {
             const {data} = await bitbucket
                 .repositories
-                .listCommits({workspace: workspace, repo_slug: repo_slug, page: page.toString(), pagelen: pagelen, revision: ""});
+                .listCommits({workspace: workspace, repo_slug: repo_slug, page: page, pagelen: pagelen, revision: ""});
 
             let commitData = reduceCommitData(data);
             //Add link to the Bitbucket repository
