@@ -53,7 +53,7 @@ export default function ServerContainer({
             onMouseEnter={() => setHover(true)}
             onMouseLeave={() => setHover(false)}
             style={{
-                animationDelay: `${0.2 * index}s`,
+                animationDelay: `${0.2 * (index + 1)}s`,
             }}
         >
             {online === undefined ? (

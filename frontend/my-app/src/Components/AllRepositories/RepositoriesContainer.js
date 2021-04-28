@@ -56,7 +56,7 @@ export default function RepositoryContainer({
             onMouseLeave={() => setHover(false)}
             to={"/repository/" + id}
             style={{
-                animationDelay: `${0.2 * index}s`,
+                animationDelay: `${0.2 * (index + 1)}s`,
             }}
         >
             <div className="flex justify-between">

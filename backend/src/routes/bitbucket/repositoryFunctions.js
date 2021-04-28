@@ -1,7 +1,5 @@
 const bitbucket = require("./bitbucket");
 const moment = require("moment");
-moment.locale("en-GB");
-
 
 //Returns information about the commits
 const getCommitInfo = async (workspace, repo_slug) => {
@@ -25,6 +23,7 @@ const getCommitInfo = async (workspace, repo_slug) => {
 
 //Reduces the commit data you get from the Bitbucket api
 const reduceCommitData = (data) => {
+    moment.locale("en-GB");
     let commits = [];
 
     data.values.forEach((commit) => {
@@ -62,7 +61,6 @@ const getBranchData = async (workspace, repo_slug) => {
             name: branch.name,
             author: branch.target.author?.user?.display_name || "",
             //next: branch.next
-            
         };
         branches.push(reducedBranch);
     });

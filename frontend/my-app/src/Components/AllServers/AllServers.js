@@ -38,7 +38,7 @@ export default function AllServers({ setUrl }) {
 
     return (
         <div className="main">
-            <div className="relative flex justify-between items-baseline">
+            <div className="relative flex justify-between enter items-baseline">
                 <div>
                     <h2 className={`text-white text-2xl font-medium`}>
                         Servers

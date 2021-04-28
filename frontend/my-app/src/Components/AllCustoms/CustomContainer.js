@@ -22,7 +22,7 @@ export default function CustomContainer(props) {
             onMouseEnter={() => setHover(true)}
             onMouseLeave={() => setHover(false)}
             style={{
-                animationDelay: `${0.2 * props.index}s`,
+                animationDelay: `${0.2 * (props.index + 1)}s`,
             }}
         >
             <div

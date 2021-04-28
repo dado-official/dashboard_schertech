@@ -37,7 +37,7 @@ export default function AllServers({ setUrl, props }) {
 
     return (
         <div className="main">
-            <div className="relative flex justify-between items-baseline">
+            <div className="relative flex justify-between items-baseline enter">
                 <div>
                     <h2 className={`text-white text-2xl font-medium`}>
                         All Repositories
