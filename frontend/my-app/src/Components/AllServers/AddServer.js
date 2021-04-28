@@ -4,7 +4,7 @@ import TextArea from "../Shared/TextArea";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 
-const AddServer = ({ setIsPopover, isPopover }) => {
+const AddServer = ({ setIsPopover, isPopover, setUpdate }) => {
     const [serverName, setServerName] = useState("");
     const [location, setLocation] = useState("");
     const [ipAddress, setIpAddress] = useState("");
@@ -47,7 +47,7 @@ const AddServer = ({ setIsPopover, isPopover }) => {
                 })
                 .then((res) => {
                     console.log(res.data);
-                    history.push("/server");
+                    setUpdate((prev) => !prev);
                 });
         }
     }
