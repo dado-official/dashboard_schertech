@@ -158,7 +158,10 @@ router.get("/:workspace/:repo_slug", async (req, res) => {
 
         //TODO change to promise.all
         const branches = await functions.getBranchData(workspace, repo_slug);       //Returns branches and number of branches
-        const last_commits = await functions.getCommitInfo(workspace, repo_slug);   //Returns last 30 commits
+        if(branches.branch_number>=100){
+            branches.branch_number=">=100";
+        } 
+        //const last_commits = await functions.getCommitInfo(workspace, repo_slug);   //Returns last 30 commits
         const total_commit_number = await functions.getTotalCommitNumber(workspace, repo_slug);
 
         const resultObject = {
@@ -181,6 +184,7 @@ router.get("/:workspace/:repo_slug", async (req, res) => {
         res.sendStatus(status);
     }
 });
+
 
 //Returns minor information about the repository
 router.get("/:workspace/:repo_slug/menu", async (req, res) => {
