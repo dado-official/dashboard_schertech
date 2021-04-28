@@ -53,7 +53,7 @@ const reduceCommitData = (data) => {
 const getBranchData = async (workspace, repo_slug) => {
     const {data} = await bitbucket
         .repositories
-        .listRefs({workspace: workspace, repo_slug: repo_slug});
+        .listRefs({workspace: workspace, repo_slug: repo_slug, pagelen: 100});
 
     const branches = [];
 
@@ -62,6 +62,7 @@ const getBranchData = async (workspace, repo_slug) => {
             name: branch.name,
             author: branch.target.author?.user?.display_name || "",
             //next: branch.next
+            
         };
         branches.push(reducedBranch);
     });
@@ -159,7 +160,7 @@ const getTotalCommitNumber = async (workspace, repo_slug) => {
     let page = 1;
     let quantity = 0;
     try {
-        while (true) {
+        while (page<11) {
             const {data} = await bitbucket
                 .repositories
                 .listCommits({workspace: workspace, repo_slug: repo_slug, page: page, pagelen: pagelen, revision: ""});
@@ -173,6 +174,7 @@ const getTotalCommitNumber = async (workspace, repo_slug) => {
                 return ({commit_number: quantity});
             }
         }
+        return ({commit_number: ">=1000"});
     } catch (err) {
         const {error, status, message} = err;
         console.log("ERROR:", error, status, message);
