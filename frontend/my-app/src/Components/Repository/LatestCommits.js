@@ -23,7 +23,7 @@ export default function LatestCommits({workspaceReposlug}) {
     }, [workspaceReposlug]);
 
     return (
-        <div className="bg-primary w-full rounded-0.938 px-6 py-4">
+        <div className="bg-primary w-full overflow-y-scroll rounded-0.938 px-6 py-4 mb-8">
             <div className="flex gap-2 items-center">
                 <FaHistory color="white" />
                 <h6 className="text-white font-medium">Latest commits</h6>
@@ -39,7 +39,7 @@ export default function LatestCommits({workspaceReposlug}) {
                         usernameRaw={element.author_raw}
                         date={element.date}
                         lastChange={element.last_change}
-                        userPicture={element.author_icon}
+                        userPicture={ element.author_icon !== undefined ? element.author_icon : "https://cdn.iconscout.com/icon/free/png-512/laptop-user-1-1179329.png" }
                     />
                 ))
                 : <p>loading ...</p>
