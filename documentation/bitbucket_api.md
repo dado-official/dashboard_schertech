@@ -197,3 +197,24 @@ repo_slug | The name of the repository slug
     TODO
 }
 ````
+
+
+
+## Get the last 30 commits in a Repository
+
+`GET /:workspace/:repo_slug/lastcommits`
+
+#### Path parameters
+
+Parameter | Description
+--- | ---
+workspace | The name of the workspace
+repo_slug | The name of the repository slug
+
+#### Response
+
+````
+{
+    TODO
+}
+````
