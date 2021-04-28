@@ -44,7 +44,7 @@ export default function Repository({ setUrl, props }) {
     }, []);
 
     return (
-        <div className="main pb-8">
+        <div className="main mb-8">
             <div className="flex justify-between">
                 <div className="flex gap-4">
                     <img
@@ -72,21 +72,24 @@ export default function Repository({ setUrl, props }) {
                   Go to Repository
                 </a>
               </div>
-              <div className="flex w-full">
-                <div className="grid grid-flow-rows grid-cols-4 gap-8 mt-8 w-full">
-                  <LatestCommits 
+              <div className="flex w-full h-32 pb-8">
+                <div className="grid grid-flow-rows grid-cols-4 gap-8 mt-8 w-full h-full">
+                  <LatestCommits workspaceReposlug={workspaceReposlug}
                     param={dataOfCommits.commits} 
                 />
-                <div className="flex flex-col gap-8 col-span-2">
+                <div className="flex flex-col gap-8 col-span-2 pb-8">
                   <MostCommitsChart workspaceReposlug={workspaceReposlug} />
                   <CommitsPerWeekChart workspaceReposlug={workspaceReposlug} />
                 </div>
-                <Insights
+                <div>
+                  <Insights
                   created_on={data.created_on}
                   last_updated_date={data.last_updated_formatted}
                   owner={data.owner_name}
                   branches={data.branch_number}
                 />
+                </div>
+                
               </div>
             </div>
           </div>
