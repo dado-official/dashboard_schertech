@@ -60,6 +60,7 @@ export default function AllServers({ setUrl }) {
                     <AddServer
                         setIsPopover={setIsPopover}
                         isPopover={isPopover}
+                        setUpdate={setDel}
                     />
                 </div>
             </div>
@@ -68,6 +69,8 @@ export default function AllServers({ setUrl }) {
                     ? data.map((element) => (
                           <ServerContainer
                               name={element.hostname}
+                              servername={element.server_name}
+                              location={element.location}
                               setDel={setDel}
                               description={element.description}
                           />

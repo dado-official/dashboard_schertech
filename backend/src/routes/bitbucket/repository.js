@@ -174,6 +174,7 @@ router.get("/:workspace/:repo_slug", async (req, res) => {
             branch_number: branches.branch_number,
             branches: branches.branches,
             total_commit_number: total_commit_number,
+            link: `https://bitbucket.org/${workspace}/${repo_slug}/commits/`
             //last_commits: last_commits,
         };
 
@@ -307,42 +308,56 @@ router.get("/:workspace/:repo_slug/chart1", async (req, res) => {
 //TODO formatting
 //Returns information about how often and by whom a commit was made
 router.get("/:workspace/:repo_slug/chart2", async (req, res) => {
-    try {
-        const {data} = await bitbucket
-            .repositories
-            .listCommits({workspace: req.params.workspace, repo_slug: req.params.repo_slug, revision: ""});
-
-        let commits = [];
-
-        let date = new Date();                      //get date from a week ago to check if commit was within last week
-        date.setDate(date.getDate() - 7);
-
-        let commitMap = new Map();
-
-        data.values.forEach((commit) => {
-            let reducedCommit = {
-                author_name: commit.author?.user?.display_name || "",
-                date: commit.date
-            };
-
-            let dateCheck = Date.parse(date);                   //Date from a week ago and commitDate need to be parsed to the same format to be compared
-            let commitDate = Date.parse(commit.date);
-
-            if (dateCheck < commitDate) {                                                     //check if commit was within last week and adding it to map
-                if (commitMap.get(commit.author?.user?.display_name) != undefined) {         //change value of commits issued or add user to the commitmap
-                    let counter = commitMap.get(commit.author?.user?.display_name);
-                    ++counter;
-                    commitMap.set(commit.author?.user?.display_name, counter);
+    let commitMap = new Map();
+    let i = 0
+    let page = 1
+    let pagelen = 100
+    
+    let date = new Date();                      //get date from a week ago to check if commit was within last week
+    date.setDate(date.getDate() - 7);
+    let dateCheck = Date.parse(date);                   //Date from a week ago and commitDate need to be parsed to the same format to be compared
+    
+    try{
+        while (true) {
+            const {data} = await bitbucket
+                .repositories
+                .listCommits({
+                    workspace: req.params.workspace,
+                    repo_slug: req.params.repo_slug,
+                    page: page,
+                    pagelen: pagelen,
+                    revision: ""
+                });
+            let commitData = functions.reduceCommitData(data);
+            
+            while(i < commitData.commit_number-1){
+                let commitDate = Date.parse(commitData.commits[i].date);
+                
+                if (dateCheck < commitDate) {                                                    //check if commit was within last week and adding it to map
+                    if (commitMap.get(commitData.commits[i].author_name) != undefined) {        
+                        let counter = commitMap.get(commitData.commits[i].author_name);          //change value of commits issued or add user to the commitmap
+                        ++counter;
+                        commitMap.set(commitData.commits[i].author_name, counter);
+                        ++i
+                    } else {
+                        commitMap.set(commitData.commits[i].author_name, 1);
+                        ++i
+                    }
                 } else {
-                    commitMap.set(commit.author?.user?.display_name, 1);
+                    let user = Array.from(commitMap.keys());
+                    let commitanzahl = Array.from(commitMap.values());
+                    return res.send({user: user, commitanzahl: commitanzahl});
                 }
             }
-            commits.push(commitMap);
-        });
+            i = 0;
+            ++page;
 
-        let user = Array.from(commitMap.keys());
-        let commitanzahl = Array.from(commitMap.values());
-        return res.send({user: user, commitanzahl: commitanzahl});
+            if (commitData.commit_number < 100) {
+                let user = Array.from(commitMap.keys());
+                let commitanzahl = Array.from(commitMap.values());
+                return res.send({user: user, commitanzahl: commitanzahl});
+            }  
+        }       
     } catch (err) {
         const {error, status, message} = err;
         console.log("ERROR:", error, status, message);

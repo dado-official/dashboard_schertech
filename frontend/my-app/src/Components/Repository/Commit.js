@@ -33,7 +33,10 @@ export default function Commit({
                     <p className="text-unclicked text-xs">{commitID} </p>
                 </div>
                 <div className="flex gap-1 items-center">
-                    <HiHashtag color="#94A3BC" size="16" />
+                    <div>
+                        <HiHashtag color="#94A3BC" size="16"/>
+                    </div>
+                    
                     <p className="text-unclicked text-xs">{hash} </p>
                 </div>
             </div>
