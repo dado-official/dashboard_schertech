@@ -42,42 +42,31 @@ export default function ServerContainer({ name, description, setDel }) {
 
     return (
         <div
-            className={`hover:bg-backgroundHover ${
-                online === true
-                    ? "bgContainerGreen"
-                    : online === false
-                    ? "bgContainerRed"
-                    : "bgContainerWhite"
-            } relative bg-primary py-3 px-4 flex flex-col justify-between w-full rounded-0.938`}
+            className={`hover:bg-backgroundHover relative bg-primary py-3 px-4 pb-4 flex flex-col justify-between cursor-pointer w-full rounded-0.938`}
             onMouseEnter={() => setHover(true)}
             onMouseLeave={() => setHover(false)}
         >
+            {online === undefined ? (
+                <div class="loader rounded-t-0.938">
+                    <div class="loader__element"></div>
+                </div>
+            ) : (
+                <div
+                    className={`absolute left-0 top-0 rounded-t-0.938 w-full h-1 ${
+                        online === undefined
+                            ? "bg-white"
+                            : online
+                            ? "bg-onlineGreen"
+                            : "bg-offlineRed"
+                    }`}
+                ></div>
+            )}
             <h6 className="font-medium text-white">{name}</h6>
             <p className="text-unclicked text-sm mt-2 h-5 overflow-auto">
                 {description}
             </p>
             <div className="flex mt-4 justify-between">
-                <div className="flex gap-2">
-                    <Locaction location="Brixen, Italy" />
-
-                    <div className="bg-hover py-2 px-4 rounded-0.938 flex items-center gap-2">
-                        <p
-                            className={`text-xs ${
-                                online === true
-                                    ? "text-onlineGreen"
-                                    : online === false
-                                    ? "text-offlineRed"
-                                    : "text-white"
-                            }`}
-                        >
-                            {online === undefined
-                                ? "Waiting"
-                                : online
-                                ? "Online"
-                                : "Offline"}
-                        </p>
-                    </div>
-                </div>
+                <Locaction location="Brixen, Italy" />
                 <h6
                     className={`text-unclicked hover:text-white font-semi text-2xl transition eae-in-out duration-300 cursor-pointer ${
                         !hover ? " opacity-0" : ""
