@@ -159,7 +159,7 @@ router.get("/:workspace/:repo_slug", async (req, res) => {
         const branches = await functions.getBranchData(workspace, repo_slug);       //Returns branches and number of branches
         if(branches.branch_number>=100){
             branches.branch_number=">=100";
-        } 
+        }
         //const last_commits = await functions.getCommitInfo(workspace, repo_slug);   //Returns last 30 commits
         const total_commit_number = await functions.getTotalCommitNumber(workspace, repo_slug);
 
@@ -184,7 +184,6 @@ router.get("/:workspace/:repo_slug", async (req, res) => {
         res.sendStatus(status);
     }
 });
-
 
 //Returns minor information about the repository
 router.get("/:workspace/:repo_slug/menu", async (req, res) => {
@@ -312,11 +311,11 @@ router.get("/:workspace/:repo_slug/chart2", async (req, res) => {
     let i = 0
     let page = 1
     let pagelen = 100
-    
+
     let date = new Date();                      //get date from a week ago to check if commit was within last week
     date.setDate(date.getDate() - 7);
     let dateCheck = Date.parse(date);                   //Date from a week ago and commitDate need to be parsed to the same format to be compared
-    
+
     try{
         while (true) {
             const {data} = await bitbucket
@@ -329,12 +328,12 @@ router.get("/:workspace/:repo_slug/chart2", async (req, res) => {
                     revision: ""
                 });
             let commitData = functions.reduceCommitData(data);
-            
+
             while(i < commitData.commit_number-1){
                 let commitDate = Date.parse(commitData.commits[i].date);
-                
+
                 if (dateCheck < commitDate) {                                                    //check if commit was within last week and adding it to map
-                    if (commitMap.get(commitData.commits[i].author_name) != undefined) {        
+                    if (commitMap.get(commitData.commits[i].author_name) != undefined) {
                         let counter = commitMap.get(commitData.commits[i].author_name);          //change value of commits issued or add user to the commitmap
                         ++counter;
                         commitMap.set(commitData.commits[i].author_name, counter);
@@ -356,8 +355,8 @@ router.get("/:workspace/:repo_slug/chart2", async (req, res) => {
                 let user = Array.from(commitMap.keys());
                 let commitanzahl = Array.from(commitMap.values());
                 return res.send({user: user, commitanzahl: commitanzahl});
-            }  
-        }       
+            }
+        }
     } catch (err) {
         const {error, status, message} = err;
         console.log("ERROR:", error, status, message);
