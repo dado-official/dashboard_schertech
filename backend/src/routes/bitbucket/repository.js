@@ -333,17 +333,23 @@ router.get("/:workspace/:repo_slug/chart2", async (req, res) => {
                 let commitDate = Date.parse(commitData.commits[i].date);
 
                 if (dateCheck < commitDate) {                                                    //check if commit was within last week and adding it to map
-                    if (commitMap.get(commitData.commits[i].author_name) != undefined) {
-                        let counter = commitMap.get(commitData.commits[i].author_name);          //change value of commits issued or add user to the commitmap
+                    if (commitMap.get(commitData.commits[i].author_raw) != undefined) {        
+                        let counter = commitMap.get(commitData.commits[i].author_raw);          //change value of commits issued or add user to the commitmap
                         ++counter;
-                        commitMap.set(commitData.commits[i].author_name, counter);
+                        commitMap.set(commitData.commits[i].author_raw, counter);
                         ++i
                     } else {
-                        commitMap.set(commitData.commits[i].author_name, 1);
+                        commitMap.set(commitData.commits[i].author_raw, 1);
                         ++i
                     }
                 } else {
                     let user = Array.from(commitMap.keys());
+                    i = 0
+                    while(i< user.length){
+                        let temp = user[i].split('<',1)
+                        user[i] = temp
+                        ++i
+                    }
                     let commitanzahl = Array.from(commitMap.values());
                     return res.send({user: user, commitanzahl: commitanzahl});
                 }
@@ -353,6 +359,12 @@ router.get("/:workspace/:repo_slug/chart2", async (req, res) => {
 
             if (commitData.commit_number < 100) {
                 let user = Array.from(commitMap.keys());
+                i = 0
+                while(i< user.length){
+                    let temp = user[i].split('<',1)
+                    user[i] = temp
+                    ++i
+                }
                 let commitanzahl = Array.from(commitMap.values());
                 return res.send({user: user, commitanzahl: commitanzahl});
             }
@@ -363,7 +375,6 @@ router.get("/:workspace/:repo_slug/chart2", async (req, res) => {
         res.sendStatus(err);
     }
 });
-
 //Returns all commits in a Repository
 router.get("/:workspace/:repo_slug/allcommits", async (req, res) => {
     const {workspace, repo_slug} = req.params;
