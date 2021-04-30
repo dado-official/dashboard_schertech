@@ -15,7 +15,6 @@ export default function RepositoryContainer({
     const [hover, setHover] = useState(false);
     const [owner, setOwner] = useState("");
     const [lastEdit, setEdit] = useState("");
-    const [reachable, setReachable] = useState(true)
 
     const history = useHistory();
 
@@ -29,6 +28,7 @@ export default function RepositoryContainer({
                     "/menu"
             )
             .then((resp) => {
+                console.log(resp.data)
                 setOwner(resp.data.owner_name);
                 setEdit(resp.data.last_update_fromnow);
             })
