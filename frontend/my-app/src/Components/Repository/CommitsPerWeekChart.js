@@ -24,7 +24,10 @@ export default function CommitsPerWeekChart({ workspaceReposlug }) {
     }, [workspaceReposlug]);
 
     return (
-        <div className="bg-primary tranition ease-in-out w-full rounded-0.938 px-6 py-4 h-minContent">
+        <div
+            className="bg-primary tranition ease-in-out w-full enter rounded-0.938 px-6 py-4 h-minContent"
+            style={{ animationDelay: "0.6s" }}
+        >
             <div className="flex items-center gap-2 mb-4">
                 <AiOutlineBarChart color="white" size="18" />
                 <h6 className="text-white font-medium">

@@ -29,8 +29,8 @@ export default function CustomContainer(props) {
                 className={`bg-blue w-full h-1 absolute left-0 top-0 rounded-t-0.938 ${
                     props.remainingdays === undefined ||
                     props.remainingdays.includes("ago")
-                        ? " bg-onlineGreen"
-                        : " bg-offlineRed"
+                        ? " bg-offlineRed"
+                        : " bg-onlineGreen"
                 }`}
             ></div>
             <div className="flex justify-between">
@@ -66,8 +66,8 @@ export default function CustomContainer(props) {
                                 props.remainingdays !== undefined &&
                                 props.remainingdays !== null &&
                                 !props.remainingdays.includes("ago")
-                                    ? "text-offlineRed"
-                                    : " text-onlineGreen"
+                                    ? "text-onlineGreen"
+                                    : " text-offlineRed"
                             }`}
                         >
                             {props.remainingdays}

@@ -48,7 +48,7 @@ export default function Repository({ setUrl, props }) {
     return (
         <div className="main mb-8">
             <div className="flex justify-between">
-                <div className="flex gap-4">
+                <div className="flex gap-4 enter">
                     <img
                         src={data.avatar_link}
                         alt="Repo photo"

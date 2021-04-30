@@ -50,7 +50,7 @@ export default function AllServers({ setUrl }) {
                         onClick={() => {
                             setIsPopover((prev) => !prev);
                         }}
-                        className="py-2 px-6 bg-onlineGreen focus:outline-none outline-none rounded-0.625 font-medium text-black"
+                        className="py-2 px-6 bg-onlineGreen hover:bg-greenHover focus:outline-none outline-none rounded-0.625 font-medium text-black"
                     >
                         <div className=" flex items-center gap-2">
                             Add Server

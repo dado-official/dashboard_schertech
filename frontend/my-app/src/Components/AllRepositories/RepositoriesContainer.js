@@ -15,7 +15,7 @@ export default function RepositoryContainer({
     const [hover, setHover] = useState(false);
     const [owner, setOwner] = useState("");
     const [lastEdit, setEdit] = useState("");
-    const [reachable, setReachable] = useState(true)
+    const [reachable, setReachable] = useState(true);
 
     const history = useHistory();
 
@@ -29,10 +29,10 @@ export default function RepositoryContainer({
                     "/menu"
             )
             .then((resp) => {
-                console.log(resp.data)
+                console.log(resp.data);
                 setOwner(resp.data.owner_name);
                 setEdit(resp.data.last_update_fromnow);
-            })
+            });
     }, []);
 
     function removeRepository(e) {
@@ -53,7 +53,7 @@ export default function RepositoryContainer({
 
     return (
         <Link
-            className="bg-primary enter hover:bg-backgroundHover cursor-pointer rounded-0.938 py-3 px-4 w-full"
+            className="bg-primary flex flex-col justify-between enter hover:bg-backgroundHover cursor-pointer rounded-0.938 py-3 px-4 w-full"
             onMouseEnter={() => setHover(true)}
             onMouseLeave={() => setHover(false)}
             to={"/repository/" + id}
@@ -61,9 +61,9 @@ export default function RepositoryContainer({
                 animationDelay: `${0.2 * (index + 1)}s`,
             }}
         >
-            <div className="flex justify-between">
-                <h6 className="text-white ">{name}</h6>
-                <h6 className="text-unclicked">
+            <div className="flex justify-between flex-wrap">
+                <h6 className="text-white break-all">{name}</h6>
+                <h6 className="text-unclicked text-sm">
                     Owner: <span className="text-onlineGreen">{owner}</span>
                 </h6>
             </div>

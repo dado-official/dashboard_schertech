@@ -29,7 +29,10 @@ export default function MostCommitsChart({ workspaceReposlug }) {
     }, [workspaceReposlug]);
 
     return (
-        <div className="bg-primary flex flex-col w-full rounded-0.938 px-6 py-4 duration-500 ease-in transition-all">
+        <div
+            className="bg-primary enter flex flex-col w-full rounded-0.938 px-6 py-4 duration-500 ease-in transition-all"
+            style={{ animationDelay: "0.4s" }}
+        >
             <div className="flex items-center gap-2 mb-4">
                 <AiOutlineBarChart color="white" size="18" />
                 <h6 className="text-white font-medium">

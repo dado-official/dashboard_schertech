@@ -28,7 +28,10 @@ export default function LatestCommits({ workspaceReposlug }) {
     }, [workspaceReposlug]);
 
     return (
-        <div className="bg-primary overflow-auto w-full h-vhheight 2xl:h-full rounded-0.938 px-6 py-4 2xl:mb-8">
+        <div
+            className="bg-primary overflow-auto w-full h-vhheight 2xl:h-auto rounded-0.938 px-6 py-4 2xl:mb-8 enter"
+            style={{ animationDelay: "0.2s" }}
+        >
             <div className="flex gap-2 items-center">
                 <FaHistory color="white" />
                 <h6 className="text-white font-medium">Latest commits</h6>
