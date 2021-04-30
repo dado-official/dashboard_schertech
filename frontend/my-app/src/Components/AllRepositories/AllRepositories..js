@@ -3,11 +3,13 @@ import RepositoriesContaier from "./RepositoriesContainer";
 import axios from "axios";
 import { FaAngleDown } from "react-icons/fa";
 import AddRepository from "./AddRepository";
+import RepositoryNotReachableContainer from "./RepositoryNotReachableContainer";
 
-export default function AllServers({ setUrl, props }) {
+export default function AllRepository({ setUrl, props }) {
     const [data, setData] = useState([]);
     const [isPopover, setIsPopover] = useState(false);
     const [update, setUpdate] = useState(false);
+    const [state, setState] = useState(false)
 
     const addServerRef = useRef();
 
@@ -28,12 +30,35 @@ export default function AllServers({ setUrl, props }) {
         };
     });
 
+
     useEffect(() => {
         setUrl("Repository");
         axios.get("http://localhost:4000/api/repository").then((res) => {
+            console.log(res.data)
             setData(res.data);
         });
     }, [update]);
+
+    /*
+    function checkConnection(workspace, repoSlug){
+        let reach
+        axios.get("http://localhost:4000/api/repository/" + workspace + "/" + repoSlug + "/menu")
+        .then((res) => {
+            reach = true;
+        })    
+        .catch((err) => {
+            console.log(err.response.status)
+            if(err.response.status !== 200){
+                reach = false  
+            }
+            
+        }).then(() => {
+            return reach
+        })        
+        
+    }
+    */
+
 
     return (
         <div className="main">
@@ -67,17 +92,16 @@ export default function AllServers({ setUrl, props }) {
             </div>
             <div className="grid grid-flow-row responsiveGrid gap-8 mt-4">
                 {data != []
-                    ? data.map((element, index) => (
-                          <RepositoriesContaier
-                              name={element.name}
-                              description={element.description}
-                              workspace={element.workspace}
-                              repo_slug={element.repo_slug}
-                              id={element.id}
-                              index={index}
-                              setDel={setUpdate}
-                          />
-                      ))
+                    ? data.map((element) => (
+                        <RepositoriesContaier
+                                        name={element.name}
+                                        description={element.description}
+                                        workspace={element.workspace}
+                                        repo_slug={element.repo_slug}
+                                        id={element.id}
+                                        setDel={setUpdate}
+                                    />
+                        ))
                     : null}
             </div>
         </div>

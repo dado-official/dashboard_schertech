@@ -29,6 +29,7 @@ export default function RepositoryContainer({
                     "/menu"
             )
             .then((resp) => {
+                console.log(resp.data)
                 setOwner(resp.data.owner_name);
                 setEdit(resp.data.last_update_fromnow);
             })

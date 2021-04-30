@@ -351,7 +351,32 @@ router.get("/:workspace/:repo_slug/chart2", async (req, res) => {
                         ++i
                     }
                     let commitanzahl = Array.from(commitMap.values());
-                    return res.send({user: user, commitanzahl: commitanzahl});
+                    i = 0
+                    let j = 0
+                    let tempuser
+                    let tempcommitanzahl = 0
+                    let tempindex = 0
+                    let usersorted = []
+                    let commitanzahlsorted = []
+                    while(j < commitanzahl.length){
+                        while(i < user.length){
+                            if(commitanzahl[i] > tempcommitanzahl){
+                                tempindex = i
+                                tempcommitanzahl = commitanzahl[i]
+                                tempuser = user[i]
+                                ++i
+                            } else {
+                                ++i
+                            }
+                        }
+                        commitanzahl[tempindex] = 0
+                        usersorted[j] = tempuser
+                        commitanzahlsorted[j] = tempcommitanzahl
+                        tempcommitanzahl = 0
+                        i = 0
+                        ++j
+                    }
+                    return res.send({user: usersorted, commitanzahl: commitanzahlsorted});
                 }
             }
             i = 0;
@@ -366,7 +391,7 @@ router.get("/:workspace/:repo_slug/chart2", async (req, res) => {
                     ++i
                 }
                 let commitanzahl = Array.from(commitMap.values());
-                return res.send({user: user, commitanzahl: commitanzahl});
+                return res.send({user: usersorted, commitanzahl: commitanzahlsorted});
             }
         }
     } catch (err) {
