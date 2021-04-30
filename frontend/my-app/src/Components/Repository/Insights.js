@@ -17,6 +17,10 @@ export default function Insights(props) {
                 <p className="  pl-2 ">{props.branches}</p>
             </div>
             <div className="flex flex-row pt-0.938 text-sm">
+                <p className="text-unclicked">Commits:</p>
+                <p className="  pl-2 ">{props.commits}</p>
+            </div>
+            <div className="flex flex-row pt-0.938 text-sm">
                 <p className="text-unclicked">Created on:</p>
                 <p className="  pl-2 ">{props.created_on}</p>
             </div>

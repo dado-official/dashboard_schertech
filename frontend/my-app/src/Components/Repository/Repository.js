@@ -68,7 +68,7 @@ export default function Repository({ setUrl, props }) {
                         </div>
                     </div>
                 </div>
-                <a href={dataOfCommits.link} className=" h-minContent py-2 px-6 bg-onlineGreen focus:outline-none outline-none rounded-0.625 font-medium text-black">
+                <a href={data.link} className=" h-minContent py-2 px-6 bg-onlineGreen focus:outline-none outline-none rounded-0.625 font-medium text-black">
                   Go to Repository</a>
               </div>
               <div className="flex w-full h-32 pb-8">
@@ -86,6 +86,7 @@ export default function Repository({ setUrl, props }) {
                   last_updated_date={data.last_updated_formatted}
                   owner={data.owner_name}
                   branches={data.branch_number}
+                  commits="1"
                 />
                 </div>
                 
