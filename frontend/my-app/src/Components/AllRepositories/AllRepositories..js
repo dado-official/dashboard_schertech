@@ -9,7 +9,7 @@ export default function AllRepository({ setUrl, props }) {
     const [data, setData] = useState([]);
     const [isPopover, setIsPopover] = useState(false);
     const [update, setUpdate] = useState(false);
-    const [state, setState] = useState(false)
+    const [state, setState] = useState(false);
 
     const addServerRef = useRef();
 
@@ -30,11 +30,10 @@ export default function AllRepository({ setUrl, props }) {
         };
     });
 
-
     useEffect(() => {
         setUrl("Repository");
         axios.get("http://localhost:4000/api/repository").then((res) => {
-            console.log(res.data)
+            console.log(res.data);
             setData(res.data);
         });
     }, [update]);
@@ -59,10 +58,9 @@ export default function AllRepository({ setUrl, props }) {
     }
     */
 
-
     return (
         <div className="main">
-            <div className="relative flex justify-between items-baseline enter">
+            <div className="relative flex justify-between items-baseline enter flex-wrap gap-4">
                 <div>
                     <h2 className={`text-white text-2xl font-medium`}>
                         All Repositories
@@ -93,15 +91,15 @@ export default function AllRepository({ setUrl, props }) {
             <div className="grid grid-flow-row responsiveGrid gap-8 mt-4">
                 {data != []
                     ? data.map((element) => (
-                        <RepositoriesContaier
-                                        name={element.name}
-                                        description={element.description}
-                                        workspace={element.workspace}
-                                        repo_slug={element.repo_slug}
-                                        id={element.id}
-                                        setDel={setUpdate}
-                                    />
-                        ))
+                          <RepositoriesContaier
+                              name={element.name}
+                              description={element.description}
+                              workspace={element.workspace}
+                              repo_slug={element.repo_slug}
+                              id={element.id}
+                              setDel={setUpdate}
+                          />
+                      ))
                     : null}
             </div>
         </div>

@@ -67,7 +67,7 @@ export default function Repository({ setUrl }) {
 
     return (
         <div className="pb-8 main">
-            <div className="relative flex justify-between items-baseline enter">
+            <div className="relative flex justify-between items-baseline enter flex-wrap gap-4">
                 <div>
                     <h6 className="text-2xl text-white font-medium">
                         {apiData.title}
