@@ -33,7 +33,6 @@ router.get("/", (req, res) => {
         for (const i in entryIDs) {
             const id = entryIDs[i];
             const res = await axios.get(`http://localhost:${main.port}/api/custom/${id}`);
-
             entries.push({
                 id: id,
                 title: res.data.title,
@@ -42,10 +41,18 @@ router.get("/", (req, res) => {
                 target_value: res.data.target_value,
                 entry_date: res.data.entry_date,
                 remaining_time: res.data.remaining_time,
+                remaining_time_unix: res.data.remaining_time_unix,
                 values_number: res.data.values_number,
                 progress: res.data.progress
             });
         }
+
+        entries.sort((a, b) => {
+            if (a.remaining_time_unix < b.remaining_time_unix) return -1;
+            if (a.remaining_time_unix > b.remaining_time_unix) return 1;
+            return 0;
+        });
+
 
         res.send(entries);
     });
@@ -159,6 +166,7 @@ router.get("/:entry_id", (req, res) => {
         }
 
         let remainingTime;
+        let remainingTimeUnix;
         let progress;
 
         //Checks if there are any values
@@ -167,6 +175,7 @@ router.get("/:entry_id", (req, res) => {
             let lastDate = moment.unix(rows[rows.length - 1].value_date);
             let nextDate = lastDate.add(rows[0].frequency, "days");
             remainingTime = moment(nextDate, "dd:hh:mm").fromNow();
+            remainingTimeUnix = 1 - moment().diff(nextDate, "ms");
 
             //Calculate the progress in percent new / old - 1
             let newValue = rows[rows.length - 1].value;
@@ -182,11 +191,12 @@ router.get("/:entry_id", (req, res) => {
             target_value: rows[0].target_value,
             entry_date: rows[0].entry_date,
             remaining_time: remainingTime,
+            remaining_time_unix: remainingTimeUnix,
             values_number: rows.length,
             progress: Math.round(progress * 100) / 100
         };
 
-        //Removes data from the array, because it has no values
+        //Removes data from the array, if it has no values
         if (!rows[0].value_id) {
             rows = [];
         }
