@@ -58,7 +58,6 @@ router.get("/:hostname", async (req, res) => {
         //Check if the database is online
         connection.ping((err) => {
             let reachable = !err;
-
             res.send({reachable: reachable});
         });
 
