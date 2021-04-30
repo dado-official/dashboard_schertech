@@ -15,7 +15,7 @@ export default function Commit({
 }) {
     return (
         <div className=" overflow-x-auto w-full bg-hover p-3 rounded-0.938 mt-4">
-            <p className="text-white text-sm">{message}</p>
+            <p className="text-white break-all text-sm">{message}</p>
             <div className="flex gap-1 items-center mt-2">
                 <img
                     src={userPicture}
@@ -30,14 +30,14 @@ export default function Commit({
             <div className="mt-1 ">
                 <div className="flex gap-1 items-center">
                     <GoGitCommit color="#94A3BC" size="16" />
-                    <p className="text-unclicked text-xs">{commitID} </p>
+                    <p className="text-unclicked  text-xs">{commitID} </p>
                 </div>
                 <div className="flex gap-1 items-center">
                     <div>
                         <HiHashtag color="#94A3BC" size="16"/>
                     </div>
                     
-                    <p className="text-unclicked text-xs">{hash} </p>
+                    <p className="text-unclicked break-all text-xs">{hash} </p>
                 </div>
             </div>
         </div>

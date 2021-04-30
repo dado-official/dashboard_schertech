@@ -68,7 +68,7 @@ export default function Repository({ setUrl, props }) {
                         </div>
                     </div>
                 </div>
-                <a href={dataOfCommits.link} className="py-2 px-6 bg-onlineGreen focus:outline-none outline-none rounded-0.625 font-medium text-black">
+                <a href={dataOfCommits.link} className=" h-minContent py-2 px-6 bg-onlineGreen focus:outline-none outline-none rounded-0.625 font-medium text-black">
                   Go to Repository</a>
               </div>
               <div className="flex w-full h-32 pb-8">
