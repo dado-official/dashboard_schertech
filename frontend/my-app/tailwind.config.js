@@ -47,6 +47,7 @@ module.exports = {
                 minContent: "min-content",
                 0.875: "0.875rem",
                 navbarWidth: "calc(100% - 4rem)",
+                vhheight: "calc(100vh - 4rem)",
             },
             borderRadius: {
                 0.938: "0.450rem",

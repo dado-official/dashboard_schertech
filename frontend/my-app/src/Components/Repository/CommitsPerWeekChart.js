@@ -3,23 +3,25 @@ import { AiOutlineBarChart } from "react-icons/ai";
 import { Bar } from "react-chartjs-2";
 import axios from "axios";
 
-export default function CommitsPerWeekChart({workspaceReposlug}) {
+export default function CommitsPerWeekChart({ workspaceReposlug }) {
     const [loaded, setLoaded] = useState(false);
-    const [data, setData] = useState([])
+    const [data, setData] = useState([]);
 
     useEffect(() => {
-        if(workspaceReposlug !== undefined){
-            console.log(`http://localhost:4000/api/repository/${workspaceReposlug.workspace}/${workspaceReposlug.repoSlug}/chart1`)    
-            axios.get(`http://localhost:4000/api/repository/${workspaceReposlug.workspace}/${workspaceReposlug.repoSlug}/chart1`).then((res) => {
-            
-            setData(res.data)
-            setLoaded(true)
-            })  
+        if (workspaceReposlug !== undefined) {
+            console.log(
+                `http://localhost:4000/api/repository/${workspaceReposlug.workspace}/${workspaceReposlug.repoSlug}/chart1`
+            );
+            axios
+                .get(
+                    `http://localhost:4000/api/repository/${workspaceReposlug.workspace}/${workspaceReposlug.repoSlug}/chart1`
+                )
+                .then((res) => {
+                    setData(res.data);
+                    setLoaded(true);
+                });
         }
     }, [workspaceReposlug]);
-
-
-
 
     return (
         <div className="bg-primary tranition ease-in-out w-full rounded-0.938 px-6 py-4 h-minContent">
@@ -62,7 +64,7 @@ export default function CommitsPerWeekChart({workspaceReposlug}) {
                             "last week",
                             "two weeks ago",
                             "three weeks ago",
-                            "four weeks ago"
+                            "four weeks ago",
                         ],
                         datasets: [
                             {
@@ -76,7 +78,7 @@ export default function CommitsPerWeekChart({workspaceReposlug}) {
                 />
                 <div
                     className={`absolute transition ease-in duration-300 ?00 top-1/2 left-1/2 centerAbsolute bg-primary flex justify-center items-center w-full h-full ${
-                        loaded ? "opacity-0" : ""
+                        loaded ? "opacity-0 -z-10" : ""
                     }`}
                 >
                     <div class="sk-folding-cube">

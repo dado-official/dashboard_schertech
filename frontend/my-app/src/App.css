@@ -313,3 +313,7 @@ tbody {
         opacity: 100%;
     }
 }
+
+.-z-10 {
+    z-index: -10;
+}
