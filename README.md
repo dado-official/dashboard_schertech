@@ -1,4 +1,4 @@
-# dashboard_shertech
+# dashboard_schertech
 
 
 ## Requirements
