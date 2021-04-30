@@ -29,6 +29,8 @@ repositories to monitor.
 ]
 ````
 
+
+
 ## Add a new repository to the database
 
 `POST /`
@@ -41,6 +43,8 @@ workspace | The name of the workspace
 repo_slug | The name of the repository slug
 name |
 description (optional) | The description of the repository
+
+
 
 ## Update information about the repository
 
@@ -62,6 +66,8 @@ new_repo_slug | The new name of the repository slug
 name |
 description (optional) | The description of the repository
 
+
+
 ## Delete a repository from the database
 
 `DELETE /:workspace/:repo_slug`
@@ -72,6 +78,8 @@ Parameter | Description
 --- | ---
 workspace | The name of the workspace
 repo_slug | The name of the repository slug (name)
+
+
 
 ## Get information about the repository from the database, based on the id
 
@@ -96,6 +104,12 @@ id | The id of the repository from the local database
     } 
 ]
 ````
+
+
+
+# Repositories - Bitbucket API
+
+
 
 ## Get all information about a specific repository
 
