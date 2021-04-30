@@ -3,11 +3,13 @@ import RepositoriesContaier from "./RepositoriesContainer";
 import axios from "axios";
 import { FaAngleDown } from "react-icons/fa";
 import AddRepository from "./AddRepository";
+import RepositoryNotReachableContainer from "./RepositoryNotReachableContainer";
 
 export default function AllServers({ setUrl, props }) {
     const [data, setData] = useState([]);
     const [isPopover, setIsPopover] = useState(false);
     const [update, setUpdate] = useState(false);
+    const [state, setState] = useState(false)
 
     const addServerRef = useRef();
 
@@ -28,12 +30,31 @@ export default function AllServers({ setUrl, props }) {
         };
     });
 
+
     useEffect(() => {
         setUrl("Repository");
         axios.get("http://localhost:4000/api/repository").then((res) => {
             setData(res.data);
         });
     }, [update]);
+
+    async function checkConnection(workspace, repoSlug){
+        let reach
+        axios.get("http://localhost:4000/api/repository/" + workspace + "/" + repoSlug + "/menu")
+        .then((res) => {
+            reach = true;
+        })    
+        .catch((err) => {
+            console.log(err.response.status)
+            if(err.response.status !== 200){
+                reach = false  
+            }
+            
+        }).then(() => {
+            return reach
+        })        
+        
+    }
 
     return (
         <div className="main">
@@ -67,16 +88,29 @@ export default function AllServers({ setUrl, props }) {
             </div>
             <div className="grid grid-flow-row responsiveGrid gap-8 mt-4">
                 {data != []
-                    ? data.map((element) => (
-                          <RepositoriesContaier
-                              name={element.name}
-                              description={element.description}
-                              workspace={element.workspace}
-                              repo_slug={element.repo_slug}
-                              id={element.id}
-                              setDel={setUpdate}
-                          />
-                      ))
+                    ? data.map((element) => {
+                        if(await checkConnection(element.workspace, element.repo_slug)){
+                            console.log("reachable")
+                            return <RepositoriesContaier
+                                        name={element.name}
+                                        description={element.description}
+                                        workspace={element.workspace}
+                                        repo_slug={element.repo_slug}
+                                        id={element.id}
+                                        setDel={setUpdate}
+                                    />
+                        } else {
+                            console.log("unreachable")
+                            return <RepositoryNotReachableContainer
+                                        name={element.name}
+                                        description={element.description}
+                                        workspace={element.workspace}
+                                        repo_slug={element.repo_slug}
+                                        id={element.id}
+                                        setDel={setUpdate}
+                                    />
+                        }
+                    })
                     : null}
             </div>
         </div>
