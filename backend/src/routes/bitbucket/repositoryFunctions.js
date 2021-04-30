@@ -1,7 +1,5 @@
 const bitbucket = require("./bitbucket");
 const moment = require("moment");
-moment.locale("en-GB");
-
 
 //Returns information about the commits
 const getCommitInfo = async (workspace, repo_slug) => {
@@ -25,6 +23,7 @@ const getCommitInfo = async (workspace, repo_slug) => {
 
 //Reduces the commit data you get from the Bitbucket api
 const reduceCommitData = (data) => {
+    moment.locale("en-GB");
     let commits = [];
 
     data.values.forEach((commit) => {
@@ -53,7 +52,7 @@ const reduceCommitData = (data) => {
 const getBranchData = async (workspace, repo_slug) => {
     const {data} = await bitbucket
         .repositories
-        .listRefs({workspace: workspace, repo_slug: repo_slug});
+        .listRefs({workspace: workspace, repo_slug: repo_slug, pagelen: 100});
 
     const branches = [];
 
@@ -159,7 +158,7 @@ const getTotalCommitNumber = async (workspace, repo_slug) => {
     let page = 1;
     let quantity = 0;
     try {
-        while (true) {
+        while (page<11) {
             const {data} = await bitbucket
                 .repositories
                 .listCommits({workspace: workspace, repo_slug: repo_slug, page: page, pagelen: pagelen, revision: ""});
@@ -173,6 +172,7 @@ const getTotalCommitNumber = async (workspace, repo_slug) => {
                 return ({commit_number: quantity});
             }
         }
+        return ({commit_number: ">=1000"});
     } catch (err) {
         const {error, status, message} = err;
         console.log("ERROR:", error, status, message);

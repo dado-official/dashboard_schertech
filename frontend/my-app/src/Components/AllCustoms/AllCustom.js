@@ -41,7 +41,7 @@ export default function AllCustom({ setUrl }) {
 
     return (
         <div className="main">
-            <div className="relative flex justify-between items-baseline">
+            <div className="relative enter flex justify-between items-baseline">
                 <div>
                     <h2 className={`text-white text-2xl font-medium`}>
                         Custom
@@ -66,7 +66,7 @@ export default function AllCustom({ setUrl }) {
                 </div>
             </div>
             <div className="grid grid-flow-row gap-8 mt-4 responsiveGrid">
-                {data.map((element) => (
+                {data.map((element, index) => (
                     <CustomContainer
                         key={element.id}
                         name={element.title}
@@ -75,6 +75,7 @@ export default function AllCustom({ setUrl }) {
                         id={element.id}
                         chart={element.progress}
                         remainingdays={element.remaining_time}
+                        index={index}
                     />
                 ))}
             </div>

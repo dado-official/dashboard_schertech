@@ -40,7 +40,10 @@ export default function About({
     }
 
     return (
-        <div className="text-white rounded-0.938 bg-primary w-full px-6 py-4">
+        <div
+            className="text-white enter rounded-0.938 bg-primary w-full px-6 py-4"
+            style={{ animationDelay: "0.8s" }}
+        >
             <div className="flex gap-2 items-center ">
                 <AiOutlineInfoCircle color="white" size="18" />
                 <p className="font-medium">About</p>

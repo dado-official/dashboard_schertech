@@ -38,7 +38,7 @@ export default function AllServers({ setUrl }) {
 
     return (
         <div className="main">
-            <div className="relative flex justify-between items-baseline">
+            <div className="relative flex justify-between enter items-baseline">
                 <div>
                     <h2 className={`text-white text-2xl font-medium`}>
                         Servers
@@ -66,13 +66,14 @@ export default function AllServers({ setUrl }) {
             </div>
             <div className="grid grid-flow-row gap-8 mt-4 responsiveGrid">
                 {data.length > 0
-                    ? data.map((element) => (
+                    ? data.map((element, index) => (
                           <ServerContainer
                               name={element.hostname}
                               servername={element.server_name}
                               location={element.location}
                               setDel={setDel}
                               description={element.description}
+                              index={index}
                           />
                       ))
                     : null}
