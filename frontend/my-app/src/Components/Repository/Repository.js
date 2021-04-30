@@ -86,7 +86,7 @@ export default function Repository({ setUrl, props }) {
                   last_updated_date={data.last_updated_formatted}
                   owner={data.owner_name}
                   branches={data.branch_number}
-                  commits="1"
+                  commits={data.total_commit_number}
                 />
                 </div>
                 
