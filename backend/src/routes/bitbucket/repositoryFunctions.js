@@ -158,7 +158,7 @@ const getTotalCommitNumber = async (workspace, repo_slug) => {
     let page = 1;
     let quantity = 0;
     try {
-        while (page<11) {
+        while (page < 11) {
             const {data} = await bitbucket
                 .repositories
                 .listCommits({workspace: workspace, repo_slug: repo_slug, page: page, pagelen: pagelen, revision: ""});
