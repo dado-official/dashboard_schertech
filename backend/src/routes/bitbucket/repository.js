@@ -400,6 +400,7 @@ router.get("/:workspace/:repo_slug/chart2", async (req, res) => {
         res.sendStatus(err);
     }
 });
+
 //Returns all commits in a Repository
 router.get("/:workspace/:repo_slug/allcommits", async (req, res) => {
     const {workspace, repo_slug} = req.params;
