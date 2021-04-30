@@ -38,7 +38,7 @@ export default function AllServers({ setUrl, props }) {
         });
     }, [update]);
 
-    async function checkConnection(workspace, repoSlug){
+    function checkConnection(workspace, repoSlug){
         let reach
         axios.get("http://localhost:4000/api/repository/" + workspace + "/" + repoSlug + "/menu")
         .then((res) => {
@@ -89,7 +89,7 @@ export default function AllServers({ setUrl, props }) {
             <div className="grid grid-flow-row responsiveGrid gap-8 mt-4">
                 {data != []
                     ? data.map((element) => {
-                        if(await checkConnection(element.workspace, element.repo_slug)){
+                        if(checkConnection(element.workspace, element.repo_slug)){
                             console.log("reachable")
                             return <RepositoriesContaier
                                         name={element.name}
