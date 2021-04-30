@@ -3,7 +3,7 @@ import { BiStats } from "react-icons/bi";
 
 export default function Insights(props) {
     return (
-        <div className="text-white rounded-0.938 bg-primary w-full px-6 py-4">
+        <div className="text-white rounded-0.938 bg-primary w-full px-6 py-4 mb-8 xl:mb-0">
             <div className="flex flex-row content-evenly items-center ">
                 <BiStats size="18"></BiStats>
                 <p className="pl-2 font-medium">Insights</p>
