@@ -47,8 +47,8 @@ router.get("/:hostname", async (req, res) => {
 
         const {db_username, db_password, db_port} = row;
 
+        //Create connection to db
         const connection = await mysql.createConnection({
-            //create connection to db
             host: hostname,
             user: db_username,
             password: db_password,
