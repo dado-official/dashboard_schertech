@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Locaction from "./Location";
+import Location from "./Location";
 import axios from "axios";
 
 export default function ServerContainer({
@@ -78,7 +78,7 @@ export default function ServerContainer({
                 {description}
             </p>
             <div className="flex mt-4 justify-between">
-                {location === null ? null : <Locaction location={location} />}
+                {location === null ? null : <Location location={location} />}
                 <h6
                     className={`text-unclicked hover:text-white font-semi text-2xl transition eae-in-out duration-300 cursor-pointer ${
                         !hover ? " opacity-0" : ""

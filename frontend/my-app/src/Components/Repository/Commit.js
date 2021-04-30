@@ -23,7 +23,7 @@ export default function Commit({
                     className="h-0.875 w-0.875 rounded-3px"
                 />
                 <p className="text-unclicked text-xs">
-                    <span className="text-white">{username}</span> commitet{" "}
+                    <span className="text-white">{username}</span> committed{" "}
                     {lastChange}
                 </p>
             </div>
