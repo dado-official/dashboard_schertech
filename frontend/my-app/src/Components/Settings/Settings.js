@@ -21,8 +21,8 @@ export default function Settings({ setUrl }) {
             setInitialUsername(res.data.BITBUCKET_USERNAME);
             setPassword(res.data.BITBUCKET_APP_PASSWORD);
             setInitialPassword(res.data.BITBUCKET_APP_PASSWORD);
-            setPath(res.data["DB_PATH "]);
-            setInitialPath(res.data["DB_PATH "]);
+            setPath(res.data["DB_PATH"]);
+            setInitialPath(res.data["DB_PATH"]);
         });
     }, []);
 
