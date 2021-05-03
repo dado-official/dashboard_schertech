@@ -4,7 +4,10 @@ import { HiTrendingDown } from "react-icons/hi";
 
 export default function Progress({ isPositive, percentage }) {
     return (
-        <div className="text-white rounded-0.938 bg-primary w-full px-6 py-4 h-minContent pb-6">
+        <div
+            className="text-white enter rounded-0.938 bg-primary w-full px-6 py-4 h-minContent pb-6"
+            style={{ animationDelay: "0.6s" }}
+        >
             <div className="flex items-center gap-2">
                 {isPositive ? (
                     <HiTrendingUp color="white" size="20" />

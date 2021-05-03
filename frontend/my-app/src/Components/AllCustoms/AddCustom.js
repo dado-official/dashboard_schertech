@@ -8,7 +8,7 @@ import axios from "axios";
 const AddCustom = ({ setIsPopover, isPopover, setUpdate }) => {
     const [customName, setCustomName] = useState("");
     const [interval, setInterval] = useState(1);
-    const [desciption, setDescription] = useState("");
+    const [description, setDescription] = useState("");
     const [wishValue, setWishValue] = useState();
     const [error, setError] = useState("");
 
@@ -28,15 +28,15 @@ const AddCustom = ({ setIsPopover, isPopover, setUpdate }) => {
         } else if (!isNumeric(interval)) {
             setError("Enter a frequency");
         } else if (!isNumeric(interval)) {
-            setError("Fruequency should be a number");
+            setError("Frequency should be a number");
         } else {
             console.log("Custom Name: ", customName);
             console.log("Interval: ", interval);
-            console.log("Description: ", desciption);
+            console.log("Description: ", description);
             axios
                 .post("http://localhost:4000/api/custom", {
                     title: customName,
-                    description: desciption,
+                    description: description,
                     frequency: interval,
                     target_value: wishValue,
                 })
@@ -52,7 +52,7 @@ const AddCustom = ({ setIsPopover, isPopover, setUpdate }) => {
     return (
         <div
             className={`bg-input rounded-0.938 w-26 p-8 z-10 absolute right-0 top-14 border-onlineGreen border-4 ${
-                isPopover ? "" : "hidden"
+                isPopover ? "popover" : "popoverLeave"
             }`}
         >
             <p className="text-xl text-white mb-5">Add Custom</p>
@@ -71,7 +71,7 @@ const AddCustom = ({ setIsPopover, isPopover, setUpdate }) => {
                 {interval}
             </Input>
             <p className=" text-white text-sm ">Description</p>
-            <TextArea state={desciption} setState={setDescription}></TextArea>
+            <TextArea state={description} setState={setDescription}></TextArea>
             <p className="text-offlineRed mb-5">{error}</p>
             <button
                 onClick={subm}

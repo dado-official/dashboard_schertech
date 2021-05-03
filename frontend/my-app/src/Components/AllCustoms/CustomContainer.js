@@ -18,14 +18,12 @@ export default function CustomContainer(props) {
     return (
         <Link
             to={`custom/${props.id}`}
-            className={`bg-primary hover:bg-backgroundHover tranition ease-in-out cursor-pointer duration-300 rounded-0.938 flex flex-col justify-between py-3 px-4 w-full border-l-4 ${
-                props.remainingdays === undefined ||
-                props.remainingdays.includes("ago")
-                    ? " border-onlineGreen"
-                    : " border-offlineRed"
-            }`}
+            className={`bg-primary enter hover:bg-backgroundHover relative cursor-pointer rounded-0.938 flex flex-col justify-between p-4 w-full `}
             onMouseEnter={() => setHover(true)}
             onMouseLeave={() => setHover(false)}
+            style={{
+                animationDelay: `${0.2 * (props.index + 1)}s`,
+            }}
         >
             <div className="flex justify-between">
                 <h6 className="text-white ">{props.name}</h6>
@@ -41,7 +39,7 @@ export default function CustomContainer(props) {
                 </div>
             </div>
 
-            <p className="text-unclicked text-sm mt-2 h-10 overflow-auto">
+            <p className="text-unclicked text-sm mt-2 h-5 overflow-auto">
                 {props.description}
             </p>
 
@@ -60,8 +58,8 @@ export default function CustomContainer(props) {
                                 props.remainingdays !== undefined &&
                                 props.remainingdays !== null &&
                                 !props.remainingdays.includes("ago")
-                                    ? "text-offlineRed"
-                                    : " text-onlineGreen"
+                                    ? "text-onlineGreen"
+                                    : " text-offlineRed"
                             }`}
                         >
                             {props.remainingdays}

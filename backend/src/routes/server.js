@@ -42,13 +42,13 @@ router.get("/:hostname", async (req, res) => {
 
         if (!row) {
             console.log("Couldn't find any data");
-            return res.sendStatus(400);
+            return res.sendStatus(204);
         }
 
         const {db_username, db_password, db_port} = row;
 
+        //Create connection to db
         const connection = await mysql.createConnection({
-            //create connection to db
             host: hostname,
             user: db_username,
             password: db_password,
@@ -58,7 +58,6 @@ router.get("/:hostname", async (req, res) => {
         //Check if the database is online
         connection.ping((err) => {
             let reachable = !err;
-
             res.send({reachable: reachable});
         });
 

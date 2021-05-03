@@ -1,39 +1,47 @@
 import React, { useState } from "react";
 import { BiGitBranch } from "react-icons/bi";
 import { GoGitCommit } from "react-icons/go";
+import { HiHashtag } from "react-icons/hi";
 
 export default function Commit({
     message,
-    messageLong,
     username,
+    usernameRaw,
     userPicture,
-    branch,
+    hash,
     commitID,
     date,
+    lastChange,
+    index,
 }) {
     return (
-        <div className="w-full bg-hover px-4 py-3 rounded-0.938 mt-4">
-            <p className="text-white text-sm">{message}</p>
-            <p className="text-unclicked text-xs">{messageLong}</p>
-            <div className="flex gap-1 items-center mt-2">
+        <div
+            className=" overflow-x-auto w-full bg-hover p-3 rounded-0.938 mt-4 enter"
+            style={{ animationDelay: `${index * 0.1}s` }}
+        >
+            <p className="text-white break-all text-sm">{message}</p>
+            <div className="flex gap-1 mt-2">
                 <img
                     src={userPicture}
                     alt="profile picture"
                     className="h-0.875 w-0.875 rounded-3px"
                 />
                 <p className="text-unclicked text-xs">
-                    <span className="text-white">{username}</span> commitet{" "}
-                    {date}
+                    <span className="text-white">{username}</span> committed{" "}
+                    {lastChange}
                 </p>
             </div>
-            <div className="mt-1 flex justify-between">
-                <div className="flex gap-1 items-center">
-                    <BiGitBranch color="#94A3BC" size="14" />
-                    <p className="text-unclicked text-xs">{branch} </p>
-                </div>
-                <div className="flex gap-1 items-center">
+            <div className="mt-1 ">
+                <div className="flex gap-1">
                     <GoGitCommit color="#94A3BC" size="16" />
-                    <p className="text-unclicked text-xs">{branch} </p>
+                    <p className="text-unclicked  text-xs">{commitID} </p>
+                </div>
+                <div className="flex gap-1">
+                    <div>
+                        <HiHashtag color="#94A3BC" size="16" />
+                    </div>
+
+                    <p className="text-unclicked break-all text-xs">{hash} </p>
                 </div>
             </div>
         </div>

@@ -68,7 +68,10 @@ export default function AddData({
     }
 
     return (
-        <div className="text-white rounded-0.938 bg-primary w-full px-6 py-4 h-minContent pb-6">
+        <div
+            className="text-white enter rounded-0.938 bg-primary w-full px-6 py-4 h-minContent pb-6"
+            style={{ animationDelay: "0.4s" }}
+        >
             <Warning
                 isOpen={openWarning}
                 setIsOpen={setOpenWarning}

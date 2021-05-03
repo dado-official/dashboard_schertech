@@ -37,7 +37,7 @@ const AddRepository = ({ setIsPopover, isPopover, setUpdate }) => {
     return (
         <div
             className={`bg-input rounded-0.938 w-26 p-8 z-10 absolute right-0 top-14 border-onlineGreen border-4 ${
-                isPopover ? "" : "hidden"
+                isPopover ? "popover" : "popoverLeave"
             }`}
         >
             <p className="text-white mb-5 text-xl">Add Repository</p>

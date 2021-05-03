@@ -4,14 +4,14 @@ import TextArea from "../Shared/TextArea";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 
-const AddServer = ({ setIsPopover, isPopover }) => {
+const AddServer = ({ setIsPopover, isPopover, setUpdate }) => {
     const [serverName, setServerName] = useState("");
     const [location, setLocation] = useState("");
     const [ipAddress, setIpAddress] = useState("");
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const [desciption, setDescription] = useState("");
-    const [port, setPort] = useState("3006");
+    const [description, setDescription] = useState("");
+    const [port, setPort] = useState("3306");
     const [error, setError] = useState("");
 
     const history = useHistory();
@@ -22,7 +22,7 @@ const AddServer = ({ setIsPopover, isPopover }) => {
         console.log("IP Address: ", ipAddress);
         console.log("username: ", username);
         console.log("password: ", password);
-        console.log("Description: ", desciption);
+        console.log("Description: ", description);
         if (!/\S/.test(serverName)) {
             setError("Enter a server name");
         } else if (!/\S/.test(ipAddress)) {
@@ -39,7 +39,7 @@ const AddServer = ({ setIsPopover, isPopover }) => {
                 .post("http://localhost:4000/api/server", {
                     server_name: serverName,
                     hostname: ipAddress,
-                    description: desciption,
+                    description: description,
                     db_password: password,
                     db_username: username,
                     location: location,
@@ -47,7 +47,7 @@ const AddServer = ({ setIsPopover, isPopover }) => {
                 })
                 .then((res) => {
                     console.log(res.data);
-                    history.push("/server");
+                    setUpdate((prev) => !prev);
                 });
         }
     }
@@ -59,7 +59,7 @@ const AddServer = ({ setIsPopover, isPopover }) => {
     return (
         <div
             className={`bg-input rounded-0.938 w-26 p-8 z-10 absolute right-0 top-14 border-onlineGreen border-4 ${
-                isPopover ? "" : "hidden"
+                isPopover ? "popover" : "popoverLeave"
             }`}
         >
             <p className="text-white mb-5 text-xl">Add Server</p>
@@ -88,7 +88,7 @@ const AddServer = ({ setIsPopover, isPopover }) => {
             </div>
 
             <p className=" text-white text-sm">Description</p>
-            <TextArea state={desciption} setState={setDescription}></TextArea>
+            <TextArea state={description} setState={setDescription}></TextArea>
 
             <p className="text-offlineRed mb-5">{error}</p>
 

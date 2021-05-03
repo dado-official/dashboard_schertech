@@ -19,7 +19,7 @@ export default function Edit({
     }, [show]);
     return (
         <div
-            className={`h-full absolute top-0 left-0 bg-primary w-full rounded-0.938 p-6 ${
+            className={`h-full flex flex-col absolute top-0 left-0 bg-primary w-full rounded-0.938 p-6 ${
                 !show ? "hidden" : ""
             }`}
         >
@@ -27,7 +27,7 @@ export default function Edit({
                 <MdEdit color="white" size={18} />
                 <p className="font-medium text-white">Edit Data</p>
             </div>
-            <div className="overflow-auto h-5/6">
+            <div className="overflow-auto flex-1">
                 <table className="w-full">
                     <thead className="text-white text-left">
                         <tr>

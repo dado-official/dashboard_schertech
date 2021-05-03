@@ -13,8 +13,8 @@ export default function Warning({
             }`}
         >
             <p className="text-white mb-4 text-center">
-                According to your frequency your next entry would be in{" "}
-                {waitTime}. Would you still like to add the Data?
+                According to your frequency your next entry would be {waitTime}.
+                Would you still like to add the Data?
             </p>
             <div className="flex gap-4">
                 <button

@@ -38,7 +38,7 @@ export default function AllServers({ setUrl }) {
 
     return (
         <div className="main">
-            <div className="relative flex justify-between items-baseline">
+            <div className="relative flex justify-between enter items-baseline flex-wrap gap-4">
                 <div>
                     <h2 className={`text-white text-2xl font-medium`}>
                         Servers
@@ -50,7 +50,7 @@ export default function AllServers({ setUrl }) {
                         onClick={() => {
                             setIsPopover((prev) => !prev);
                         }}
-                        className="py-2 px-6 bg-onlineGreen focus:outline-none outline-none rounded-0.625 font-medium text-black"
+                        className="py-2 px-6 bg-onlineGreen hover:bg-greenHover focus:outline-none outline-none rounded-0.625 font-medium text-black"
                     >
                         <div className=" flex items-center gap-2">
                             Add Server
@@ -60,16 +60,20 @@ export default function AllServers({ setUrl }) {
                     <AddServer
                         setIsPopover={setIsPopover}
                         isPopover={isPopover}
+                        setUpdate={setDel}
                     />
                 </div>
             </div>
             <div className="grid grid-flow-row gap-8 mt-4 responsiveGrid">
                 {data.length > 0
-                    ? data.map((element) => (
+                    ? data.map((element, index) => (
                           <ServerContainer
                               name={element.hostname}
+                              servername={element.server_name}
+                              location={element.location}
                               setDel={setDel}
                               description={element.description}
+                              index={index}
                           />
                       ))
                     : null}

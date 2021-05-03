@@ -1,7 +1,6 @@
 const router = require("express").Router();
 const axios = require("axios").default;
 const moment = require("moment");
-moment.locale("en");
 
 const db = require("@database/db");
 const main = require("../app");
@@ -10,31 +9,30 @@ const main = require("../app");
 //Returns a list of all the custom entries
 router.get("/", (req, res) => {
     let sql = `
-        SELECT DISTINCT id
+        SELECT DISTINCT entry_id
         FROM custom_entries
-        ORDER BY id`;
+        ORDER BY entry_id`;
 
     db.all(sql, async (err, rows) => {
         if (err) {
             console.log(err);
-            return res.send(400);
+            return res.sendStatus(400);
         }
 
         if (rows.length === 0) {
             console.log("Result is empty");
-            return res.send(204);
+            return res.sendStatus(204);
         }
 
         let entryIDs = [];
         rows.forEach((row) => {
-            entryIDs.push(row.id);
+            entryIDs.push(row.entry_id);
         });
 
         let entries = [];
         for (const i in entryIDs) {
             const id = entryIDs[i];
             const res = await axios.get(`http://localhost:${main.port}/api/custom/${id}`);
-
             entries.push({
                 id: id,
                 title: res.data.title,
@@ -43,10 +41,18 @@ router.get("/", (req, res) => {
                 target_value: res.data.target_value,
                 entry_date: res.data.entry_date,
                 remaining_time: res.data.remaining_time,
+                remaining_time_unix: res.data.remaining_time_unix,
                 values_number: res.data.values_number,
                 progress: res.data.progress
             });
         }
+
+        entries.sort((a, b) => {
+            if (a.remaining_time_unix < b.remaining_time_unix) return -1;
+            if (a.remaining_time_unix > b.remaining_time_unix) return 1;
+            return 0;
+        });
+
 
         res.send(entries);
     });
@@ -54,6 +60,7 @@ router.get("/", (req, res) => {
 
 //Adds a new entry
 router.post("/", (req, res) => {
+    moment.locale("en_GB");
     const {title, description, frequency, target_value} = req.body;
     let sql = `
         INSERT
@@ -95,7 +102,7 @@ router.put("/:id", (req, res) => {
         sql += "target_value = ?, ";
         values.push(target_value);
     }
-    sql += "WHERE id = ?;";
+    sql += "WHERE entry_id = ?;";
     values.push(id);
 
     //Invalid SQL syntax
@@ -123,7 +130,7 @@ router.delete("/:id", (req, res) => {
     let sql = `
         DELETE
         FROM custom_entries
-        WHERE id = ? `;
+        WHERE entry_id = ? `;
 
     db.run(sql, [id], (err) => {
         if (err) {
@@ -135,16 +142,16 @@ router.delete("/:id", (req, res) => {
     });
 });
 
-
 //Returns all the values from a specific entry and other information
 router.get("/:entry_id", (req, res) => {
+    moment.locale("en_GB");
     const {entry_id} = req.params;
     let sql = `
         SELECT *
         FROM custom_entries
         LEFT JOIN custom_values
-        ON custom_values.entry_id = custom_entries.id
-        WHERE custom_entries.id = ?
+        ON custom_values.entry_id = custom_entries.entry_id
+        WHERE custom_entries.entry_id = ?
         ORDER BY value_id`;
 
     db.all(sql, [entry_id], (err, rows) => {
@@ -159,6 +166,7 @@ router.get("/:entry_id", (req, res) => {
         }
 
         let remainingTime;
+        let remainingTimeUnix;
         let progress;
 
         //Checks if there are any values
@@ -167,6 +175,7 @@ router.get("/:entry_id", (req, res) => {
             let lastDate = moment.unix(rows[rows.length - 1].value_date);
             let nextDate = lastDate.add(rows[0].frequency, "days");
             remainingTime = moment(nextDate, "dd:hh:mm").fromNow();
+            remainingTimeUnix = 1 - moment().diff(nextDate, "ms");
 
             //Calculate the progress in percent new / old - 1
             let newValue = rows[rows.length - 1].value;
@@ -182,11 +191,12 @@ router.get("/:entry_id", (req, res) => {
             target_value: rows[0].target_value,
             entry_date: rows[0].entry_date,
             remaining_time: remainingTime,
+            remaining_time_unix: remainingTimeUnix,
             values_number: rows.length,
             progress: Math.round(progress * 100) / 100
         };
 
-        //Removes data from the array, because it has no values
+        //Removes data from the array, if it has no values
         if (!rows[0].value_id) {
             rows = [];
         }
@@ -216,6 +226,7 @@ router.get("/:entry_id/:value_id", (req, res) => {
 
 //Adds a new value to a specific entry
 router.post("/:entry_id", (req, res) => {
+    moment.locale("en_GB");
     const {entry_id} = req.params;
     const {value} = req.body;
     let sql = `
@@ -253,7 +264,6 @@ router.put("/:entry_id/:value_id", (req, res) => {
 
     res.sendStatus(200);
 });
-
 
 //Deletes a specific value from a specific entry
 router.delete("/:entry_id/:value_id", (req, res) => {

@@ -1,4 +1,4 @@
-# dashboard_shertech
+# dashboard_schertech
 
 
 ## Requirements
@@ -19,6 +19,15 @@ npm start
 cd frontend/my-app
 npm start
 ````
+
+
+### Environment variables: Backend
+Variable | Description
+--- | ---
+BITBUCKET_USERNAME | Your bitbucket username
+BITBUCKET_APP_PASSWORD | Your bitbucket app password
+PORT (optional) | Alternate path for the backend
+DB_PATH (optional) | Alternate path for the database
 
 
 
