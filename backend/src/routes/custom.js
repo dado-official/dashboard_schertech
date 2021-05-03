@@ -201,6 +201,12 @@ router.get("/:entry_id", (req, res) => {
             rows = [];
         }
 
+        rows.sort((a, b) => {
+            if (a.value_date < b.value_date) return -1;
+            if (a.value_date > b.value_date) return 1;
+            return 0;
+        });
+
         res.send({...entryInfo, data: rows});
     });
 });
@@ -263,8 +269,8 @@ router.put("/:entry_id/:value_id", (req, res) => {
         values.push(value_date);
     }
     sql += "WHERE entry_id = ? AND value_id = ? ";
-    values.push(entry_id)
-    values.push(value_id)
+    values.push(entry_id);
+    values.push(value_id);
 
     //Invalid SQL syntax
     if (values.length <= 2) {
