@@ -90,7 +90,7 @@ export default function AllRepository({ setUrl, props }) {
             </div>
             <div className="grid grid-flow-row responsiveGrid gap-8 mt-4">
                 {data != []
-                    ? data.map((element) => (
+                    ? data.map((element, index) => (
                           <RepositoriesContaier
                               name={element.name}
                               description={element.description}
@@ -98,6 +98,7 @@ export default function AllRepository({ setUrl, props }) {
                               repo_slug={element.repo_slug}
                               id={element.id}
                               setDel={setUpdate}
+                              index={index}
                           />
                       ))
                     : null}

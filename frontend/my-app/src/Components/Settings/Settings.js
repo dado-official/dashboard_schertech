@@ -103,7 +103,9 @@ export default function Settings({ setUrl }) {
                                 onClick={showPasswordHandler}
                             />
                         )}
-                        <p className=" text-unclicked text-sm">Show Password</p>
+                        <p className=" text-unclicked text-sm">
+                            {showPassword ? "Hide" : "Show"} Password
+                        </p>
                     </div>
                 </div>
                 <button
