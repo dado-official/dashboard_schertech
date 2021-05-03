@@ -12,6 +12,7 @@
         "@testing-library/user-event": "^12.8.3",
         "axios": "^0.21.1",
         "chart.js": "^2.9.4",
+        "moment": "^2.29.1",
         "nivo": "^0.31.0",
         "npm-install-all": "^1.1.21",
         "popper.js": "^1.16.1",

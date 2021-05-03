@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { MdSentimentDissatisfied } from "react-icons/md";
 import Cancel from "./Cancel";
+import moment from "moment";
 
 export default function TableElement({
     date,
@@ -13,6 +14,7 @@ export default function TableElement({
     setValue,
 }) {
     const [valueState, setValueState] = useState(value);
+    const [dateState, setDateState] = useState(date);
     const [openCancel, setOpenCancel] = useState(false);
     const [error, setError] = useState("");
 
@@ -27,15 +29,29 @@ export default function TableElement({
 
     function updateHandler() {
         if (/\S/.test(valueState) && isNumeric(valueState)) {
-            setError("");
-            axios
-                .put(`http://localhost:4000/api/custom/${entryId}/${id}`, {
-                    value: valueState,
-                })
-                .then((res) => {
-                    console.log(res.data);
-                    setUpdate((prev) => !prev);
-                });
+            if (!moment(dateState, "DD/MM/YYYY", true).isValid()) {
+                setError("Date is invalid");
+            } else {
+                setError("");
+                console.log(
+                    moment(dateState, "DD/MM/YYYY").utcOffset("+0000").format()
+                );
+                console.log();
+                axios
+                    .put(`http://localhost:4000/api/custom/${entryId}/${id}`, {
+                        value: valueState,
+                        value_date:
+                            Date.parse(
+                                moment(dateState, "DD/MM/YYYY")
+                                    .utcOffset("+0000")
+                                    .format()
+                            ) / 1000,
+                    })
+                    .then((res) => {
+                        console.log(res.data);
+                        setUpdate((prev) => !prev);
+                    });
+            }
         } else {
             setError("Invalid input");
         }
@@ -48,14 +64,19 @@ export default function TableElement({
     return (
         <tr>
             <td>
-                <p>{date}</p>
+                <input
+                    type="text"
+                    onChange={(e) => setDateState(e.target.value)}
+                    value={dateState}
+                    className="text-sm transition duration-200 ease-in-out border-onlineGreen outline-none py-2 px-3 text-white bg-input w-full rounded-0.625 focus:shadow-focusAdd"
+                ></input>
             </td>
             <td>
                 <input
                     type="text"
                     onChange={(e) => setValueState(e.target.value)}
                     value={valueState}
-                    className="pl-4 text-sm transition duration-200 ease-in-out border-onlineGreen outline-none py-2 px-3 text-white bg-input w-full rounded-0.625 focus:shadow-focusAdd"
+                    className="text-sm transition duration-200 ease-in-out border-onlineGreen outline-none py-2 px-3 text-white bg-input w-full rounded-0.625 focus:shadow-focusAdd"
                 ></input>
             </td>
             <td className="w-40">
