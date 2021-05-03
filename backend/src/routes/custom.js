@@ -106,7 +106,7 @@ router.put("/:id", (req, res) => {
     values.push(id);
 
     //Invalid SQL syntax
-    if (values.length >= 1) {
+    if (values.length <= 1) {
         return res.sendStatus(400);
     }
 
@@ -149,8 +149,8 @@ router.get("/:entry_id", (req, res) => {
     let sql = `
         SELECT *
         FROM custom_entries
-        LEFT JOIN custom_values
-        ON custom_values.entry_id = custom_entries.entry_id
+                 LEFT JOIN custom_values
+                           ON custom_values.entry_id = custom_entries.entry_id
         WHERE custom_entries.entry_id = ?
         ORDER BY value_id`;
 
@@ -248,14 +248,34 @@ router.post("/:entry_id", (req, res) => {
 //Updates a specific value
 router.put("/:entry_id/:value_id", (req, res) => {
     const {entry_id, value_id} = req.params;
-    const {value} = req.body;
-    let sql = `
-        UPDATE custom_values
-        SET value = ?
-        WHERE entry_id = ?
-          AND value_id = ?`;
+    const {value, value_date} = req.body;
 
-    db.run(sql, [value, entry_id, value_id], (err) => {
+
+    //Create update statement, only update if a value is given
+    let values = [];
+    let sql = "UPDATE custom_values SET ";
+    if (value) {
+        sql += "value = ?, ";
+        values.push(value);
+    }
+    if (value_date) {
+        sql += "value_date = ?, ";
+        values.push(value_date);
+    }
+    sql += "WHERE entry_id = ? AND value_id = ? ";
+    values.push(entry_id)
+    values.push(value_id)
+
+    //Invalid SQL syntax
+    if (values.length <= 2) {
+        return res.sendStatus(400);
+    }
+
+    //Regex to remove the last comma in this string:
+    //https://stackoverflow.com/questions/5497318/replace-last-occurrence-of-character-in-string/
+    sql = sql.replace(/,([^,]*)$/, "$1");
+
+    db.run(sql, values, (err) => {
         if (err) {
             console.log(err);
             return res.sendStatus(400);
@@ -269,10 +289,12 @@ router.put("/:entry_id/:value_id", (req, res) => {
 router.delete("/:entry_id/:value_id", (req, res) => {
     const {entry_id, value_id} = req.params;
     let sql = `
-        DELETE
-        FROM custom_values
-        WHERE entry_id = ?
-          AND value_id = ?`;
+            DELETE;
+FROM;
+custom_values;
+WHERE;
+entry_id = ?
+    AND value_id = ? `;
 
     db.run(sql, [entry_id, value_id], (err) => {
         if (err) {

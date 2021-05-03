@@ -142,7 +142,7 @@ router.put("/:hostname", (req, res) => {
     values.push(hostname);
 
     //Invalid SQL syntax
-    if (values.length >= 1) {
+    if (values.length <= 1) {
         return res.sendStatus(400);
     }
 

@@ -81,7 +81,7 @@ router.put("/:workspace/:repo_slug", (req, res) => {
     sql = sql.replace(/,([^,]*)$/, "$1");
 
     //Invalid SQL syntax
-    if (values.length >= 2) {
+    if (values.length <= 2) {
         return res.sendStatus(400);
     }
 
