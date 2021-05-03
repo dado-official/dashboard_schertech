@@ -314,6 +314,7 @@ tbody {
     }
 }
 
+<<<<<<< HEAD
 .popover {
     animation: popoverSlide 0.1s ease-in;
     animation-fill-mode: backwards;
@@ -352,6 +353,8 @@ tbody {
     }
 }
 
+=======
+>>>>>>> 798c3264b9a5560aba7430c6158a92b25e73488d
 .-z-10 {
     z-index: -10;
 }

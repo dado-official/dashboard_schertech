@@ -25,6 +25,14 @@ export default function CustomContainer(props) {
                 animationDelay: `${0.2 * (props.index + 1)}s`,
             }}
         >
+            <div
+                className={`bg-blue w-full h-1 absolute left-0 top-0 rounded-t-0.938 ${
+                    props.remainingdays === undefined ||
+                    props.remainingdays.includes("ago")
+                        ? " bg-offlineRed"
+                        : " bg-onlineGreen"
+                }`}
+            ></div>
             <div className="flex justify-between">
                 <h6 className="text-white ">{props.name}</h6>
                 <div className="flex justify-between items-center">

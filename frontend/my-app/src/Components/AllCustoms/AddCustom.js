@@ -63,7 +63,7 @@ const AddCustom = ({ setIsPopover, isPopover, setUpdate }) => {
                 </div>
                 <div className="w-full">
                     <p className=" text-white text-sm ">Wish Value</p>
-                    <Input state={wishValue} setState={setWishValue} />
+                    <Input state={wishValue} setState={setWishValue}/>
                 </div>
             </div>
             <p className=" text-white text-sm ">Frequency (days)</p>
