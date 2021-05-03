@@ -1,4 +1,6 @@
+![plot](./frontend/my-app/public/logo192.png)
 # dashboard_schertech
+
 
 
 ## Requirements
