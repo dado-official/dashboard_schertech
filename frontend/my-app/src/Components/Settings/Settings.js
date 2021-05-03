@@ -54,7 +54,7 @@ export default function Settings({ setUrl }) {
         if (initialPath !== path) {
             setInitialPath(path);
             axios
-                .put(`http://localhost:4000/api/env/DB_PATH%20`, {
+                .put(`http://localhost:4000/api/env/DB_PATH`, {
                     value: path,
                 })
                 .then((res) => {
