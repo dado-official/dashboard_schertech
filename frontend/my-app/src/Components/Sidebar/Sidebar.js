@@ -5,6 +5,7 @@ import { HiServer } from "react-icons/hi";
 import { IoLogoBitbucket } from "react-icons/all";
 import { BiCustomize } from "react-icons/bi";
 import { RiCloseFill } from "react-icons/ri";
+import { MdSettings } from "react-icons/md";
 
 const Sidebar = ({ url, setOpenSidebar, openSidebar }) => {
     return (
@@ -37,6 +38,13 @@ const Sidebar = ({ url, setOpenSidebar, openSidebar }) => {
             <SidebarElement
                 icon={BiCustomize}
                 title="Custom"
+                url={url}
+                alert={0}
+                setOpenSidebar={setOpenSidebar}
+            />
+            <SidebarElement
+                icon={MdSettings}
+                title="Settings"
                 url={url}
                 alert={0}
                 setOpenSidebar={setOpenSidebar}

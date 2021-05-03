@@ -16,7 +16,7 @@ export default function Commit({
 }) {
     return (
         <div
-            className=" overflow-x-auto w-full bg-hover p-3 rounded-0.938 mt-4 enter"
+            className="overflow-x-auto w-full bg-hover p-3 rounded-0.938 mt-4 enter"
             style={{ animationDelay: `${index * 0.1}s` }}
         >
             <p className="text-white break-all text-sm">{message}</p>

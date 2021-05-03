@@ -11,6 +11,7 @@ import AllCustom from "./Components/AllCustoms/AllCustom";
 import Custom from "./Components/Custom/Custom";
 import AddCustom from "./Components/AllCustoms/AddCustom";
 import Navbar from "./Components/Navbar/Navbar";
+import Settings from "./Components/Settings/Settings";
 
 function App() {
     const [url, setUrl] = useState();
@@ -35,19 +36,19 @@ function App() {
                     <AllRepositories setUrl={setUrl} />
                 </Route>
                 <Route path={"/repository/add"}>
-                    <AddRepository 
+                    <AddRepository
                         setName={setName}
                         setWorkspace={setWorkspace}
                         setReposlug={setReposlug}
                     />
                 </Route>
                 <Route path="/repository/:id">
-                    <Repository 
+                    <Repository
                         setUrl={setUrl}
                         name={name}
                         workspace={workspace}
                         reposlug={reposlug}
-                     />
+                    />
                 </Route>
                 <Route path={"/server/add"}>
                     <AddServer />
@@ -60,6 +61,9 @@ function App() {
                 </Route>
                 <Route path="/custom/:id" exact>
                     <Custom setUrl={setUrl} />
+                </Route>
+                <Route path="/settings" exact>
+                    <Settings setUrl={setUrl} />
                 </Route>
             </Switch>
         </Router>
