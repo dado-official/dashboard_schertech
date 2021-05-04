@@ -36,7 +36,7 @@ export default function Chart({ wishValue, dataArray, labels }) {
 
     return (
         <div
-            className="bg-primary enter tranition ease-in-out w-full 2xl:col-span-3 rounded-0.938 px-6 py-4 h-minContent pb-6"
+            className="bg-primary enter tranition ease-in-out w-full 2xl:col-span-4 rounded-0.938 px-6 py-4 h-minContent pb-6"
             style={{ animationDelay: "0.2s" }}
         >
             <div className="flex items-center gap-2 mb-4">

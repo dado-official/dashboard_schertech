@@ -46,7 +46,7 @@ body {
 }
 
 .responsiveGridCustom {
-    @apply grid-cols-1 2xl:grid-cols-4;
+    @apply grid-cols-1 2xl:grid-cols-5;
 }
 
 .main {

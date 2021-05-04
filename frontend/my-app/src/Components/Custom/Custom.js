@@ -81,7 +81,7 @@ export default function Repository({ setUrl }) {
                     {!showEdit ? "Edit data" : "Exit"}
                 </button>
             </div>
-            <div className="relative grid grid-flow-rows gap-8 grid-cols-4 mt-6 responsiveGridCustom">
+            <div className="relative grid grid-flow-rows gap-8 grid-cols-5 mt-6 responsiveGridCustom">
                 <Edit
                     show={showEdit}
                     data={data}
