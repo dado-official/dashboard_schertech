@@ -157,8 +157,8 @@ router.get("/:workspace/:repo_slug", async (req, res) => {
 
         //TODO change to promise.all
         const branches = await functions.getBranchData(workspace, repo_slug);       //Returns branches and number of branches
-        if(branches.branch_number>=100){
-            branches.branch_number=">=100";
+        if (branches.branch_number >= 100) {
+            branches.branch_number = ">=100";
         }
         //const last_commits = await functions.getCommitInfo(workspace, repo_slug);   //Returns last 30 commits
         const total_commit_number = await functions.getTotalCommitNumber(workspace, repo_slug);
@@ -308,15 +308,15 @@ router.get("/:workspace/:repo_slug/chart1", async (req, res) => {
 //Returns information about how often and by whom a commit was made
 router.get("/:workspace/:repo_slug/chart2", async (req, res) => {
     let commitMap = new Map();
-    let i = 0
-    let page = 1
-    let pagelen = 100
+    let i = 0;
+    let page = 1;
+    let pagelen = 100;
 
     let date = new Date();                      //get date from a week ago to check if commit was within last week
     date.setDate(date.getDate() - 7);
     let dateCheck = Date.parse(date);                   //Date from a week ago and commitDate need to be parsed to the same format to be compared
 
-    try{
+    try {
         while (true) {
             const {data} = await bitbucket
                 .repositories
@@ -329,52 +329,52 @@ router.get("/:workspace/:repo_slug/chart2", async (req, res) => {
                 });
             let commitData = functions.reduceCommitData(data);
 
-            while(i < commitData.commit_number-1){
+            while (i < commitData.commit_number - 1) {
                 let commitDate = Date.parse(commitData.commits[i].date);
 
                 if (dateCheck < commitDate) {                                                    //check if commit was within last week and adding it to map
-                    if (commitMap.get(commitData.commits[i].author_raw) != undefined) {        
+                    if (commitMap.get(commitData.commits[i].author_raw) != undefined) {
                         let counter = commitMap.get(commitData.commits[i].author_raw);          //change value of commits issued or add user to the commitmap
                         ++counter;
                         commitMap.set(commitData.commits[i].author_raw, counter);
-                        ++i
+                        ++i;
                     } else {
                         commitMap.set(commitData.commits[i].author_raw, 1);
-                        ++i
+                        ++i;
                     }
                 } else {
                     let user = Array.from(commitMap.keys());
-                    i = 0
-                    while(i< user.length){
-                        let temp = user[i].split('<',1)
-                        user[i] = temp
-                        ++i
+                    i = 0;
+                    while (i < user.length) {
+                        let temp = user[i].split("<", 1);
+                        user[i] = temp;
+                        ++i;
                     }
                     let commitanzahl = Array.from(commitMap.values());
-                    i = 0
-                    let j = 0
-                    let tempuser
-                    let tempcommitanzahl = 0
-                    let tempindex = 0
-                    let usersorted = []
-                    let commitanzahlsorted = []
-                    while(j < commitanzahl.length){
-                        while(i < user.length){
-                            if(commitanzahl[i] > tempcommitanzahl){
-                                tempindex = i
-                                tempcommitanzahl = commitanzahl[i]
-                                tempuser = user[i]
-                                ++i
+                    i = 0;
+                    let j = 0;
+                    let tempuser;
+                    let tempcommitanzahl = 0;
+                    let tempindex = 0;
+                    let usersorted = [];
+                    let commitanzahlsorted = [];
+                    while (j < commitanzahl.length) {
+                        while (i < user.length) {
+                            if (commitanzahl[i] > tempcommitanzahl) {
+                                tempindex = i;
+                                tempcommitanzahl = commitanzahl[i];
+                                tempuser = user[i];
+                                ++i;
                             } else {
-                                ++i
+                                ++i;
                             }
                         }
-                        commitanzahl[tempindex] = 0
-                        usersorted[j] = tempuser
-                        commitanzahlsorted[j] = tempcommitanzahl
-                        tempcommitanzahl = 0
-                        i = 0
-                        ++j
+                        commitanzahl[tempindex] = 0;
+                        usersorted[j] = tempuser;
+                        commitanzahlsorted[j] = tempcommitanzahl;
+                        tempcommitanzahl = 0;
+                        i = 0;
+                        ++j;
                     }
                     return res.send({user: usersorted, commitanzahl: commitanzahlsorted});
                 }
@@ -384,11 +384,11 @@ router.get("/:workspace/:repo_slug/chart2", async (req, res) => {
 
             if (commitData.commit_number < 100) {
                 let user = Array.from(commitMap.keys());
-                i = 0
-                while(i< user.length){
-                    let temp = user[i].split('<',1)
-                    user[i] = temp
-                    ++i
+                i = 0;
+                while (i < user.length) {
+                    let temp = user[i].split("<", 1);
+                    user[i] = temp;
+                    ++i;
                 }
                 let commitanzahl = Array.from(commitMap.values());
                 return res.send({user: usersorted, commitanzahl: commitanzahlsorted});
@@ -445,6 +445,16 @@ router.get("/:workspace/:repo_slug/lastcommits", async (req, res) => {
             .listCommits({workspace: workspace, repo_slug: repo_slug, revision: ""});
         let commitData = functions.reduceCommitData(data);
         lastcommits = commitData.commits;
+
+        //Sorts the last 30 commits by date
+        lastcommits.sort((a, b) => {
+            a = new Date(a);
+            b = new Date(b);
+            if (a.date < b.date) return -1;
+            if (a.date > b.date) return 1;
+            return 0;
+        });
+
         res.send(lastcommits);
     } catch (err) {
         const {error, status, message} = err;

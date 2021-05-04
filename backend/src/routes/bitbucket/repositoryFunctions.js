@@ -27,8 +27,8 @@ const reduceCommitData = (data) => {
     let commits = [];
 
     data.values.forEach((commit) => {
-        const commitDate = moment(commit.date).format("Do MMMM YYYY, h:mm:ss");
-        const lastChange = moment(commitDate, "Do MMMM YYYY, h:mm:ss").fromNow();
+        //const commitDate = moment(commit.date).format("LLLL"); //old: Do MMMM YYYY, h:mm:ss
+        const lastChange = moment(commit.date).fromNow();
         const reducedCommit = {
             id: commit.hash.substring(0, 7),
             hash: commit.hash,
