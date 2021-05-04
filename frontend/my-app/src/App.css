@@ -335,6 +335,8 @@ tbody {
 .popoverLeave {
     animation: popoverSlideLeave 0.1s ease-in;
     animation-fill-mode: forwards;
+    display: none;
+    z-index: -20;
 }
 
 @keyframes popoverSlideLeave {
