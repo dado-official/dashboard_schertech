@@ -296,12 +296,10 @@ router.put("/:entry_id/:value_id", (req, res) => {
 router.delete("/:entry_id/:value_id", (req, res) => {
     const {entry_id, value_id} = req.params;
     let sql = `
-            DELETE;
-FROM;
-custom_values;
-WHERE;
-entry_id = ?
-    AND value_id = ? `;
+        DELETE
+        FROM custom_values
+        WHERE entry_id = ?
+          AND value_id = ? `;
 
     db.run(sql, [entry_id, value_id], (err) => {
         if (err) {
