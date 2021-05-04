@@ -171,6 +171,13 @@ router.get("/:entry_id", (req, res) => {
 
         //Checks if there are any values
         if (rows[0].value_id) {
+            //Sorts the values by time
+            rows.sort((a, b) => {
+                if (a.value_date < b.value_date) return -1;
+                if (a.value_date > b.value_date) return 1;
+                return 0;
+            });
+
             //Calculate the remaining time
             let lastDate = moment.unix(rows[rows.length - 1].value_date);
             let nextDate = lastDate.add(rows[0].frequency, "days");
@@ -200,12 +207,6 @@ router.get("/:entry_id", (req, res) => {
         if (!rows[0].value_id) {
             rows = [];
         }
-
-        rows.sort((a, b) => {
-            if (a.value_date < b.value_date) return -1;
-            if (a.value_date > b.value_date) return 1;
-            return 0;
-        });
 
         res.send({...entryInfo, data: rows});
     });
