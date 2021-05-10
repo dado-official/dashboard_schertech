@@ -304,7 +304,6 @@ router.get("/:workspace/:repo_slug/chart1", async (req, res) => {
     }
 });
 
-//TODO formatting
 //Returns information about how often and by whom a commit was made
 router.get("/:workspace/:repo_slug/chart2", async (req, res) => {
     let commitMap = new Map();
@@ -461,62 +460,6 @@ router.get("/:workspace/:repo_slug/lastcommits", async (req, res) => {
         console.log("ERROR:", error, status, message);
         res.sendStatus(status);
     }
-});
-
-//Check performance of each function in repositoryFunctions
-router.get("/:workspace/:repo_slug/performance", async (req, res) => {
-    const {workspace, repo_slug} = req.params;
-    let t0, t1;
-
-    t0 = new Date();
-    await functions.getCommitInfo(workspace, repo_slug);
-    t1 = new Date();
-    let getCommitInfo1 = t1 - t0;
-
-    t0 = new Date();
-    try {
-        const {data} = await bitbucket
-            .repositories
-            .listCommits({
-                workspace: workspace,
-                repo_slug: repo_slug,
-                revision: ""
-            });
-        await functions.reduceCommitData(data);
-    } catch (err) {
-        console.log(err);
-    }
-    t1 = new Date();
-    let reduceCommitData1 = t1 - t0;
-
-    t0 = new Date();
-    await functions.getBranchData(workspace, repo_slug);
-    t1 = new Date();
-    let getBranchData1 = t1 - t0;
-
-    t0 = new Date();
-    await functions.getLinesInfo(workspace, repo_slug);
-    t1 = new Date();
-    let getLinesInfo1 = t1 - t0;
-
-    t0 = new Date();
-    await functions.diffStatCheck(workspace, repo_slug, "7f5b8cb");
-    t1 = new Date();
-    let diffStatCheck1 = t1 - t0;
-
-    t0 = new Date();
-    await functions.getTotalCommitNumber(workspace, repo_slug);
-    t1 = new Date();
-    let getTotalCommitNumber1 = t1 - t0;
-
-    res.send({
-        getCommitInfo: getCommitInfo1,
-        reduceCommitData: reduceCommitData1,
-        getBranchData: getBranchData1,
-        getLinesInfo: getLinesInfo1,
-        diffStatCheck: diffStatCheck1,
-        getTotalCommitNumber: getTotalCommitNumber1
-    });
 });
 
 

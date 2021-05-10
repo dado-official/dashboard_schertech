@@ -18,7 +18,7 @@ repositories to monitor.
 #### Response
 
 ````
-[
+Array: [
     {
         id
         workspace
@@ -28,8 +28,6 @@ repositories to monitor.
     } 
 ]
 ````
-
-
 
 ## Add a new repository to the database
 
@@ -41,10 +39,8 @@ Parameter | Description
 --- | ---
 workspace | The name of the workspace
 repo_slug | The name of the repository slug
-name |
+name | The name you want to give to the repository
 description (optional) | The description of the repository
-
-
 
 ## Update information about the repository
 
@@ -63,10 +59,8 @@ Parameter | Description
 --- | ---
 new_workspace | The new name of the workspace
 new_repo_slug | The new name of the repository slug
-name |
+name | The name you want to give to the repository
 description (optional) | The description of the repository
-
-
 
 ## Delete a repository from the database
 
@@ -78,8 +72,6 @@ Parameter | Description
 --- | ---
 workspace | The name of the workspace
 repo_slug | The name of the repository slug (name)
-
-
 
 ## Get information about the repository from the database, based on the id
 
@@ -94,7 +86,7 @@ id | The id of the repository from the local database
 #### Response
 
 ````
-[
+Array: [
     {
         id
         workspace
@@ -105,11 +97,7 @@ id | The id of the repository from the local database
 ]
 ````
 
-
-
 # Repositories - Bitbucket API
-
-
 
 ## Get all information about a specific repository
 
@@ -126,11 +114,26 @@ repo_slug | The name of the repository slug
 
 ````
 {
-    TODO
+    owner_name
+    is_private
+    created_on
+    last_updated_formatted
+    last_update_fromnow
+    avatar_link
+    branch_number
+    branches:
+        Array: [
+            {
+                name
+                author
+            }
+        ]
+    total_commit_number
+    link
 }
 ````
 
-## Get some information about the repository
+## Get basic information about the repository
 
 `GET /:workspace/:repo_slug/menu`
 
@@ -145,11 +148,10 @@ repo_slug | The name of the repository slug
 
 ````
 {
-    TODO
+    owner_name
+    last_update_fromnow
 }
 ````
-
-
 
 ## Get the amount of commits from the last 5 weeks
 
@@ -165,12 +167,11 @@ repo_slug | The name of the repository slug
 #### Response
 
 ````
-{
-    TODO
-}
+Array: [
+   #Only an array, each index contains the commits per week
+   index: #Commits per week
+]
 ````
-
-
 
 ## Get the information about how often and by whom a commit was made
 
@@ -187,11 +188,18 @@ repo_slug | The name of the repository slug
 
 ````
 {
-    TODO
+    user:
+        Array: [
+            Array: [
+                index: #Name of the user
+            ]
+        ]
+    commitanzahl:
+        Array: [
+            index: #Number of commits
+        ]
 }
 ````
-
-
 
 ## Get all commits in a Repository
 
@@ -208,11 +216,22 @@ repo_slug | The name of the repository slug
 
 ````
 {
-    TODO
+    commit_number
+    commits:
+        Array: [
+            {
+                id
+                hash
+                message
+                author_name
+                author_raw
+                date
+                last_change
+                author_icon
+            }
+        ]
 }
 ````
-
-
 
 ## Get the last 30 commits in a Repository
 
@@ -228,7 +247,16 @@ repo_slug | The name of the repository slug
 #### Response
 
 ````
-{
-    TODO
-}
+Array: [
+        {
+            id
+            hash
+            message
+            author_name
+            author_raw
+            date
+            last_change
+            author_icon
+        }
+]
 ````
