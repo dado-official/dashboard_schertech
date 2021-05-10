@@ -6,6 +6,22 @@
 
 
 
+## Check if mysql is online on a specific server
+`GET /:hostname`
+#### Path parameters
+Parameter | Description
+--- | ---
+hostname | The hostname or IP of the server
+
+#### Response
+````
+{
+    reachable: boolean
+}
+````
+
+
+
 ## Get a list of all servers that are stored on the database
 `GET /`  
 #### Response
@@ -38,20 +54,6 @@ db_password (optional) | The password of the DB user
 location (optional) | The location of the server
 description (optional) | The description of the Server
 
-
-## Check if mysql is online on a specific server
-`GET /:hostname`
-#### Path parameters
-Parameter | Description
---- | ---
-hostname | The hostname or IP of the server
-
-#### Response
-````
-{
-    reachable: boolean
-}
-````
 
 
 ## Update information about the server

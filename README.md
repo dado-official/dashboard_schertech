@@ -24,6 +24,7 @@ npm start
 
 
 ### Environment variables: Backend
+Create a .env file in the backend directory and add the following variables:
 Variable | Description
 --- | ---
 BITBUCKET_USERNAME | Your bitbucket username
