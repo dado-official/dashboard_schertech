@@ -14,13 +14,14 @@
 ````
 Array: [
     {
-        id
+        entry_id
         title
         description
         frequency
         target_value
         entry_date
         remaining_time
+        remaining_time_unix
         values_number
         progress
     }
@@ -79,26 +80,25 @@ entry_id | The id of the entry
 #### Response
 ````
 {
-    id
     title
     description
     frequency
     target_value
     entry_date
     remaining_time
+    remaining_time_unix
     values_number
     progress
     data: 
         Array: [
             {
-                id
+                entry_id
                 title
                 description
                 frequency
                 target_value
                 entry_date
                 value_id
-                entry_id
                 value
                 value_date
             }
