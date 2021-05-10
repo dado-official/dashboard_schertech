@@ -201,7 +201,7 @@ repo_slug | The name of the repository slug
 }
 ````
 
-## Get all commits in a Repository
+## Get all commits in a Repository (This will take some time, depending on the number of commits)
 
 `GET /:workspace/:repo_slug/allcommits`
 
