@@ -13,12 +13,14 @@
 ### Start backend
 ````
 cd backend
+npm install (only once)
 npm start
 ````
 
 ### Start frontend
 ````
 cd frontend/my-app
+npm install (only once)
 npm start
 ````
 
